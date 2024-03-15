@@ -1,17 +1,26 @@
-/* Declare variables and their value */
+/* Uncreative Platformer made by Ciupaga; Simple game made in JS.
+ * GPL 3.0 (C) 2024 Ciupaga */
 
+/* Declare variables and their value */
 @font-face {
     font-family: Fira_Mono;
-    src: url('Fonts/Fira_Mono.ttf') format('truetype');
+    src: url("Fonts/Fira_Mono.ttf") format("truetype");
 }
 
 /* Declare objects and their look */
-
 body {
     background-color: gray;
+    text-align: center;
 }
-
 * {
     color: whitesmoke;
     font-family: Fira_Mono;
 }
+#Board {
+    background-color: black;
+    position: absolute;
+    top: 0%;
+    left: 0%
+}
+
+/* Todo: create image for general background and for game background */
