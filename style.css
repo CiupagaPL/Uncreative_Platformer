@@ -1,0 +1,17 @@
+/* Declare variables and their value */
+
+@font-face {
+    font-family: Fira_Mono;
+    src: url('Fonts/Fira_Mono.ttf') format('truetype');
+}
+
+/* Declare objects and their look */
+
+body {
+    background-color: gray;
+}
+
+* {
+    color: whitesmoke;
+    font-family: Fira_Mono;
+}
