@@ -1,51 +1,45 @@
 /* Uncreative Platformer made by Ciupaga; Simple game made in JS.
  * GPL 3.0 (C) 2024 Ciupaga */
 
-/* Create render board and context */
-let Board, Context;
+/* Update function */
+window.update = function() {
+    /* Clear screen */
+    Context.clearRect(0, 0, Board.width, Board.height);
 
-/* Create screen object */
-let Screen = {
-    x: window.innerWidth, 
-    y: window.innerHeight,
-};
+    /* Draw objects */
+    Context.drawImage(Cube.img, Cube.x, Cube.y, Cube.width, Cube.height);
+    Context.drawImage(Test1.img, Test1.x, Test1.y, Test1.width, Test1.height);
+    Context.fillStyle = Test2.color;
+    Context.fillRect(Test2.x, Test2.y, Test2.width, Test2.height);
 
-/* Create test object */
-let Cube = {
-    x: 128,
-    y: 128,
-    width: 100,
-    height: 100,
-    pos: {
-        x: 256,
-        y: 256,
-    },
-    img: new Image(),
-};
-
-/* General project key input function */
-document.addEventListener("keydown", function(Event) {
-    if(Event.keyCode == 13) {
-        alert("Enter was pressed!");
-    }
-});
-
-/* Function after window is loaded */
-window.onload = function() {
-    /* Draw board */
-    Board = document.getElementById("Board");
-    Board.width = Screen.x;
-    Board.height = Screen.y;
-    Context = Board.getContext("2d");
-
-    /* Draw test object */
-    //Context.fillStyle = "green";
-    //Context.fillRect(Cube.x, Cube.y, Cube.width, Cube.height);
-    Cube.img.src = "Sprites/Icon_Small.png";
-    Cube.img.onload = function() {
-        Context.drawImage(Cube.img, Cube.x, Cube.y, Cube.width, Cube.height);
-    }
+    /* Continue update */
+    requestAnimationFrame(window.update);
 }
 
-/* Todo: do screen change resolution function */
-/* Todo: write function detecting window.y > window.x and block it */
+/* Key input function */
+document.addEventListener("keydown", function(Event) {
+    switch(Event.key) {
+        case "w":
+            /* Move object y */
+            Test2.y = Test2.y - 25;
+
+            break;
+        case "a":
+            /* Move object x */
+            Test2.x = Test2.x - 25;
+
+            break;
+        case "s":
+            /* Move object y */
+            Test2.y = Test2.y + 25;
+
+            break;
+        case "d":
+            /* Move object x */
+            Test2.x = Test2.x + 25;
+
+            break;
+        default:
+            break;
+    }
+});
