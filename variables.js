@@ -2,7 +2,7 @@
  * GPL 3.0 (C) 2024 Ciupaga */
 
 /* Create global variables */
-let Scene = 1;
+let Scene = 1, Fps = 60, PlayerSpeed = 18, TransitionSpeed = 36, isTransition = false;
 
 /* Create global objects */
 let Board, Context;
@@ -11,33 +11,35 @@ let Board, Context;
 let Screen = {
     x: window.innerWidth, 
     y: window.innerHeight,
+    ax: window.screen.width,
+    ay: window.screen.height,
+};
+
+/* Create transition object */
+let Transition = {
+    x: 0,
+    y: 0,
+    width: Screen.x,
+    height: Screen.y,
+    color: "green",
 };
 
 /* Create cube object */
-let Cube = {
-    x: 512,
-    y: 512,
-    width: 128,
-    height: 128,
-    img: new Image(),
-};
-
-/* Create test1 object */
-let Test1 = {
+let Player = {
     x: 128,
     y: 128,
-    width: 256,
-    height: 256,
-    img: new Image(),
-};
-
-/* Create test2 object */
-let Test2 = {
-    x: 512,
-    y: 1024,
     width: 128,
     height: 128,
-    color: "green"
+    color: "red",
+};
+
+/* Create logo object */
+let Logo = {
+    x: 256,
+    y: 256,
+    width: 1600,
+    height: 400,
+    img: new Image(),
 };
 
 window.onload = function() {
@@ -48,9 +50,9 @@ window.onload = function() {
     Context = Board.getContext("2d");
 
     /* Set textures of objects */
-    Cube.img.src = "Sprites/Icon_Small.png";
-    Test1.img.src = "Sprites/Test1.png"; 
+    Logo.img.src = "Sprites/Logo.png";
 
     /* Start update function */
     requestAnimationFrame(window.update);
 }
+
