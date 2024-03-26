@@ -2,10 +2,7 @@
  * GPL 3.0 (C) 2024 Ciupaga */
 
 /* Create global variables */
-let Scene = 1, Fps = 60, PlayerSpeed = 18, TransitionSpeed = 36, isTransition = false;
-
-/* Create global objects */
-let Board, Context;
+let Scene = 1, Fps = 120;
 
 /* Create screen object */
 let Screen = {
@@ -15,30 +12,43 @@ let Screen = {
     ay: window.screen.height,
 };
 
+/* Create scale variable */
+let Scale = {
+    x: Screen.x / 1920,
+    y: Screen.y / 1080,
+};
+
+/* Create global objects variables */
+let PlayerSpeed = 18;
+let TransitionFpsTimer = 0, TransitionSpeed = Screen.y/30, isTransition = false;
+
+/* Create global objects */
+let Board, Context;
+
 /* Create transition object */
 let Transition = {
     x: 0,
     y: 0,
-    width: Screen.x,
-    height: Screen.y,
+    width: 1920 * Scale.x,
+    height: 1080 * Scale.y,
     color: "green",
 };
 
 /* Create cube object */
 let Player = {
-    x: 128,
-    y: 128,
-    width: 128,
-    height: 128,
+    x: 128 * Scale.x,
+    y: 128 * Scale.y,
+    width: 128 * Scale.x,
+    height: 128 * Scale.y,
     color: "red",
 };
 
 /* Create logo object */
 let Logo = {
-    x: 256,
-    y: 256,
-    width: 1600,
-    height: 400,
+    x: 128 * Scale.x,
+    y: 128 * Scale.y,
+    width: 800 * Scale.x,
+    height: 400 * Scale.y,
     img: new Image(),
 };
 

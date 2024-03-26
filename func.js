@@ -29,14 +29,16 @@ window.update = function() {
 
 /* Menu scene */
 function menuScene(isTransition) {
-    /* Create scene variables */
-    
-    /* Transition animation function */
-    if(Transition.y < Screen.y) {
-        Transition.y = Transition.y + TransitionSpeed;
+    /* Start timer */
+    if(TransitionFpsTimer < 30) {
+        TransitionFpsTimer = TransitionFpsTimer + 1;
     }
-    else if(Transition.y >= Screen.y) {
-        Transition.y = Screen.y;
+    /* End timer and start function */
+    else if(TransitionFpsTimer >= 30) {
+        /* Transition animation function */
+        if(Transition.y < Screen.y) {
+            Transition.y = Transition.y + TransitionSpeed * Scale.y;
+        }
     }
 
     /* Draw objects */

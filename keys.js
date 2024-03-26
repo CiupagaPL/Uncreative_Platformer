@@ -18,19 +18,7 @@ document.addEventListener("keydown", function(Event) {
         switch(Event.key) {
             case "w":
                 /* Move object -y */
-                Player.y = Player.y - PlayerSpeed;
-                break;
-            case "a":
-                /* Move object -x */
-                Player.x = Player.x - PlayerSpeed;
-                break;
-            case "s":
-                /* Move object +y */
-                Player.y = Player.y + PlayerSpeed;
-                break;
-            case "d":
-                /* Move object +x */
-                Player.x = Player.x + PlayerSpeed;
+                Player.y = Player.y - PlayerSpeed * Scale.y;
                 break;
             default:
                 break;
