@@ -1,54 +1,63 @@
-/* Uncreative Platformer made by Ciupaga; Simple game made in JS.
- * GPL 3.0 (C) 2024 Ciupaga */
+/* Uncreative Platformer made by CiupagaPL; Simple platformer made in JS.
+ * GPL 3.0 (C) 2024 CiupagaPL */
+
+/* Window create function */
+window.onload = function() {
+    /* Create game board */
+    Board = document.getElementById("Board");
+    Board.width = BoardWidth;
+    Board.height = BoardHeight;
+    Context = Board.getContext("2d");
+
+    /* Start update function */
+    window.onupdate();
+}
+
+/* Window resize function */
+window.onresize = function() {
+    /* Change board resolution */
+    BoardWidth = window.innerWidth * 0.9;
+    BoardHeight = window.innerHeight * 0.9;
+}
 
 /* Update function */
-window.update = function() {
+window.onupdate = function() {
     /* Limit fps */
     setTimeout(() => {
-        /* Continue update */
-        requestAnimationFrame(window.update);
-    }, 1000 / Fps);
+        requestAnimationFrame(window.onupdate);
+    }, 1000 / 120);
 
     /* Clear screen */
-    Context.clearRect(0, 0, Board.width, Board.height);
+    Context.clearRect(0, 0, BoardWidth, BoardHeight);
 
+    /* Draw public objects */
+    
     /* Menu scene */
     if(Scene == 1) {
-        menuScene(isTransition);
+        /* Draw scene objects */
+        Context.fillStyle = PlayerColor;
+        Context.fillRect(PlayerX, PlayerY, PlayerWidth, PlayerHeight);
+
+        Context.fillStyle = PlatformColor;
+        Context.fillRect(PlatformX, PlatformY, PlatformWidth, PlatformHeight);
+
+        /* Key input handler */
+        document.addEventListener("keyup", function(Event) {
+            if(Event.key == "1" && !hasPlayerJumped) {
+                hasPlayerJumped = true;
+            }
+        });
+
+        /* Player jump function */
+        if(hasPlayerJumped) {
+            alert("Hi!");
+            hasPlayerJumped = false;
+        }
     }
 
     /* Test scene */
     if(Scene == 2) {
-        testScene(isTransition);
+    
     }
-
-    /* Draw public objects */
-    Context.fillStyle = Transition.color;
-    Context.fillRect(Transition.x, Transition.y, Transition.width, Transition.height);
-}
-
-/* Menu scene */
-function menuScene(isTransition) {
-    /* Start timer */
-    if(TransitionFpsTimer < 30) {
-        TransitionFpsTimer = TransitionFpsTimer + 1;
-    }
-    /* End timer and start function */
-    else if(TransitionFpsTimer >= 30) {
-        /* Transition animation function */
-        if(Transition.y < Screen.y) {
-            Transition.y = Transition.y + TransitionSpeed * Scale.y;
-        }
-    }
-
-    /* Draw objects */
-    Context.drawImage(Logo.img, Logo.x, Logo.y, Logo.width, Logo.height);
-}
-
-/* Test scene */
-function testScene(isTransition) {
-    /* Draw objects */
-    Context.fillStyle = Player.color;
-    Context.fillRect(Player.x, Player.y, Player.width, Player.height);
 }
 

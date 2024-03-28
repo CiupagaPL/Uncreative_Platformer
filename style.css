@@ -1,5 +1,5 @@
-/* Uncreative Platformer made by Ciupaga; Simple game made in JS.
- * GPL 3.0 (C) 2024 Ciupaga */
+/* Uncreative Platformer made by CiupagaPL; Simple platformer made in JS.
+ * GPL 3.0 (C) 2024 CiupagaPL */
 
 /* Create font-face for project */
 @font-face {
@@ -8,22 +8,53 @@
 }
 
 /* Default body look */
-body {
-    background-color: gray;
+body, html {
+    background: url(Sprites/Background1.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+/* Defaul look */
+* {
+    color: black;
+    font-family: Fira_Mono;
     text-align: center;
 }
 
-/* Default text look */
-* {
-    color: whitesmoke;
-    font-family: Fira_Mono;
-}
-
-/* Board object setup */
+/* Default board look*/
 #Board {
-    background-color: black;
     position: absolute;
-    top: 0%;
-    left: 0%;
+    top: 2%;
+    left: 2.5%;
+    width: 95%;
+    height: 92%;
+    background-color: black;
+    border: 4px solid white;
+    border-radius: 12px;
 }
 
+/* Default footer look */
+#Footer {
+    position: absolute;
+    top: 96.25%;
+    left: 2.25%;
+    height: 4%;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+/* Test object setup */
+#Test {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 256px;
+    height: 256px;
+    margin-left: 0%;
+    margin-top: 20%;
+    display: none;
+}
