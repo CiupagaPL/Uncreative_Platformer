@@ -7,18 +7,7 @@
     src: url("Fonts/Fira_Mono.ttf") format("truetype");
 }
 
-/* Default body look */
-body, html {
-    background: url(Sprites/Background1.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100%;
-    width: 100%;
-    margin: 0px;
-}
-
-/* Defaul look */
+/* Defaul font look */
 * {
     color: black;
     font-family: Fira_Mono;
@@ -28,33 +17,9 @@ body, html {
 /* Default board look*/
 #Board {
     position: absolute;
-    top: 2%;
-    left: 2.5%;
-    width: 95%;
-    height: 92%;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
     background-color: black;
-    border: 4px solid white;
-    border-radius: 12px;
-}
-
-/* Default footer look */
-#Footer {
-    position: absolute;
-    top: 96.25%;
-    left: 2.25%;
-    height: 3.75%;
-    font-size: 24px;
-    text-decoration: none;
-}
-
-/* Test object setup */
-#Test {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 256px;
-    height: 256px;
-    margin-left: 0%;
-    margin-top: 20%;
-    display: none;
 }

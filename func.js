@@ -4,9 +4,9 @@
 /* Window create function */
 window.onload = function() {
     /* Create game board */
-    Board.width = BoardWidth;
-    Board.height = BoardHeight;
-    Context = Board.getContext("2d");
+    Board.base.width = Board.w;
+    Board.base.height = Board.h;
+    Context = Board.base.getContext("2d");
 
     /* Start update function */
     window.onupdate();
@@ -15,11 +15,13 @@ window.onload = function() {
 /* Window resize function */
 window.onresize = function() {
     /* Change board resolution */
-    BoardWidth = window.innerWidth * 0.9;
-    BoardHeight = window.innerHeight * 0.9;
+    Board.w = window.innerWidth;
+    Board.h = window.innerHeight;
+    Board.base.width = Board.w;
+    Board.base.height = Board.h;
 }
 
-/* Update function */
+/* Window update function */
 window.onupdate = function() {
     /* Limit fps */
     setTimeout(() => {
@@ -27,74 +29,200 @@ window.onupdate = function() {
     }, 1000 / 120);
 
     /* Clear screen */
-    Context.clearRect(0, 0, BoardWidth, BoardHeight);
-
-    /* Draw public objects */
+    Context.clearRect(0, 0, Board.w, Board.h);
     
     /* Menu scene */
     if(Scene == 1) {
+        /* Draw background object */
+        Background.img = new Image();
+        Background.img.src = "Sprites/Background1.png";
+        Context.drawImage(Background.img, Background.x, Background.y, Background.w, Background.h);
 
+        /* Draw transition object */
+        Context.fillStyle = Transition.color;
+        Context.fillRect(Transition.x, Transition.y, Transition.w, Transition.h);
+
+        /* Things todo on scene start */
+        if(SceneStart == 0) {
+            /* Set default position of transition object */
+            if(Transition.timer == 0) {
+                Transition.y = 0;
+            }
+            
+            /* Start transition timer */ 
+            Transition.timer += 1;
+            /* Start transition animation */
+            if(Transition.timer >= 30) {
+                /* Move transition object */
+                if(Transition.y > -Board.h) {
+                    Transition.y -= Transition.vx;
+                }
+                /* End animation */
+                else if(Transition.y <= -Board.h) {
+                    /* End scene start */
+                    Transition.timer = 0;
+                    SceneStart = 1;
+                }
+            }
+        }
+
+        /* Things todo on scene change */
+        if(SceneChange == 1) {
+            /* Start transition timer */
+            Transition.timer += 1;
+            /* Start transition animation */
+            if(Transition.timer >= 30) {
+                /* Move transition object */
+                if(Transition.y < 0) {
+                    Transition.y += Transition.vx;
+                }
+                /* End animation */
+                else if(Transition.y >= 0) {
+                    /* End scene */
+                    Transition.timer = 0;
+                    SceneChange = 0;
+                    SceneStart = 0;
+                    Scene = 2;
+                }
+            }
+        }
     }
 
     /* Test scene */
     if(Scene == 2) {
-        /* Draw player object */
-        Context.fillStyle = PlayerColor;
-        Context.fillRect(PlayerX, PlayerY, PlayerWidth, PlayerHeight);
+        /* Draw background object */
+        Background.img = new Image();
+        Background.img.src = "Sprites/Background1.png";
+        Context.drawImage(Background.img, Background.x, Background.y, Background.w, Background.h);
 
-        /* Draw platform object */
-        Context.fillStyle = PlatformColor;
-        Context.fillRect(PlatformX, PlatformY, PlatformWidth, PlatformHeight);
+        /* Draw player object */
+        Context.fillStyle = Player.color;
+        Context.fillRect(Player.x, Player.y, Player.w, Player.h);
 
         /* Draw platform2 object */
-        Context.fillStyle = Platform2Color;
-        Context.fillRect(Platform2X, Platform2Y, Platform2Width, Platform2Height);
+        Context.fillStyle = Platform2.color;
+        Context.fillRect(Platform2.x, Platform2.y, Platform2.w, Platform2.h);
 
+        /* Draw transition object */
+        Context.fillStyle = Transition.color;
+        Context.fillRect(Transition.x, Transition.y, Transition.w, Transition.h);
+
+        /* Things todo on scene start */
         if(SceneStart == 0) {
             /* Set default position of player object */
-            PlayerX = BoardWidth/2 - PlayerWidth/2;
-            PlayerY = BoardHeight*7/8 - PlayerHeight/2;
+            Player.x = 750;
+            Player.y = 1000;
 
             /* Set default gravity value */
-            PlayerVelocityY = 0;
+            Player.vy = 0;
 
-            /* Choose player start side */
-            PlayerSide = Math.floor(Math.random() * 2);
-            if(PlayerSide == 0) {
-                PlayerVelocityX = 8;
-            }
-            else if(PlayerSide == 1) {
-                PlayerVelocityX = -8;
+            /* Generate level */
+            //window.generatelevel();
+
+            /* Set default position of transition object */
+            if(Transition.timer == 0) {
+                Transition.y = 0;
             }
 
-            /* End function */
-            SceneStart = 1;
+            /* Start transition timer */ 
+            Transition.timer += 1;
+            /* Start transition animation */
+            if(Transition.timer >= 30) {
+                /* Move transition object */
+                if(Transition.y < Board.h) {
+                    Transition.y += Transition.vx;
+                }
+                /* End animation */
+                else if(Transition.y >= Board.h) {
+                    /* End scene start */
+                    Transition.timer = 0;
+                    SceneStart = 1;
+                } 
+            }
+        }
+
+        /* Things todo on scene change */
+        if(SceneChange == 1) {
+            console.log(Transition.timer, Transition.y);
+
+            /* Start transition timer */
+            Transition.timer += 1;
+            /* Start transition animation */
+            if(Transition.timer >= 30) {
+                /* Move transition object */
+                if(Transition.y > 0) {
+                    Transition.y -= Transition.vx;
+                }
+                /* End animation */
+                else if(Transition.y <= 0) {
+                    /* End scene */
+                    Transition.timer = 0;
+                    SceneChange = 0;
+                    SceneStart = 0;
+                    Scene = 1;
+                }
+            }
         }
 
         /* Move player object */
-        PlayerX += PlayerVelocityX;
-        PlayerY += PlayerVelocityY;
-        PlayerVelocityY += PlayerGravity;
+        Player.x += Player.vx;
+        Player.y += Player.vy;
+        //Player.vy += Player.gravity;
 
         /* Bounce player object from walls */
-        if(PlayerX <= 0) {
-            PlayerVelocityX = 8;
+        if(Player.x <= 0) {
+            /* Change player side */
+            Player.vx = 8;
+            Player.side = 0;
         }
-        if(PlayerX >= BoardWidth - PlayerWidth) {
-            PlayerVelocityX = -8;
+        if(Player.x >= Board.w - Player.w) {
+            /* Change player side */
+            Player.vx = -8;
+            Player.side = 1;
         }
 
-        /* Detect collisions */
-        if(window.detectcollision(PlayerX, PlayerY, PlayerWidth, PlayerHeight, Platform2X, Platform2Y, Platform2Width, Platform2Height)) {
-            PlayerVelocityY = 0;
-            hasPlayerJumped = false;
+        /* Detect collisions between player and platform2 object */
+        if(window.detectcollision(Player, Platform2)) {
+            /* Stop gravity */
+            player.vy = 0;
+            Player.jumpcount = 0;
         }
+
+        /* Detect collition between player and platform object */
+        //if(window.detectcollision(PlayerX, PlayerY, PlayerWidth, PlayerHeight, PlatformX, PlatformY, PlatformWidth, PlatformHeight)) {
+            /* Set player object movement */
+            //if(PlayerY <= PlatformY - PlatformHeight) {
+                //PlayerVelocityY = 0;
+                //PlayerJumpCount = 0;
+            //}
+            //else {
+                //PlayerVelocityY = -initPlayerVelocityY*1/4;
+            //}
+        //}
     }
 }
 
-window.detectcollision = function(FirstX, FirstY, FirstWidth, FirstHeight, SecondX, SecondY, SecondWidth, SecondHeight) {
-    return FirstX < SecondX + SecondWidth &&
-           FirstX + FirstWidth > SecondX &&
-           FirstY < SecondY + SecondHeight &&
-           FirstY + FirstHeight > SecondY;
+/* Window collision function */
+window.detectcollision = function(First, Second) {
+    /* Calculate and return collision */
+    return First.x < Second.x + Second.w &&
+           First.x + First.w > Second.x &&
+           First.y < Second.y + Second.h &&
+           First.y + First.h > Second.y;
 }
+
+/* Window level generator function */
+//window.generatelevel = function() {
+    /* Recreate array */
+    //PlatformArray = [];
+
+    /* Starting platform */
+    //let FirstPlatformX = BoardWidth / 2;
+    //let FirstPlatformY = BoardHeight/2 + PlatformHeight*4;
+    //let FirstPlatformWidth = PlatformWidth;
+    //let FirstPlatformHeight = PlatformHeight;
+    //let FirstPlatformColor = PlatformColor;
+
+    /* Finalize first platform */
+    //PlatformArray.push(FirstPlatform);
+//}*/

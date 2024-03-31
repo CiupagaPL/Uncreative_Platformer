@@ -4,39 +4,68 @@
 /* Variables */
 
 /* Create global variables */
-let Scene = 1, SceneStart = 0;
+let Scene = 1, SceneStart = 0, SceneChange = 0;
 
 /* Objects */
 
-/* Create board object */
-let Board = document.getElementById("Board");
-let BoardWidth = window.innerWidth * 0.9;
-let BoardHeight = window.innerHeight * 0.9;
+/* Create global objects */
 let Context;
 
+/* Create board object */
+let Board = {
+    base: document.getElementById("Board"),
+    w: window.innerWidth,
+    h: window.innerHeight,
+};
+
+/* Create transition object */
+let Transition = {
+    w: Board.w,
+    h: Board.h,
+    x: 0,
+    y: 0,
+    color: "black",
+    timer: 0,
+    vx: 30,
+};
+
+/* Create background object */
+let Background = {
+    w: Board.w,
+    h: Board.h,
+    x: 0,
+    y: 0,
+    img: new Image(),
+};
+
 /* Create player object */
-let PlayerWidth = 128;
-let PlayerHeight = 128;
-let PlayerX = BoardWidth/2 - PlayerWidth/2;
-let PlayerY = BoardHeight*7/8 - PlayerHeight/2;
-let PlayerColor = "green";
-let PlayerVelocityX = 0;
-let PlayerVelocityY = 0;
-let initPlayerVelocityY = -16;
-let PlayerGravity = 0.4;
-let PlayerSide = 0;
-let hasPlayerJumped = false;
+let Player = {
+    w: 128,
+    h: 128,
+    x: 0,
+    y: 0,
+    color: "green",
+    vx: 0,
+    vy: 0,
+    initvy: -14,
+    gravity: 0.4,
+    side: 0,
+    jumpcount: 0,
+};
 
 /* Create platform object */
-let PlatformWidth = 256;
-let PlatformHeight = 32;
-let PlatformX = BoardWidth*3/4 - PlatformWidth/2;
-let PlatformY = BoardHeight/2 - PlatformHeight/2;
-let PlatformColor = "red";
+let Platform = {
+    array: [],
+    w: 512,
+    h: 32,
+    color: "red",
+};
 
 /* Create platform2 object */
-let Platform2Width = BoardWidth;
-let Platform2Height = 128;
-let Platform2X = 0;
-let Platform2Y = BoardHeight *6.6/8 + PlayerHeight;
-let Platform2Color = "blue";
+let Platform2 = {
+    w: Board.w,
+    h: 128,
+    x: 0,
+    y: Board.h - 128,
+    color: "blue",
+};
