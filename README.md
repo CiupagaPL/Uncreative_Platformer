@@ -1,5 +1,4 @@
-![Logo](https://cdn.discordapp.com/attachments/822928311487299687/1218312067937992884/Logo.png?ex=66073488&is=65f4bf88&hm=30a2e81bfa518bd9cf8e7ebafed526b9e042740161a5b4f92857dabebf21fb72&)
-
+![Logo](https://cdn.discordapp.com/attachments/822928311487299687/1224051418541985833/Logo2.png?ex=661c15b7&is=6609a0b7&hm=56b7e72fde14e66b4c187f1ecc2764d4759df027048a7292d7617dbf64bba812&)
 # Uncreative Platformer
 
 ## General Info
@@ -7,7 +6,7 @@ Simple Uncreative **JS** platformer.
 > Warning! This project is private
 
 ## Project Status
-Newest Version: **Build 7**;
+Newest Version: **Build 7.5**;
 Last Updated: **31.03.2024**;
 
 ## License
