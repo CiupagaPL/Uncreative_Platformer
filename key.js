@@ -7,9 +7,11 @@ document.addEventListener("keyup", function(Event) {
     if(Scene == 1) {
         switch(Event.key) {
             /* Change scene */
-            case " ":
-                SceneChange = 1;
-                break;
+            case "1":
+                if(SceneStart != 0) {
+                    SceneChange = 1;
+                    break;
+                }
 
             /* Default */
             default:
@@ -69,13 +71,45 @@ document.addEventListener("keyup", function(Event) {
                 break;
 
             /* Come back to menu scene */
-            case "Escape":
-                SceneChange = 1;
-                break;
+            case "1":
+                if(SceneStart != 0) {
+                    SceneChange = 1;
+                    break;
+                }
 
             /* Default */
             default:
                 break;
+        }
+    }
+});
+
+/* Mouse position updater */
+window.addEventListener("mousemove", function(Event) {
+    Mouse.x = Event.clientX;
+    Mouse.y = Event.clientY;
+});
+
+/* Mouse input handler */
+window.addEventListener("click", function(Event) {
+    /* Button1 function */
+    if(window.detectcollision(Button1, Mouse)) {
+        if(SceneStart != 0) {
+            SceneChange = 1;
+        }
+    }
+
+    /* Button2 function */
+    if(window.detectcollision(Button2, Mouse)) {
+        if(SceneStart != 0) {
+            SceneChange = 1;
+        }
+    }
+
+    /* Button3 function */
+    if(window.detectcollision(Button3, Mouse)) {
+        if(SceneStart != 0) {
+            SceneChange = 1;
         }
     }
 });

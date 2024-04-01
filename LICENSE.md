@@ -1,4 +1,4 @@
-![Logo](https://cdn.discordapp.com/attachments/822928311487299687/1224051418541985833/Logo2.png?ex=661c15b7&is=6609a0b7&hm=56b7e72fde14e66b4c187f1ecc2764d4759df027048a7292d7617dbf64bba812&)
+![Logo](https://cdn.discordapp.com/attachments/822928311487299687/1224346578400313374/Logo2.png?ex=661d289b&is=660ab39b&hm=29ff81c25cfdb09f9d1386dce7530d48acf1f193e9bdd2e56c5ef26cec607b2f&)
 # License
 ## GNU 3.0
 **GNU GENERAL PUBLIC LICENSE

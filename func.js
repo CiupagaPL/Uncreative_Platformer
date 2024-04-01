@@ -14,9 +14,14 @@ window.onload = function() {
 
 /* Window resize function */
 window.onresize = function() {
+    /* Refresh screen resolution */
+    Screen.w = window.innerWidth;
+    Screen.h = window.innerHeight;
+
+    Board.w = Screen.w;
+    Board.h = Screen.h;
+
     /* Change board resolution */
-    Board.w = window.innerWidth;
-    Board.h = window.innerHeight;
     Board.base.width = Board.w;
     Board.base.height = Board.h;
 }
@@ -34,9 +39,32 @@ window.onupdate = function() {
     /* Menu scene */
     if(Scene == 1) {
         /* Draw background object */
-        Background.img = new Image();
         Background.img.src = "Sprites/Background1.png";
         Context.drawImage(Background.img, Background.x, Background.y, Background.w, Background.h);
+
+        /* Draw logo object */
+        Logo.img.src = "Sprites/Logo1.png";
+        Context.drawImage(Logo.img, Logo.x, Logo.y, Logo.w, Logo.h);
+
+        /* Draw button1 object */
+        Context.fillStyle = Button1.color;
+        Context.fillRect(Button1.x, Button1.y, Button1.w, Button1.h);
+
+        /* Draw button2 object */
+        Context.fillStyle = Button2.color;
+        Context.fillRect(Button2.x, Button2.y, Button2.w, Button2.h);
+
+        /* Draw button3 object */
+        Context.fillStyle = Button3.color;
+        Context.fillRect(Button3.x, Button3.y, Button3.w, Button3.h);
+
+        /* Draw button4 object */
+        Context.fillStyle = Button4.color;
+        Context.fillRect(Button4.x, Button4.y, Button4.w, Button4.h);
+
+        /* Draw button5 object */
+        Context.fillStyle = Button5.color;
+        Context.fillRect(Button5.x, Button5.y, Button5.w, Button5.h);
 
         /* Draw transition object */
         Context.fillStyle = Transition.color;
@@ -85,6 +113,46 @@ window.onupdate = function() {
                     Scene = 2;
                 }
             }
+        }
+
+        /* Check collision between cursor and button1 object */
+        if(window.detectcollision(Button1, Mouse)) {
+            Button1.color = "blue";
+        }
+        else if(!window.detectcollision(Button1, Mouse)) {
+            Button1.color = "red";
+        }
+
+        /* Check collision between cursor and button2 object */
+        if(window.detectcollision(Button2, Mouse)) {
+            Button2.color = "blue";
+        }
+        else if(!window.detectcollision(Button2, Mouse)) {
+            Button2.color = "red";
+        }
+
+        /* Check collision between cursor and button3 object */
+        if(window.detectcollision(Button3, Mouse)) {
+            Button3.color = "blue";
+        }
+        else if(!window.detectcollision(Button3, Mouse)) {
+            Button3.color = "red";
+        }
+
+        /* Check collision between cursor and button4 object */
+        if(window.detectcollision(Button4, Mouse)) {
+            Button4.color = "blue";
+        }
+        else if(!window.detectcollision(Button4, Mouse)) {
+            Button4.color = "red";
+        }
+
+        /* Check collision between cursor and button5 object */
+        if(window.detectcollision(Button5, Mouse)) {
+            Button5.color = "blue";
+        }
+        else if(!window.detectcollision(Button5, Mouse)) {
+            Button5.color = "red";
         }
     }
 
@@ -143,8 +211,6 @@ window.onupdate = function() {
 
         /* Things todo on scene change */
         if(SceneChange == 1) {
-            console.log(Transition.timer, Transition.y);
-
             /* Start transition timer */
             Transition.timer += 1;
             /* Start transition animation */
