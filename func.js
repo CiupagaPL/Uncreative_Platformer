@@ -114,46 +114,6 @@ window.onupdate = function() {
                 }
             }
         }
-
-        /* Check collision between cursor and button1 object */
-        if(window.detectcollision(Button1, Mouse)) {
-            Button1.color = "blue";
-        }
-        else if(!window.detectcollision(Button1, Mouse)) {
-            Button1.color = "red";
-        }
-
-        /* Check collision between cursor and button2 object */
-        if(window.detectcollision(Button2, Mouse)) {
-            Button2.color = "blue";
-        }
-        else if(!window.detectcollision(Button2, Mouse)) {
-            Button2.color = "red";
-        }
-
-        /* Check collision between cursor and button3 object */
-        if(window.detectcollision(Button3, Mouse)) {
-            Button3.color = "blue";
-        }
-        else if(!window.detectcollision(Button3, Mouse)) {
-            Button3.color = "red";
-        }
-
-        /* Check collision between cursor and button4 object */
-        if(window.detectcollision(Button4, Mouse)) {
-            Button4.color = "blue";
-        }
-        else if(!window.detectcollision(Button4, Mouse)) {
-            Button4.color = "red";
-        }
-
-        /* Check collision between cursor and button5 object */
-        if(window.detectcollision(Button5, Mouse)) {
-            Button5.color = "blue";
-        }
-        else if(!window.detectcollision(Button5, Mouse)) {
-            Button5.color = "red";
-        }
     }
 
     /* Test scene */
