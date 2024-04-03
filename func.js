@@ -66,6 +66,21 @@ window.onupdate = function() {
         Context.fillStyle = Button5.color;
         Context.fillRect(Button5.x, Button5.y, Button5.w, Button5.h);
 
+        /* Check if foreground is on */
+        if(Settings == 1 || About == 1) {
+            /* Draw foreback object */
+            Context.fillStyle = ForeBack.color;
+            Context.fillRect(ForeBack.x, ForeBack.y, ForeBack.w, ForeBack.h);
+
+            /* Draw foreground object */
+            Context.fillStyle = Foreground.color;
+            Context.fillRect(Foreground.x, Foreground.y, Foreground.w, Foreground.h);
+
+            /* Draw buttonx object */
+            Context.fillStyle = ButtonX.color;
+            Context.fillRect(ButtonX.x, ButtonX.y, ButtonX.w, ButtonX.h);
+        }
+
         /* Draw transition object */
         Context.fillStyle = Transition.color;
         Context.fillRect(Transition.x, Transition.y, Transition.w, Transition.h);
@@ -131,18 +146,42 @@ window.onupdate = function() {
         Context.fillStyle = Platform2.color;
         Context.fillRect(Platform2.x, Platform2.y, Platform2.w, Platform2.h);
 
+        /* Check if foreground is on */
+        if(Pause == 1 || Help == 1) {
+            /* Draw foreback object */
+            Context.fillStyle = ForeBack.color;
+            Context.fillRect(ForeBack.x, ForeBack.y, ForeBack.w, ForeBack.h);
+
+            /* Draw foreground object */
+            Context.fillStyle = Foreground.color;
+            Context.fillRect(Foreground.x, Foreground.y, Foreground.w, Foreground.h);
+
+            /* Draw buttonx object */
+            Context.fillStyle = ButtonX.color;
+            Context.fillRect(ButtonX.x, ButtonX.y, ButtonX.w, ButtonX.h);
+        }
+
+        /* Draw buttonpause object */
+        Context.fillStyle = ButtonPause.color;
+        Context.fillRect(ButtonPause.x, ButtonPause.y, ButtonPause.w, ButtonPause.h);
+
+        /* Draw buttonhelp object */
+        Context.fillStyle = ButtonHelp.color;
+        Context.fillRect(ButtonHelp.x, ButtonHelp.y, ButtonHelp.w, ButtonHelp.h);
+
         /* Draw transition object */
         Context.fillStyle = Transition.color;
         Context.fillRect(Transition.x, Transition.y, Transition.w, Transition.h);
 
         /* Things todo on scene start */
         if(SceneStart == 0) {
-            /* Set default position of player object */
-            Player.x = 750;
-            Player.y = 1000;
+            /* Gravity and physics generally */
 
-            /* Set default gravity value */
-            Player.vy = 0;
+            if(Pause != 1 && Help != 1) {
+                Player.x = 750;
+                Player.y = 1000;
+                Player.vy = 0;
+            }
 
             /* Generate level */
             //window.generatelevel();
@@ -191,9 +230,11 @@ window.onupdate = function() {
         }
 
         /* Move player object */
-        Player.x += Player.vx;
-        Player.y += Player.vy;
-        //Player.vy += Player.gravity;
+        if(Pause != 1 && Help != 1) {
+            Player.x += Player.vx;
+            Player.y += Player.vy;
+            Player.vy += Player.gravity;
+        }
 
         /* Bounce player object from walls */
         if(Player.x <= 0) {
@@ -210,7 +251,7 @@ window.onupdate = function() {
         /* Detect collisions between player and platform2 object */
         if(window.detectcollision(Player, Platform2)) {
             /* Stop gravity */
-            player.vy = 0;
+            Player.vy = 0;
             Player.jumpcount = 0;
         }
 
