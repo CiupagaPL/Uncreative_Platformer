@@ -6,8 +6,8 @@ Simple Uncreative **JS** platformer.
 > Warning! This project is private
 
 ## Project Status
-Newest Version: **Build 9**;
-Last Updated: **3.04.2024**;
+Newest Version: **Build 10**;
+Last Updated: **15.04.2024**;
 
 ## License
 **Project licence is based on GPL 3.0.** It uses some 3rd part assets that I'll list bellow. If I'll forget about something I'm really sorry! Here's the list:

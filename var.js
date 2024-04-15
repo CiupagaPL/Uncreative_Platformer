@@ -6,11 +6,12 @@
 /* Create global variables */
 let Scene = 1, SceneStart = 0, SceneChange = 0;
 let About = 0, Settings = 0, Pause = 0, Help = 0, Mode = 0;
+let Score = 0;
 
 /* Objects */
 
 /* Create global objects */
-let Context;
+let Context, CurrentPlatform;
 
 /* Create screen object */
 let Screen = {
@@ -156,8 +157,8 @@ let ButtonHelp = {
 let Player = {
     w: 128,
     h: 128,
-    x: 0,
-    y: 0,
+    x: Board.w / 2 - 64,
+    y: Board.h - 72 - 64,
     color: "green",
     vx: 0,
     vy: 0,
@@ -175,13 +176,21 @@ let Platform = {
     x: 0,
     y: 0,
     color: "red",
+    lenght: 100,
+    currentlenght: 0,
+    load: 8,
+    currentload: 0,
+    randomx: 0,
+    randomw: 0,
+    touched: 0,
 };
 
-/* Create platform2 object */
-let Platform2 = {
-    w: Board.w,
-    h: 64,
-    x: 0,
-    y: Board.h - 64,
-    color: "blue",
+/* Create scoretext object */
+let ScoreText = {
+    color: "black",
+    font: "64px Fira_Mono",
+    value: "0",
+    x: 128,
+    y: 128,
 };
+
