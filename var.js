@@ -166,6 +166,25 @@ let Player = {
     gravity: 0.4,
     side: 0,
     jumpcount: 0,
+    touched: 0,
+};
+
+/* Create groundcheck1 object */
+let GroundCheck1 = {
+    w: 128,
+    h: 2,
+    x: Player.x,
+    y: Player.y + 124,
+    color: "rgba(0, 0, 0, 0)",
+};
+
+/* Create groundcheck2 object */
+let GroundCheck2 = {
+    w: 128,
+    h: 2,
+    x: Player.x,
+    y: Player.y - 2,
+    color: "rgba(0, 0, 0, 0)",
 };
 
 /* Create platform object */

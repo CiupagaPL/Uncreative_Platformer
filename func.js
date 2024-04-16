@@ -215,6 +215,22 @@ window.onupdate = function() {
         Context.fillStyle = Player.color;
         Context.fillRect(Player.x, Player.y, Player.w, Player.h);
 
+        /* Draw groundcheck1 object */
+        Context.fillStyle = ScoreText.color;
+        Context.fillRect(GroundCheck1.x, GroundCheck1.y, GroundCheck1.w, GroundCheck1.h);
+
+        /* Draw groundcheck2 object */
+        Context.fillStyle = ScoreText.color;
+        Context.fillRect(GroundCheck2.x, GroundCheck2.y, GroundCheck2.w, GroundCheck2.h);
+
+        /* Refresh groundcheck1 position */
+        GroundCheck1.x = Player.x ;
+        GroundCheck1.y = Player.y + 124;
+
+        /* Refresh groundcheck2 position */
+        GroundCheck2.x = Player.x;
+        GroundCheck2.y = Player.y - 2;
+
         /* Update generate level function */
         window.generatelevel();
         Platform.currentlenght = 0;
@@ -228,28 +244,34 @@ window.onupdate = function() {
                 Context.fillRect(CurrentPlatform.x, CurrentPlatform.y, CurrentPlatform.w, CurrentPlatform.h);
             }
 
+            /* Detect collisions between groundcheck1 and platform object */
+            if(window.detectcollision(CurrentPlatform, GroundCheck1)) {
+                Player.vy = 0;
+                Player.jumpcount = 0;
+                if(GroundCheck1.y >= CurrentPlatform.y) {
+                    Player.vy = -2;
+                }
+                Player.touched = 1;
+            }
+            /* Detect collisions between groundcheck2 and platform object */
+            if(window.detectcollision(CurrentPlatform, GroundCheck2)) {
+                Player.vy = 8;
+                Player.touched = 1;
+            }
             /* Detect collisions between player and platform object */
-            if(window.detectcollision(Player, CurrentPlatform)) {
-                if(CurrentPlatform.y + 8 >= Player.y + Player.h) {
-                    /* Stop gravity */
-                    Player.vy = 0;
-                    Player.jumpcount = 0;
+            else if(window.detectcollision(Player, CurrentPlatform) && Player.touched == 0) {
+                if(Player.side == 1) {
+                    Player.side = 0;
+                    Player.vx = 8;
                 }
-                if(CurrentPlatform.y - CurrentPlatform.h <= Player.y) {
-                    Player.vy = 5;
+                else if(Player.side == 0) {
+                    Player.side = 1;
+                    Player.vx = -8;
                 }
-                //else if(CurrentPlatform.y - CurrentPlatform > Player.y) {
-                    //console.log("11");
-                    //if(CurrentPlatform.x + CurrentPlatform.w <= Player.x) {
-                        //Player.vx = -8;
-                    //}
-                    //if(Player.x + Player.w >= CurrentPlatform.x) {
-                        //Player.vx = 8;
-                    //}
-                //}
-           }
+            }
 
             /* Change loop value */
+            Player.touched = 0;
             Platform.currentlenght += 1;
         }
 
