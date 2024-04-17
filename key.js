@@ -6,53 +6,12 @@ document.addEventListener("keyup", function(Event) {
     /* Menu scene keys */
     if(Scene == 1) {
         switch(Event.key) {
-            /* Set mode and change scene */
-            case "1":
-                if(SceneStart != 0) {
-                    Mode = 1;
-                    SceneChange = 1;
-                }
-
-                break;
-            case "2":
-                if(SceneStart != 0) {
-                    Mode = 2;
-                    SceneChange = 1;
-                }
-
-                break;
-            case "3":
-                if(SceneStart != 0 && Scene == 1) {
-                    Mode = 3;
-                    SceneChange = 1;
-                }
-
-                break;
-
-            /* Turn on settings */
-            case "4":
-                if(SceneStart != 0 && Scene == 1) {
-                    Settings = 1;
-                }
-
-                break;
-
-            /* Turn on about */
-            case "5":
-                if(SceneStart != 0 && Scene == 1) {
-                    About = 1;
-                }
-
-                break;
-
             /* Quit from foreground */
             case "q":
                 if(SceneStart != 0) {
                     About = 0;
                     Settings = 0;
                 }
-
-                break;
 
             /* Default */
             default:
@@ -68,22 +27,9 @@ document.addEventListener("keyup", function(Event) {
                 Pause = 1;
                 break;
 
-            /* Turn on foreground */
-            case "1":
-                Help = 0;
-                Pause = 1;
-
-                break;
-            case "2":
-                Help = 1;
-                Pause = 0;
-
-                break;
-
             /* Quit from foreground */
             case "q":
                 if(SceneStart != 0) {
-                    Help = 0;
                     Pause = 0;
                 }
 
@@ -92,29 +38,12 @@ document.addEventListener("keyup", function(Event) {
             /* Make player object jump */
             case " ":
                 /* Count player jumps */
-                switch(Player.jumpcount) {
+                switch(Player.jump) {
                     case 0:
                         /* Change value */
-                        if(!Pause == 1 && !Help == 1) {
+                        if(!Pause == 1) {
                             Player.vy = Player.initvy;
-                            Player.jumpcount = 1;
-                        }
-
-                        break;
-                    case 1:
-
-                        /* Change value */
-                        if(!Pause == 1 && !Help == 1) {
-                            Player.vy = Player.initvy * 3/4;
-                            Player.jumpcount = 2;
-                        }
-
-                        break;
-                    case 2:
-                        /* Change value */
-                        if(!Pause == 1 && !Help == 1) {
-                            Player.vy = Player.initvy * 2/3;
-                            Player.jumpcount = 3;
+                            Player.jump = 1;
                         }
 
                         break;
@@ -126,36 +55,26 @@ document.addEventListener("keyup", function(Event) {
 
                 break;
 
+            /* Stop player object */
+            case "s":
+                /* Change side to none */
+                if(!Pause == 1) {
+                    Player.side = 0;
+                }
+
+                break;
             /* Move player object left-right */
             case "d":
                 /* Change side to right */
-                if(!Pause == 1 && !Help == 1) {
-                    Player.vx = 8;
-                    Player.side = 0;
+                if(!Pause == 1) {
+                    Player.side = 1;
                 }
 
                 break;
             case "a":
                 /* Change side to left */
-                if(!Pause == 1 && !Help == 1) {
-                    Player.vx = -8;
-                    Player.side = 1;
-                }
-
-                break;
-            case "ArrowRight":
-                /* Change side to right */
-                if(!Pause == 1 && !Help == 1) {
-                    Player.vx = 8;
-                    Player.side = 0;
-                }
-
-                break;
-            case "ArrowLeft":
-                /* Change side to left */
-                if(!Pause == 1 && !Help == 1) {
-                    Player.vx = -8;
-                    Player.side = 1;
+                if(!Pause == 1) {
+                    Player.side = 2;
                 }
 
                 break;
@@ -241,16 +160,6 @@ window.addEventListener("mousemove", function(Event) {
         /* Change object color */
         ButtonPause.color = "red";
     }
-
-    /* Check collision between cursor and buttonhelp object */
-    if(window.detectcollision(ButtonHelp, Mouse)) {
-        /* Change object color */
-        ButtonHelp.color = "blue";
-    }
-    else if(!window.detectcollision(ButtonHelp, Mouse)) {
-        /* Change object color */
-        ButtonHelp.color = "red";
-    }
 });
 
 /* Mouse input handler */
@@ -315,15 +224,6 @@ window.addEventListener("click", function(Event) {
             /* Turn on pause */
             Pause = 1;
             Help = 0;
-        }
-    }
-
-    /* Buttonhelp object function */
-    if(window.detectcollision(ButtonHelp, Mouse)) {
-        if(SceneStart != 0) {
-            /* Turn on help */
-            Pause = 0;
-            Help = 1;
         }
     }
 });

@@ -1,4 +1,4 @@
-![Logo](https://cdn.discordapp.com/attachments/822928311487299687/1224346578400313374/Logo2.png?ex=661d289b&is=660ab39b&hm=29ff81c25cfdb09f9d1386dce7530d48acf1f193e9bdd2e56c5ef26cec607b2f&)
+![Logo](https://cdn.discordapp.com/attachments/822928311487299687/1224660672202281112/Logo2.png?ex=6630c221&is=661e4d21&hm=c86f49ff702cc1df9a11fae28b6d16bc32c60c8f2fe32f5ecb8ed28726ddc288&)
 # Uncreative Platformer
 
 ## General Info
@@ -6,8 +6,8 @@ Simple Uncreative **JS** platformer.
 > Warning! This project is private
 
 ## Project Status
-Newest Version: **Build 11**;
-Last Updated: **16.04.2024**;
+Newest Version: **Build 12**;
+Last Updated: **17.04.2024**;
 
 ## License
 **Project licence is based on GPL 3.0.** It uses some 3rd part assets that I'll list bellow. If I'll forget about something I'm really sorry! Here's the list:

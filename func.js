@@ -137,9 +137,9 @@ window.onupdate = function() {
         /* Things todo on scene start */
         if(SceneStart == 0) {
             /* Gravity and physics generally */
-            if(Pause != 1 && Help != 1) {
+            if(Pause != 1) {
                 Player.x = Board.w / 2 - 64;
-                Player.y = Board.h - 72 - 128 * 8;
+                Player.y = Board.h - 72 - 128;
                 Player.vy = 0;
                 Player.vx = 0;
             }
@@ -196,16 +196,16 @@ window.onupdate = function() {
         if(Player.x <= 0) {
             /* Change player side */
             Player.vx = 8;
-            Player.side = 0;
+            Player.side = 1;
         }
         if(Player.x >= Board.w - Player.w) {
             /* Change player side */
             Player.vx = -8;
-            Player.side = 1;
+            Player.side = 2;
         }
 
         /* Move player object */
-        if(Pause != 1 && Help != 1) {
+        if(Pause != 1) {
             Player.x += Player.vx;
             Player.y += Player.vy;
             Player.vy += Player.gravity;
@@ -216,29 +216,60 @@ window.onupdate = function() {
         Context.fillRect(Player.x, Player.y, Player.w, Player.h);
 
         /* Draw groundcheck1 object */
-        Context.fillStyle = ScoreText.color;
+        Context.fillStyle = GroundCheck1.color;
         Context.fillRect(GroundCheck1.x, GroundCheck1.y, GroundCheck1.w, GroundCheck1.h);
 
         /* Draw groundcheck2 object */
-        Context.fillStyle = ScoreText.color;
+        Context.fillStyle = GroundCheck2.color;
         Context.fillRect(GroundCheck2.x, GroundCheck2.y, GroundCheck2.w, GroundCheck2.h);
 
+        /* Draw groundcheck3 object */
+        Context.fillStyle = GroundCheck3.color;
+        Context.fillRect(GroundCheck3.x, GroundCheck3.y, GroundCheck3.w, GroundCheck3.h);
+
+        /* Draw groundcheck4 object */
+        Context.fillStyle = GroundCheck4.color;
+        Context.fillRect(GroundCheck4.x, GroundCheck4.y, GroundCheck4.w, GroundCheck4.h);
+
         /* Refresh groundcheck1 position */
-        GroundCheck1.x = Player.x ;
-        GroundCheck1.y = Player.y + 124;
+        GroundCheck1.x = Player.x + Player.vx;
+        GroundCheck1.y = Player.y + 126 + Player.vy;
 
         /* Refresh groundcheck2 position */
-        GroundCheck2.x = Player.x;
-        GroundCheck2.y = Player.y - 2;
+        GroundCheck2.x = Player.x + Player.vx;
+        GroundCheck2.y = Player.y + Player.vy;
+
+        /* Refresh groundcheck3 position */
+        GroundCheck3.x = Player.x + 2 + Player.vx;
+        GroundCheck3.y = Player.y + 12 + Player.vy;
+
+        /* Refresh groundcheck4 position */
+        GroundCheck4.x = Player.x + 124 + Player.vx;
+        GroundCheck4.y = Player.y + 12 + Player.vy;
 
         /* Update generate level function */
         window.generatelevel();
         Platform.currentlenght = 0;
 
+        /* Refresh player object movement */
+        if(Player.side == 0) {
+            /* Stop player object */
+            Player.vx = 0;
+        }
+        if(Player.side == 1) {
+            /* Move player object right */
+            Player.vx = 8;
+        }
+        else if(Player.side == 2) {
+            /* Move player object left */
+            Player.vx = -8;
+        }
+
         /* Generate level */
         while(Platform.lenght >= Platform.currentlenght) { 
-            /* Draw current array platform */
+            /* Check if array exists */
             if(typeof Platform.array[Platform.currentlenght] !== "undefined") {
+                /* Draw current array platform */
                 CurrentPlatform = Platform.array[Platform.currentlenght];
                 Context.fillStyle = CurrentPlatform.color;
                 Context.fillRect(CurrentPlatform.x, CurrentPlatform.y, CurrentPlatform.w, CurrentPlatform.h);
@@ -246,32 +277,32 @@ window.onupdate = function() {
 
             /* Detect collisions between groundcheck1 and platform object */
             if(window.detectcollision(CurrentPlatform, GroundCheck1)) {
+                /* Change y velocity of Player object */
                 Player.vy = 0;
-                Player.jumpcount = 0;
-                if(GroundCheck1.y >= CurrentPlatform.y) {
-                    Player.vy = -2;
-                }
-                Player.touched = 1;
+
+                /* End jumping function */
+                //if(Player.jump == 1) {
+                    //Player.side = 0;
+                    Player.jump = 0;
+                //}
             }
             /* Detect collisions between groundcheck2 and platform object */
             if(window.detectcollision(CurrentPlatform, GroundCheck2)) {
+                /* Change y velocity of Player object */
                 Player.vy = 8;
-                Player.touched = 1;
             }
-            /* Detect collisions between player and platform object */
-            else if(window.detectcollision(Player, CurrentPlatform) && Player.touched == 0) {
-                if(Player.side == 1) {
-                    Player.side = 0;
-                    Player.vx = 8;
-                }
-                else if(Player.side == 0) {
-                    Player.side = 1;
-                    Player.vx = -8;
-                }
+            /* Detect collisions between groundcheck3 and platform object */
+            if(window.detectcollision(CurrentPlatform, GroundCheck3)) {
+                /* Change x velocity of Player object */
+                Player.side = 1;
+            }
+            /* Detect collisions between groundcheck4 and platform object */
+            if(window.detectcollision(CurrentPlatform, GroundCheck4)) {
+                /* Change x velocity of Player object */
+                Player.side = 2;
             }
 
             /* Change loop value */
-            Player.touched = 0;
             Platform.currentlenght += 1;
         }
 
@@ -281,7 +312,7 @@ window.onupdate = function() {
         Context.fillText(ScoreText.value, ScoreText.x, ScoreText.y);
 
         /* Check if foreground is on */
-        if(Pause == 1 || Help == 1) {
+        if(Pause == 1) {
             /* Draw foreback object */
             Context.fillStyle = ForeBack.color;
             Context.fillRect(ForeBack.x, ForeBack.y, ForeBack.w, ForeBack.h);
@@ -298,10 +329,6 @@ window.onupdate = function() {
         /* Draw buttonpause object */
         Context.fillStyle = ButtonPause.color;
         Context.fillRect(ButtonPause.x, ButtonPause.y, ButtonPause.w, ButtonPause.h);
-
-        /* Draw buttonhelp object */
-        Context.fillStyle = ButtonHelp.color;
-        Context.fillRect(ButtonHelp.x, ButtonHelp.y, ButtonHelp.w, ButtonHelp.h);
 
         /* Draw transition object */
         Context.fillStyle = Transition.color;

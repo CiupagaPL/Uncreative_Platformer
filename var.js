@@ -5,7 +5,7 @@
 
 /* Create global variables */
 let Scene = 1, SceneStart = 0, SceneChange = 0;
-let About = 0, Settings = 0, Pause = 0, Help = 0, Mode = 0;
+let About = 0, Settings = 0, Pause = 0, Dead = 0, Mode = 0;
 let Score = 0;
 
 /* Objects */
@@ -141,16 +141,7 @@ let ButtonPause = {
     h: 48,
     x: 16,
     y: 16,
-    color: "yellow",
-};
-
-/* Create buttonhelp object */
-let ButtonHelp = {
-    w: 48,
-    h: 48,
-    x: 48 + 16,
-    y: 16,
-    color: "red",
+    color: "blue",
 };
 
 /* Create player object */
@@ -158,23 +149,22 @@ let Player = {
     w: 128,
     h: 128,
     x: Board.w / 2 - 64,
-    y: Board.h - 72 - 64,
+    y: Board.h - 72 - 128,
     color: "green",
     vx: 0,
     vy: 0,
-    initvy: -14,
-    gravity: 0.4,
+    initvy: -18,
+    gravity: 0.5,
     side: 0,
-    jumpcount: 0,
-    touched: 0,
+    jump: 0,
 };
 
 /* Create groundcheck1 object */
 let GroundCheck1 = {
     w: 128,
     h: 2,
-    x: Player.x,
-    y: Player.y + 124,
+    x: Player.x + Player.vx,
+    y: Player.y + 126 + Player.vy,
     color: "rgba(0, 0, 0, 0)",
 };
 
@@ -182,8 +172,26 @@ let GroundCheck1 = {
 let GroundCheck2 = {
     w: 128,
     h: 2,
-    x: Player.x,
-    y: Player.y - 2,
+    x: Player.x + Player.vx,
+    y: Player.y + Player.vy,
+    color: "rgba(0, 0, 0, 0)",
+};
+
+/* Create groundcheck3 object */
+let GroundCheck3 = {
+    w: 2,
+    h: 104,
+    x: Player.x + 2 + Player.vx,
+    y: Player.y + 12 + Player.vy,
+    color: "rgba(0, 0, 0, 0)",
+};
+
+/* Create groundcheck4 object */
+let GroundCheck4 = {
+    w: 2,
+    h: 104,
+    x: Player.x + 124 + Player.vx,
+    y: Player.y + 12 + Player.vy,
     color: "rgba(0, 0, 0, 0)",
 };
 
@@ -197,11 +205,10 @@ let Platform = {
     color: "red",
     lenght: 100,
     currentlenght: 0,
-    load: 8,
+    load: 3,
     currentload: 0,
     randomx: 0,
     randomw: 0,
-    touched: 0,
 };
 
 /* Create scoretext object */
