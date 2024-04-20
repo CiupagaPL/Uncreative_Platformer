@@ -6,7 +6,7 @@ Simple Uncreative Platformer made in JS.
 > Warning! This project is private!
 
 ## Project Status
-Newest Version: **Build 13**;
+Newest Version: **Build 14**;
 Last Updated: **20.04.2024**;
 
 ## License
@@ -16,5 +16,5 @@ Last Updated: **20.04.2024**;
 > There will also be transitional assets that I'll try to get rid of after each new build.
 
 ## Have a Good One!
-- Ciupaga <3
+- CiupagaPL <3
 

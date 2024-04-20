@@ -6,13 +6,6 @@ document.addEventListener("keyup", function(Event) {
     /* Menu scene keys */
     if(Scene == 1) {
         switch(Event.key) {
-            /* Quit from foreground */
-            case "q":
-                if(SceneStart != 0) {
-                    About = 0;
-                    Settings = 0;
-                }
-
             /* Default */
             default:
                 break;
@@ -24,33 +17,15 @@ document.addEventListener("keyup", function(Event) {
         switch(Event.key) {
             /* Pause game */
             case "Escape":
-                Pause = 1;
-                break;
-
-            /* Quit from foreground */
-            case "q":
-                if(SceneStart != 0) {
-                    Pause = 0;
-                }
-
+                isPaused = true;
                 break;
 
             /* Make player object jump */
             case " ":
-                /* Count player jumps */
-                switch(Player.jump) {
-                    case 0:
-                        /* Change value */
-                        if(!Pause == 1) {
-                            Player.vy = Player.initvy;
-                            Player.jump = 1;
-                        }
-
-                        break;
-
-                    /* Default */
-                    default:
-                        break;
+                if(!Player.jump && !isPaused) {
+                    /* Change value and jump */
+                    Player.vy = Player.initvy;
+                    Player.jump = true;
                 }
 
                 break;
@@ -58,22 +33,23 @@ document.addEventListener("keyup", function(Event) {
             /* Stop player object */
             case "s":
                 /* Change side to none */
-                if(!Pause == 1 && Player.jump == 0) {
+                if(!Player.jump && !isPaused) {
                     Player.side = 0;
                 }
 
                 break;
+
             /* Move player object left-right */
             case "d":
                 /* Change side to right */
-                if(!Pause == 1 && Player.jump == 0) {
+                if(!Player.jump && !isPaused) {
                     Player.side = 1;
                 }
 
                 break;
             case "a":
                 /* Change side to left */
-                if(!Pause == 1 && Player.jump == 0) {
+                if(!Player.jump && !isPaused) {
                     Player.side = 2;
                 }
 
@@ -161,16 +137,6 @@ window.addEventListener("mousemove", function(Event) {
         MusicText.color = "white";
     }
 
-    /* Check collision between cursor and scaletext object */
-    if(window.detectcollision(ScaleText, Mouse)) {
-        /* Change object color */
-        ScaleText.color = "blue";
-    }
-    else if(!window.detectcollision(ScaleText, Mouse)) {
-        /* Change object color */
-        ScaleText.color = "white";
-    }
-
     /* Check collision between cursor and returntext object */
     if(window.detectcollision(ReturnText, Mouse)) {
         /* Change object color */
@@ -185,54 +151,72 @@ window.addEventListener("mousemove", function(Event) {
 /* Mouse input handler */
 window.addEventListener("click", function(Event) {
     /* Normalmodetext object function */
-    if(window.detectcollision(NormalModeText, Mouse)) {
+    if(window.detectcollision(NormalModeText, Mouse) && SceneStart) {
         /* Set mode and change scene */
-        if(SceneStart != 0) {
-            Mode = 1;
-            SceneChange = 1;
-        }
+        Mode = 1;
+        SceneChange = true;
     }
 
     /* Hardmodetext object function */
-    if(window.detectcollision(HardModeText, Mouse)) {
+    if(window.detectcollision(HardModeText, Mouse) && SceneStart) {
         /* Set mode and change scene */
-        if(SceneStart != 0) {
-            Mode = 2;
-            SceneChange = 1;
-        }
+        Mode = 2;
+        SceneChange = true;
     }
 
     /* Tutorialtext object function */
-    if(window.detectcollision(TutorialText, Mouse)) {
+    if(window.detectcollision(TutorialText, Mouse) && SceneStart) {
         /* Set mode and change scene */
-        if(SceneStart != 0) {
-            Mode = 0;
-            SceneChange = 1;
-        }
+        Mode = 0;
+        SceneChange = true;
     }
 
     /* Settingstext object function */
-    if(window.detectcollision(SettingsText, Mouse)) {
+    if(window.detectcollision(SettingsText, Mouse) && SceneStart) {
         /* Turn on settings section */
-        if(SceneStart != 0) {
-            Settings = 1;
-        }
+        SettingsTransition = 1;
     }
 
     /* Abouttext object function */
-    if(window.detectcollision(AboutText, Mouse)) {
+    if(window.detectcollision(AboutText, Mouse) && SceneStart) {
         /* Turn on about section */
-        if(SceneStart != 0) {
-            About = 1;
+        AboutTransition = 1;
+    }
+
+    /* Sfxtext object function */
+    if(window.detectcollision(SfxText, Mouse) && SceneStart) {
+        /* Change value of boolen and sfxtext */
+        if(Sfx) {
+            Sfx = false;
+            SfxText.value = "Sfx: Off";
+        }
+        else if(!Sfx) {
+            Sfx = true;
+            SfxText.value = "Sfx: On";
+        }
+    }
+
+    /* Musictext object function */
+    if(window.detectcollision(MusicText, Mouse) && SceneStart) {
+        /* Change value of boolen and musictext */
+        if(Music) {
+            Music = false;
+            MusicText.value = "Music: Off";
+        }
+        else if(!Music) {
+            Music = true;
+            MusicText.value = "Music: On";
         }
     }
 
     /* Returntext object function */
-    if(window.detectcollision(ReturnText, Mouse)) {
+    if(window.detectcollision(ReturnText, Mouse) && SceneStart) {
         /* Turn off about and settings section */
-        if(SceneStart != 0) {
-            About = 0;
-            Settings = 0;
+        if(SettingsTransition == 3) {
+            SettingsTransition = 4;
+        }
+        else if(AboutTransition == 3) {
+            AboutTransition = 4;
         }
     }
 });

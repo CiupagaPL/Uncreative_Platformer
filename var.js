@@ -4,9 +4,10 @@
 /* Variables */
 
 /* Create global variables */
-let Scene = 1, SceneStart = 0, SceneChange = 0;
-let About = 0, Settings = 0, Pause = 0, Dead = 0, Mode = 0;
-let Score = 0;
+let Scene = 1, SceneStart = false, SceneChange = false;
+let Sfx = true, Music = true;
+let AboutTransition = 0, SettingsTransition = 0, isPaused = false, isDead = false;
+let Mode = 0, Score = 0;
 
 /* Objects */
 
@@ -56,24 +57,14 @@ let Background = {
     img: new Image(),
 };
 
-/* Create transparent0 object */
-let Transparent0 = {
-    w: Board.w,
-    h: Board.h,
-    x: 0,
-    y: 0,
-    color: "rgba(0, 0, 0, 0.85)",
-};
-
-/* Create transparent1 object */
-let Transparent1 = {
+/* Create menutransparent object */
+let MenuTransparent = {
     w: 900,
     h: Board.h,
     x: -900,
     y: 0,
     vx: 45,
     color: "rgba(0, 0, 0, 0.85)",
-    timer: 0,
     type: 0,
 };
 
@@ -91,7 +82,7 @@ let Logo = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Build 13 Made By CiupagaPL",
+    value: "Build 14 Made By CiupagaPL",
     x: -362,
     y: Board.h - 12,
     vx: 18.4,
@@ -172,12 +163,12 @@ let SfxText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "Sfx: On",
-    x: 50,
+    x: -218,
     y: NormalModeText.y,
     fx: 0,
     fy: -52,
-    vx: Transparent1.vx,
-    w: 208,
+    vx: 13.4,
+    w: 218,
     h: 52,
 };
 
@@ -186,25 +177,11 @@ let MusicText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "Music: On",
-    x: 50,
+    x: -284,
     y: SfxText.y + 108,
     fx: 0,
     fy: -52,
-    vx: Transparent1.vx,
-    w: 264,
-    h: 52,
-};
-
-/* Create scaletext object */
-let ScaleText = {
-    color: "white",
-    font: "84px Orange_Kid",
-    value: "Scale: 1.00",
-    x: 50,
-    y: MusicText.y + 108,
-    fx: 0,
-    fy: -52,
-    vx: Transparent1.vx,
+    vx: 16.7,
     w: 284,
     h: 52,
 };
@@ -214,11 +191,11 @@ let ReturnText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "Return",
-    x: 50,
-    y: ScaleText.y + 216,
+    x: -188,
+    y: MusicText.y + 324,
     fx: 0,
     fy: -52,
-    vx: Transparent1.vx,
+    vx: 11.9,
     w: 188,
     h: 52,
 };
@@ -237,23 +214,12 @@ let Player = {
     initvy: -20,
     gravity: 1,
     side: 0,
-    jump: 0,
+    jumped: false,
     touch: 0,
 };
 
-/* Create groundcheck1 object */
-let GroundCheck1 = {
-    w: 96,
-    h: 2,
-    x: Player.x + Player.vx,
-    y: Player.y + 94 + Player.vy,
-    fx: 0,
-    fy: 0,
-    color: "rgba(0, 0, 0, 0)",
-};
-
-/* Create groundcheck2 object */
-let GroundCheck2 = {
+/* Create groundchecktop object */
+let GroundCheckTop = {
     w: 96,
     h: 2,
     x: Player.x + Player.vx,
@@ -263,8 +229,19 @@ let GroundCheck2 = {
     color: "rgba(0, 0, 0, 0)",
 };
 
-/* Create groundcheck3 object */
-let GroundCheck3 = {
+/* Create groundcheckbottom object */
+let GroundCheckBottom = {
+    w: 96,
+    h: 2,
+    x: Player.x + Player.vx,
+    y: Player.y + 94 + Player.vy,
+    fx: 0,
+    fy: 0,
+    color: "rgba(0, 0, 0, 0)",
+};
+
+/* Create groundcheckleft object */
+let GroundCheckLeft = {
     w: 2,
     h: 72,
     x: Player.x + 2 + Player.vx,
@@ -274,8 +251,8 @@ let GroundCheck3 = {
     color: "rgba(0, 0, 0, 0)",
 };
 
-/* Create groundcheck4 object */
-let GroundCheck4 = {
+/* Create groundcheckright object */
+let GroundCheckRight = {
     w: 2,
     h: 72,
     x: Player.x + 92 + Player.vx,
