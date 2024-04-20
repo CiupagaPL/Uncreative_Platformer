@@ -58,7 +58,7 @@ document.addEventListener("keyup", function(Event) {
             /* Stop player object */
             case "s":
                 /* Change side to none */
-                if(!Pause == 1) {
+                if(!Pause == 1 && Player.jump == 0) {
                     Player.side = 0;
                 }
 
@@ -66,14 +66,14 @@ document.addEventListener("keyup", function(Event) {
             /* Move player object left-right */
             case "d":
                 /* Change side to right */
-                if(!Pause == 1) {
+                if(!Pause == 1 && Player.jump == 0) {
                     Player.side = 1;
                 }
 
                 break;
             case "a":
                 /* Change side to left */
-                if(!Pause == 1) {
+                if(!Pause == 1 && Player.jump == 0) {
                     Player.side = 2;
                 }
 
@@ -91,81 +91,101 @@ window.addEventListener("mousemove", function(Event) {
     Mouse.x = Event.clientX;
     Mouse.y = Event.clientY;
 
-    /* Check collision between cursor and button1 object */
-    if(window.detectcollision(Button1, Mouse)) {
+    /* Check collision between cursor and normalmodetext object */
+    if(window.detectcollision(NormalModeText, Mouse)) {
         /* Change object color */
-        Button1.color = "blue";
+        NormalModeText.color = "blue";
     }
-    else if(!window.detectcollision(Button1, Mouse)) {
+    else if(!window.detectcollision(NormalModeText, Mouse)) {
         /* Change object color */
-        Button1.color = "red";
-    }
-
-    /* Check collision between cursor and button2 object */
-    if(window.detectcollision(Button2, Mouse)) {
-        /* Change object color */
-        Button2.color = "blue";
-    }
-    else if(!window.detectcollision(Button2, Mouse)) {
-        /* Change object color */
-        Button2.color = "red";
+        NormalModeText.color = "white";
     }
 
-    /* Check collision between cursor and button3 object */
-    if(window.detectcollision(Button3, Mouse)) {
+    /* Check collision between cursor and hardmodetext object */
+    if(window.detectcollision(HardModeText, Mouse)) {
         /* Change object color */
-        Button3.color = "blue";
+        HardModeText.color = "blue";
     }
-    else if(!window.detectcollision(Button3, Mouse)) {
+    else if(!window.detectcollision(HardModeText, Mouse)) {
         /* Change object color */
-        Button3.color = "red";
-    }
-
-    /* Check collision between cursor and button4 object */
-    if(window.detectcollision(Button4, Mouse)) {
-        /* Change object color */
-        Button4.color = "blue";
-    }
-    else if(!window.detectcollision(Button4, Mouse)) {
-        /* Change object color */
-        Button4.color = "red";
+        HardModeText.color = "white";
     }
 
-    /* Check collision between cursor and button5 object */
-    if(window.detectcollision(Button5, Mouse)) {
+    /* Check collision between cursor and tutorialtext object */
+    if(window.detectcollision(TutorialText, Mouse)) {
         /* Change object color */
-        Button5.color = "blue";
+        TutorialText.color = "blue";
     }
-    else if(!window.detectcollision(Button5, Mouse)) {
+    else if(!window.detectcollision(TutorialText, Mouse)) {
         /* Change object color */
-        Button5.color = "red";
-    }
-
-    /* Check collision between cursor and buttonx object */
-    if(window.detectcollision(ButtonX, Mouse)) {
-        /* Change object color */
-        ButtonX.color = "blue";
-    }
-    else if(!window.detectcollision(ButtonX, Mouse)) {
-        /* Change object color */
-        ButtonX.color = "red";
+        TutorialText.color = "white";
     }
 
-    /* Check collision between cursor and buttonpause object */
-    if(window.detectcollision(ButtonPause, Mouse)) {
+    /* Check collision between cursor and settingstext object */
+    if(window.detectcollision(SettingsText, Mouse)) {
         /* Change object color */
-        ButtonPause.color = "blue";
+        SettingsText.color = "yellow";
     }
-    else if(!window.detectcollision(ButtonPause, Mouse)) {
+    else if(!window.detectcollision(SettingsText, Mouse)) {
         /* Change object color */
-        ButtonPause.color = "red";
+        SettingsText.color = "white";
+    }
+
+    /* Check collision between cursor and abouttext object */
+    if(window.detectcollision(AboutText, Mouse)) {
+        /* Change object color */
+        AboutText.color = "yellow";
+    }
+    else if(!window.detectcollision(AboutText, Mouse)) {
+        /* Change object color */
+        AboutText.color = "white";
+    }
+
+    /* Check collision between cursor and sfxtext object */
+    if(window.detectcollision(SfxText, Mouse)) {
+        /* Change object color */
+        SfxText.color = "blue";
+    }
+    else if(!window.detectcollision(SfxText, Mouse)) {
+        /* Change object color */
+        SfxText.color = "white";
+    }
+
+    /* Check collision between cursor and musictext object */
+    if(window.detectcollision(MusicText, Mouse)) {
+        /* Change object color */
+        MusicText.color = "blue";
+    }
+    else if(!window.detectcollision(MusicText, Mouse)) {
+        /* Change object color */
+        MusicText.color = "white";
+    }
+
+    /* Check collision between cursor and scaletext object */
+    if(window.detectcollision(ScaleText, Mouse)) {
+        /* Change object color */
+        ScaleText.color = "blue";
+    }
+    else if(!window.detectcollision(ScaleText, Mouse)) {
+        /* Change object color */
+        ScaleText.color = "white";
+    }
+
+    /* Check collision between cursor and returntext object */
+    if(window.detectcollision(ReturnText, Mouse)) {
+        /* Change object color */
+        ReturnText.color = "yellow";
+    }
+    else if(!window.detectcollision(ReturnText, Mouse)) {
+        /* Change object color */
+        ReturnText.color = "white";
     }
 });
 
 /* Mouse input handler */
 window.addEventListener("click", function(Event) {
-    /* Button1 object function */
-    if(window.detectcollision(Button1, Mouse)) {
+    /* Normalmodetext object function */
+    if(window.detectcollision(NormalModeText, Mouse)) {
         /* Set mode and change scene */
         if(SceneStart != 0) {
             Mode = 1;
@@ -173,8 +193,8 @@ window.addEventListener("click", function(Event) {
         }
     }
 
-    /* Button2 object function */
-    if(window.detectcollision(Button2, Mouse)) {
+    /* Hardmodetext object function */
+    if(window.detectcollision(HardModeText, Mouse)) {
         /* Set mode and change scene */
         if(SceneStart != 0) {
             Mode = 2;
@@ -182,48 +202,37 @@ window.addEventListener("click", function(Event) {
         }
     }
 
-    /* Button3 object function */
-    if(window.detectcollision(Button3, Mouse)) {
+    /* Tutorialtext object function */
+    if(window.detectcollision(TutorialText, Mouse)) {
         /* Set mode and change scene */
         if(SceneStart != 0) {
-            Mode = 3;
+            Mode = 0;
             SceneChange = 1;
         }
     }
 
-    /* Button4 object function */
-    if(window.detectcollision(Button4, Mouse)) {
-        /* Turn on settings */
+    /* Settingstext object function */
+    if(window.detectcollision(SettingsText, Mouse)) {
+        /* Turn on settings section */
         if(SceneStart != 0) {
             Settings = 1;
         }
     }
 
-    /* Button5 object function */
-    if(window.detectcollision(Button5, Mouse)) {
-        /* Turn on about */
+    /* Abouttext object function */
+    if(window.detectcollision(AboutText, Mouse)) {
+        /* Turn on about section */
         if(SceneStart != 0) {
             About = 1;
         }
     }
 
-    /* Buttonx object function */
-    if(window.detectcollision(ButtonX, Mouse)) {
+    /* Returntext object function */
+    if(window.detectcollision(ReturnText, Mouse)) {
+        /* Turn off about and settings section */
         if(SceneStart != 0) {
-            /* Turn off foreground */
             About = 0;
             Settings = 0;
-            Pause = 0;
-            Help = 0;
-        }
-    }
-
-    /* Buttonpause object function */
-    if(window.detectcollision(ButtonPause, Mouse)) {
-        if(SceneStart != 0) {
-            /* Turn on pause */
-            Pause = 1;
-            Help = 0;
         }
     }
 });

@@ -48,28 +48,36 @@ window.onupdate = function() {
             
             /* Start transition timer */ 
             Transition.timer += 1;
+
             /* Start transition animation */
             if(Transition.timer >= 30) {
                 /* Move transition object */
                 if(Transition.y > -Board.h) {
                     Transition.y -= Transition.vx;
                 }
-                /* End animation */
+                /* End transition animation */
                 else if(Transition.y <= -Board.h) {
+                    /* Animate menu start */
+                    Transparent1.type = 1;
+                    window.animatemenu();
+
                     /* End scene start */
-                    Transition.timer = 0;
-                    SceneStart = 1;
+                    if(Transparent1.type == 0) {
+                        Transition.timer = 0;
+                        SceneStart = 1;
+                    }
                 }
             }
         }
 
         /* Things todo on scene change */
         if(SceneChange == 1) {
-            /* Start transition timer */
-            Transition.timer += 1;
-            /* Start transition animation */
-            if(Transition.timer >= 30) {
-                /* Move transition object */
+            Transparent1.type = 2;
+            window.animatemenu();
+
+            /* Animate menu end */
+            if(Transparent1.type == 0) {
+                /* Start transition animation */
                 if(Transition.y < 0) {
                     Transition.y += Transition.vx;
                 }
@@ -88,43 +96,76 @@ window.onupdate = function() {
         Background.img.src = "Sprites/Background1.png";
         Context.drawImage(Background.img, Background.x, Background.y, Background.w, Background.h);
 
+        /* Draw transparent1 object */
+        Context.fillStyle = Transparent1.color;
+        Context.fillRect(Transparent1.x, Transparent1.y, Transparent1.w, Transparent1.h);
+
+        /* Draw versiontext object */
+        Context.fillStyle = VersionText.color;
+        Context.font = VersionText.font;
+        Context.fillText(VersionText.value, VersionText.x, VersionText.y);
+
+        /* If settings and about section is off */
+        if(Settings == 0 && About == 0) {
+            /* Draw normalmodetext object */
+            Context.fillStyle = NormalModeText.color;
+            Context.font = NormalModeText.font;
+            Context.fillText(NormalModeText.value, NormalModeText.x, NormalModeText.y);
+
+            /* Draw hardmodetext object */
+            Context.fillStyle = HardModeText.color;
+            Context.font = HardModeText.font;
+            Context.fillText(HardModeText.value, HardModeText.x, HardModeText.y);
+
+            /* Draw tutorialtext object */
+            Context.fillStyle = TutorialText.color;
+            Context.font = NormalModeText.font;
+            Context.fillText(TutorialText.value, TutorialText.x, TutorialText.y);
+
+            /* Draw settingstext object */
+            Context.fillStyle = SettingsText.color;
+            Context.font = SettingsText.font;
+            Context.fillText(SettingsText.value, SettingsText.x, SettingsText.y);
+
+            /* Draw abouttext object */
+            Context.fillStyle = AboutText.color;
+            Context.font = AboutText.font;
+            Context.fillText(AboutText.value, AboutText.x, AboutText.y);
+        }
+
         /* Draw logo object */
         Logo.img.src = "Sprites/Logo1.png";
         Context.drawImage(Logo.img, Logo.x, Logo.y, Logo.w, Logo.h);
 
-        /* Draw button1 object */
-        Context.fillStyle = Button1.color;
-        Context.fillRect(Button1.x, Button1.y, Button1.w, Button1.h);
+        /* Turn on settings section */
+        if(Settings == 1) {
+            /* Draw sfxtext object */
+            Context.fillStyle = SfxText.color;
+            Context.font = SfxText.font;
+            Context.fillText(SfxText.value, SfxText.x, SfxText.y);
 
-        /* Draw button2 object */
-        Context.fillStyle = Button2.color;
-        Context.fillRect(Button2.x, Button2.y, Button2.w, Button2.h);
+            /* Draw musictext object */
+            Context.fillStyle = MusicText.color;
+            Context.font = MusicText.font;
+            Context.fillText(MusicText.value, MusicText.x, MusicText.y);
 
-        /* Draw button3 object */
-        Context.fillStyle = Button3.color;
-        Context.fillRect(Button3.x, Button3.y, Button3.w, Button3.h);
+            /* Draw scaletext object */
+            Context.fillStyle = ScaleText.color;
+            Context.font = ScaleText.font;
+            Context.fillText(ScaleText.value, ScaleText.x, ScaleText.y);
 
-        /* Draw button4 object */
-        Context.fillStyle = Button4.color;
-        Context.fillRect(Button4.x, Button4.y, Button4.w, Button4.h);
+            /* Draw returntext object */
+            Context.fillStyle = ReturnText.color;
+            Context.font = ReturnText.font;
+            Context.fillText(ReturnText.value, ReturnText.x, ReturnText.y);
+        }
 
-        /* Draw button5 object */
-        Context.fillStyle = Button5.color;
-        Context.fillRect(Button5.x, Button5.y, Button5.w, Button5.h);
-
-        /* Check if foreground is on */
-        if(Settings == 1 || About == 1) {
-            /* Draw foreback object */
-            Context.fillStyle = ForeBack.color;
-            Context.fillRect(ForeBack.x, ForeBack.y, ForeBack.w, ForeBack.h);
-
-            /* Draw foreground object */
-            Context.fillStyle = Foreground.color;
-            Context.fillRect(Foreground.x, Foreground.y, Foreground.w, Foreground.h);
-
-            /* Draw buttonx object */
-            Context.fillStyle = ButtonX.color;
-            Context.fillRect(ButtonX.x, ButtonX.y, ButtonX.w, ButtonX.h);
+        /* Turn on about section */
+        if(About == 1) {
+            /* Draw returntext object */
+            Context.fillStyle = ReturnText.color;
+            Context.font = ReturnText.font;
+            Context.fillText(ReturnText.value, ReturnText.x, ReturnText.y);
         }
 
         /* Draw transition object */
@@ -132,14 +173,14 @@ window.onupdate = function() {
         Context.fillRect(Transition.x, Transition.y, Transition.w, Transition.h);
     }
 
-    /* Test scene */
+    /* Game scene */
     if(Scene == 2) {
         /* Things todo on scene start */
         if(SceneStart == 0) {
             /* Gravity and physics generally */
             if(Pause != 1) {
                 Player.x = Board.w / 2 - 64;
-                Player.y = Board.h - 72 - 128;
+                Player.y = Board.h - 96 - 64;
                 Player.vy = 0;
                 Player.vx = 0;
             }
@@ -151,6 +192,7 @@ window.onupdate = function() {
 
             /* Start transition timer */ 
             Transition.timer += 1;
+
             /* Start transition animation */
             if(Transition.timer >= 30) {
                 /* Move transition object */
@@ -170,6 +212,7 @@ window.onupdate = function() {
         if(SceneChange == 1) {
             /* Start transition timer */
             Transition.timer += 1;
+
             /* Start transition animation */
             if(Transition.timer >= 30) {
                 /* Move transition object */
@@ -233,7 +276,7 @@ window.onupdate = function() {
 
         /* Refresh groundcheck1 position */
         GroundCheck1.x = Player.x + Player.vx;
-        GroundCheck1.y = Player.y + 126 + Player.vy;
+        GroundCheck1.y = Player.y + 94 + Player.vy;
 
         /* Refresh groundcheck2 position */
         GroundCheck2.x = Player.x + Player.vx;
@@ -244,7 +287,7 @@ window.onupdate = function() {
         GroundCheck3.y = Player.y + 12 + Player.vy;
 
         /* Refresh groundcheck4 position */
-        GroundCheck4.x = Player.x + 124 + Player.vx;
+        GroundCheck4.x = Player.x + 92 + Player.vx;
         GroundCheck4.y = Player.y + 12 + Player.vy;
 
         /* Update generate level function */
@@ -266,7 +309,7 @@ window.onupdate = function() {
         }
 
         /* Generate level */
-        while(Platform.lenght >= Platform.currentlenght) { 
+        while(Platform.lenght >= Platform.currentlenght) {
             /* Check if array exists */
             if(typeof Platform.array[Platform.currentlenght] !== "undefined") {
                 /* Draw current array platform */
@@ -276,34 +319,41 @@ window.onupdate = function() {
             }
 
             /* Detect collisions between groundcheck1 and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheck1)) {
+            if(window.detectcollision(CurrentPlatform, GroundCheck1) && Player.touch == 0) {
                 /* Change y velocity of Player object */
                 Player.vy = 0;
 
                 /* End jumping function */
-                //if(Player.jump == 1) {
-                    //Player.side = 0;
-                    Player.jump = 0;
-                //}
+                Player.jump = 0;
+                Player.touch = 1;
             }
             /* Detect collisions between groundcheck2 and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheck2)) {
+            if(window.detectcollision(CurrentPlatform, GroundCheck2) && Player.touch == 0) {
                 /* Change y velocity of Player object */
                 Player.vy = 8;
+                Player.touch = 1;
             }
             /* Detect collisions between groundcheck3 and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheck3)) {
+            if(window.detectcollision(CurrentPlatform, GroundCheck3) && Player.touch == 0) {
                 /* Change x velocity of Player object */
                 Player.side = 1;
+                Player.touch = 1;
             }
             /* Detect collisions between groundcheck4 and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheck4)) {
+            if(window.detectcollision(CurrentPlatform, GroundCheck4) && Player.touch == 0) {
                 /* Change x velocity of Player object */
                 Player.side = 2;
+                Player.touch = 1;
             }
+
+            /* Update level */
+            window.updatelevel(CurrentPlatform);
 
             /* Change loop value */
             Platform.currentlenght += 1;
+            Player.touch = 0;
+            CurrentPlatform.y += 0.25;
+
         }
 
         /* Draw scoretext object */
@@ -313,22 +363,8 @@ window.onupdate = function() {
 
         /* Check if foreground is on */
         if(Pause == 1) {
-            /* Draw foreback object */
-            Context.fillStyle = ForeBack.color;
-            Context.fillRect(ForeBack.x, ForeBack.y, ForeBack.w, ForeBack.h);
 
-            /* Draw foreground object */
-            Context.fillStyle = Foreground.color;
-            Context.fillRect(Foreground.x, Foreground.y, Foreground.w, Foreground.h);
-
-            /* Draw buttonx object */
-            Context.fillStyle = ButtonX.color;
-            Context.fillRect(ButtonX.x, ButtonX.y, ButtonX.w, ButtonX.h);
         }
-
-        /* Draw buttonpause object */
-        Context.fillStyle = ButtonPause.color;
-        Context.fillRect(ButtonPause.x, ButtonPause.y, ButtonPause.w, ButtonPause.h);
 
         /* Draw transition object */
         Context.fillStyle = Transition.color;
@@ -339,10 +375,45 @@ window.onupdate = function() {
 /* Window collision function */
 window.detectcollision = function(First, Second) {
     /* Calculate and return collision */
-    return First.x < Second.x + Second.w &&
-           First.x + First.w > Second.x &&
-           First.y < Second.y + Second.h &&
-           First.y + First.h > Second.y;
+    return First.x + First.fx < Second.x + Second.fy + Second.w &&
+           First.x + First.fx + First.w > Second.x + Second.fx &&
+           First.y + First.fy < Second.y + Second.fy + Second.h &&
+           First.y + First.fy + First.h > Second.y + Second.fy;
+}
+
+/* Window menu animating function */
+window.animatemenu = function() {
+    if(Transparent1.type == 1) {
+        if(Transparent1.x < 0) {
+            Transparent1.x += Transparent1.vx;
+            Logo.x += Logo.vx;
+            VersionText.x += VersionText.vx;
+            NormalModeText.x += NormalModeText.vx;
+            HardModeText.x += HardModeText.vx;
+            TutorialText.x += TutorialText.vx;
+            SettingsText.x += SettingsText.vx;
+            AboutText.x += AboutText.vx;
+        }
+        else if(Transparent1.x >= 0) {
+            Transparent1.type = 0;
+        }
+    }
+
+    if(Transparent1.type == 2) {
+        if(Transparent1.x > -900) {
+            Transparent1.x -= Transparent1.vx;
+            Logo.x -= Logo.vx;
+            VersionText.x -= VersionText.vx;
+            NormalModeText.x -= NormalModeText.vx;
+            HardModeText.x -= HardModeText.vx;
+            TutorialText.x -= TutorialText.vx;
+            SettingsText.x -= SettingsText.vx;
+            AboutText.x -= AboutText.vx;
+        }
+        else if(Transparent1.x <= -900) {
+            Transparent1.type = 0;
+        }
+    }
 }
 
 /* Window level generator function */
@@ -361,14 +432,74 @@ window.generatelevel = function() {
 
     /* Generate rest platforms */
     while(Platform.currentload <= Platform.load) {
-        Platform.randomx = Math.floor(Math.random() * Board.w * 3/4);
-        Platform.randomw = Math.floor(Math.random() * 256 + 256);
+        /* Start platformgenerator function */
+        window.platformgenerator();
 
-        /* Create first current platform */
-        let CurrentPlatform = {
-            x: 0,
-            y: Board.h - 256 * Platform.currentload - 340,
-            w: Platform.randomx,
+        /* Change loop value */
+        Platform.currentload += 1;
+    }
+}
+
+/* Window generator update function */
+window.updatelevel = function(CurrentPlatform) {
+    if(CurrentPlatform.y - CurrentPlatform.h >= Board.h) {
+        CurrentPlatform = window.platformgenerator();
+    }
+}
+
+/* Window platform generator function */
+window.platformgenerator = function() {
+    /* Generate platform count */
+    if(Board.h < Board.w) {
+        Platform.count = Math.floor(Math.random() * 3);
+    }
+    else if(Board.h >= Board.w) {
+        Platform.count = 0;
+    }
+
+    /* Generate all platforms position */
+    if(Platform.count == 0) {
+        Platform.randomx1 = Math.floor(Math.random() * Board.w * 3/4) + Platform.w / 2;
+    }
+    if(Platform.count == 1) {
+        Platform.randomx1 = Math.floor(Math.random() * Board.w * 1.5/4 + Platform.w / 2);
+        Platform.randomx2 = Platform.randomx1 + Platform.w + Math.floor(Math.random() * Board.w * 1.5/4 + Platform.w / 2);
+    }
+    if(Platform.count == 2) {
+        Platform.randomx1 = Math.floor(Math.random() * Board.w * 1/4 + Platform.w / 2);
+        Platform.randomx2 = Platform.randomx1 + Platform.w + Math.floor(Math.random() * Board.w * 1/4) + Platform.w / 2;
+        Platform.randomx3 = Platform.randomx2 + Platform.w + Math.floor(Math.random() * Board.w * 1/4 + Platform.w / 2);
+    }
+
+    /* Create first current platform */
+    let CurrentPlatform = {
+        x: 0,
+        y: Board.h - 192 * Platform.currentload - 288,
+        w: Platform.randomx1,
+        h: Platform.h,
+        color: Platform.color,
+    };
+
+    /* Push current platform into array */
+    Platform.array.push(CurrentPlatform);
+
+    /* Create second platform */
+    if(Platform.count == 0) {
+        CurrentPlatform = {
+            x: Platform.randomx1 + Platform.w,
+            y: CurrentPlatform.y,
+            w: Board.w - Platform.randomx1 - Platform.w,
+            h: Platform.h,
+            color: Platform.color,
+        };
+    }
+
+    /* Create second and last platform */
+    if(Platform.count == 1) {
+        CurrentPlatform = {
+            x: Platform.randomx1 + Platform.w,
+            y: CurrentPlatform.y,
+            w: Platform.randomx2 - Platform.randomx1 - Platform.w,
             h: Platform.h,
             color: Platform.color,
         };
@@ -376,20 +507,49 @@ window.generatelevel = function() {
         /* Push current platform into array */
         Platform.array.push(CurrentPlatform);
 
-        /* Create second current platform */
         CurrentPlatform = {
-            x: CurrentPlatform.w + Platform.randomw,
+            x: Platform.randomx2 + Platform.w,
             y: CurrentPlatform.y,
-            w: Board.w - CurrentPlatform.w + Platform.randomw,
+            w: Board.w - Platform.randomx2 - Platform.w,
             h: Platform.h,
             color: Platform.color,
-        }
-        
+        };
+    }
+
+    /* Create second, third and last platform */
+    else if(Platform.count == 2) {
+        CurrentPlatform = {
+            x: Platform.randomx1 + Platform.w,
+            y: CurrentPlatform.y,
+            w: Platform.randomx2 - Platform.randomx1 - Platform.w,
+            h: Platform.h,
+            color: Platform.color,
+        };
+
         /* Push current platform into array */
         Platform.array.push(CurrentPlatform);
 
-        /* Change loop value */
-        Platform.currentload += 1;
+        CurrentPlatform = {
+            x: Platform.randomx2 + Platform.w,
+            y: CurrentPlatform.y,
+            w: Platform.randomx3 - Platform.randomx2 - Platform.w,
+            h: Platform.h,
+            color: Platform.color,
+        };
+
+        /* Push current platform into array */
+        Platform.array.push(CurrentPlatform);
+
+        CurrentPlatform = {
+            x: Platform.randomx3 + Platform.w,
+            y: CurrentPlatform.y,
+            w: Board.w - Platform.randomx3 - Platform.w,
+            h: Platform.h,
+            color: Platform.color,
+        };
     }
+        
+    /* Push current platform into array */
+    Platform.array.push(CurrentPlatform);
 }
 

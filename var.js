@@ -21,10 +21,12 @@ let Screen = {
 
 /* Create mouse object */
 let Mouse = {
-    w: 10,
-    h: 10,
+    w: 12,
+    h: 12,
     x: 0,
     y: 0,
+    fx: 0,
+    fy: 0,
 };
 
 /* Create board object */
@@ -40,9 +42,9 @@ let Transition = {
     h: Board.h,
     x: 0,
     y: 0,
+    vx: 40,
     color: "black",
     timer: 0,
-    vx: 30,
 };
 
 /* Create background object */
@@ -54,167 +56,260 @@ let Background = {
     img: new Image(),
 };
 
-/* Create foreground object */
-let Foreground = {
-    w: 1200,
-    h: 800,
-    x: Board.w / 2 - 600,
-    y: Board.h / 2 - 400,
-    color: "yellow",
-};
-
-/* Create foreback object */
-let ForeBack = {
+/* Create transparent0 object */
+let Transparent0 = {
     w: Board.w,
     h: Board.h,
     x: 0,
     y: 0,
-    color: "rgba(0, 0, 0, 0.75)",
+    color: "rgba(0, 0, 0, 0.85)",
+};
+
+/* Create transparent1 object */
+let Transparent1 = {
+    w: 900,
+    h: Board.h,
+    x: -900,
+    y: 0,
+    vx: 45,
+    color: "rgba(0, 0, 0, 0.85)",
+    timer: 0,
+    type: 0,
 };
 
 /* Create logo object */
 let Logo = {
     w: 1200,
     h: 300,
-    x: Board.w / 2 - 600,
-    y: Board.h * 1/3 - 150,
+    x: -1340,
+    y: 32,
+    vx: 60,
     img: new Image(),
 };
 
-/* Create button1 object */
-let Button1 = {
-    w: 620,
-    h: 80,
-    x: Board.w / 2 - 310,
-    y: Board.h * 1.5/3 - 40,
-    color: "red",
+/* Create versiontext object */
+let VersionText = {
+    color: "white",
+    font: "32px Orange_Kid",
+    value: "Build 13 Made By CiupagaPL",
+    x: -362,
+    y: Board.h - 12,
+    vx: 18.4,
 };
 
-/* Create button2 object */
-let Button2 = {
-    w: 300,
-    h: 80,
-    x: Button1.x,
-    y: Button1.y + 100,
-    color: "red",
+/* Create normalmodetext object */
+let NormalModeText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Normal Mode",
+    x: -368,
+    y: Board.h * 1.2 / 3,
+    fx: 0,
+    fy: -52,
+    vx: 20.9,
+    w: 368,
+    h: 52,
 };
 
-/* Create button3 object */
-let Button3 = {
-    w: 300,
-    h: 80,
-    x: Button1.x + 320,
-    y: Button1.y + 100,
-    color: "red",
+/* Create hardmodetext object */
+let HardModeText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Hard Mode",
+    x: -308,
+    y: NormalModeText.y + 108,
+    fx: 0,
+    fy: -52,
+    vx: 17.9,
+    w: 308,
+    h: 52,
 };
 
-/* Create button4 object */
-let Button4 = {
-    w: 300,
-    h: 80,
-    x: Button2.x,
-    y: Button2.y + 100,
-    color: "red",
+/* Create tutorialtext object */
+let TutorialText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Tutorial",
+    x: -224,
+    y: HardModeText.y + 108,
+    fx: 0,
+    fy: -52,
+    vx: 13.7,
+    w: 224,
+    h: 52,
 };
 
-/* Create button5 object */
-let Button5 = {
-    w: 300,
-    h: 80,
-    x: Button2.x + 320,
-    y: Button2.y + 100,
-    color: "red",
+/* Create settingstext object */
+let SettingsText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Settings",
+    x: -232,
+    y: TutorialText.y + 108,
+    fx: 0,
+    fy: -52,
+    vx: 14.1,
+    w: 232,
+    h: 52,
 };
 
-/* Create buttonX object */
-let ButtonX = {
-    w: 48,
-    h: 48,
-    x: Board.w / 2 + 600 - 48 - 16,
-    y: Foreground.y + 16,
-    color: "red",
+/* Create abouttext object */
+let AboutText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "About",
+    x: -172,
+    y: SettingsText.y + 108,
+    fx: 0,
+    fy: -52,
+    vx: 11.1,
+    w: 172,
+    h: 52,
 };
 
-/* Create buttonpause object */
-let ButtonPause = {
-    w: 48,
-    h: 48,
-    x: 16,
-    y: 16,
-    color: "blue",
+/* Create sfxtext object */
+let SfxText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Sfx: On",
+    x: 50,
+    y: NormalModeText.y,
+    fx: 0,
+    fy: -52,
+    vx: Transparent1.vx,
+    w: 208,
+    h: 52,
+};
+
+/* Create musictext object */
+let MusicText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Music: On",
+    x: 50,
+    y: SfxText.y + 108,
+    fx: 0,
+    fy: -52,
+    vx: Transparent1.vx,
+    w: 264,
+    h: 52,
+};
+
+/* Create scaletext object */
+let ScaleText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Scale: 1.00",
+    x: 50,
+    y: MusicText.y + 108,
+    fx: 0,
+    fy: -52,
+    vx: Transparent1.vx,
+    w: 284,
+    h: 52,
+};
+
+/* Create returntext object */
+let ReturnText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Return",
+    x: 50,
+    y: ScaleText.y + 216,
+    fx: 0,
+    fy: -52,
+    vx: Transparent1.vx,
+    w: 188,
+    h: 52,
 };
 
 /* Create player object */
 let Player = {
-    w: 128,
-    h: 128,
-    x: Board.w / 2 - 64,
-    y: Board.h - 72 - 128,
-    color: "green",
+    w: 96,
+    h: 96,
+    x: Board.w / 2 - 48,
+    y: Board.h - 96 - 128,
+    fx: 0,
+    fy: 0,
     vx: 0,
     vy: 0,
-    initvy: -18,
-    gravity: 0.5,
+    color: "green",
+    initvy: -20,
+    gravity: 1,
     side: 0,
     jump: 0,
+    touch: 0,
 };
 
 /* Create groundcheck1 object */
 let GroundCheck1 = {
-    w: 128,
+    w: 96,
     h: 2,
     x: Player.x + Player.vx,
-    y: Player.y + 126 + Player.vy,
+    y: Player.y + 94 + Player.vy,
+    fx: 0,
+    fy: 0,
     color: "rgba(0, 0, 0, 0)",
 };
 
 /* Create groundcheck2 object */
 let GroundCheck2 = {
-    w: 128,
+    w: 96,
     h: 2,
     x: Player.x + Player.vx,
     y: Player.y + Player.vy,
+    fx: 0,
+    fy: 0,
     color: "rgba(0, 0, 0, 0)",
 };
 
 /* Create groundcheck3 object */
 let GroundCheck3 = {
     w: 2,
-    h: 104,
+    h: 72,
     x: Player.x + 2 + Player.vx,
     y: Player.y + 12 + Player.vy,
+    fx: 0,
+    fy: 0,
     color: "rgba(0, 0, 0, 0)",
 };
 
 /* Create groundcheck4 object */
 let GroundCheck4 = {
     w: 2,
-    h: 104,
-    x: Player.x + 124 + Player.vx,
+    h: 72,
+    x: Player.x + 92 + Player.vx,
     y: Player.y + 12 + Player.vy,
+    fx: 0,
+    fy: 0,
     color: "rgba(0, 0, 0, 0)",
 };
 
 /* Create platform object */
 let Platform = {
     array: [],
-    w: 512,
-    h: 32,
+    w: 256,
+    h: 24,
     x: 0,
     y: 0,
+    fx: 0,
+    fy: 0,
     color: "red",
     lenght: 100,
     currentlenght: 0,
-    load: 3,
+    load: 4,
     currentload: 0,
-    randomx: 0,
-    randomw: 0,
+    count: 0,
+    speed: 1,
+    randomx1: 0,
+    randomx2: 0,
+    randomx3: 0,
 };
 
 /* Create scoretext object */
 let ScoreText = {
     color: "black",
-    font: "64px Fira_Mono",
+    font: "128px Orange_Kid",
     value: "0",
     x: 128,
     y: 128,

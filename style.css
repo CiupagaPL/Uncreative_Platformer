@@ -3,14 +3,14 @@
 
 /* Create font-face for project */
 @font-face {
-    font-family: Fira_Mono;
-    src: url("Fonts/Fira_Mono.ttf") format("truetype");
+    font-family: Orange_Kid;
+    src: url("Fonts/Orange_Kid.otf") format("truetype");
 }
 
 /* Defaul font look */
 * {
     color: black;
-    font-family: Fira_Mono;
+    font-family: Orange_Kid;
     text-align: center;
 }
 
