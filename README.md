@@ -1,4 +1,4 @@
-![Logo](https://github.com/CiupagaPL/Uncreative_Platformer/blob/main/Sprites/Title.png)
+![Logo](https://github.com/CiupagaPL/Uncreative_Platformer/blob/main/Sprites/Title_Background.png)
 # UNCREATIVE PLATFORMER
 
 ## General Info
