@@ -6,8 +6,8 @@
 /* Create global variables */
 let Scene = 1, SceneStart = false, SceneChange = false;
 let Sfx = true, Music = true;
-let AboutTransition = 0, SettingsTransition = 0, isPaused = false, isDead = false;
-let Mode = 0, Score = 0;
+let AboutTransition = 0, SettingsTransition = 0, isDead = false;
+let Pause = 0, Mode = 0, Score = 0, Points = 0, Hp = 3;
 
 /* Objects */
 
@@ -37,6 +37,24 @@ let Board = {
     h: Screen.h,
 };
 
+/* Create warning object */
+let Warning = {
+    w: Board.w,
+    h: Board.h,
+    x: 0,
+    y: 0,
+    color: "black",
+};
+
+/* Create warningtext */
+let WarningText = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "Resize Window and/or Refresh Page to Continue!",
+    x: 32,
+    y: 64,
+};
+
 /* Create transition object */
 let Transition = {
     w: Board.w,
@@ -59,22 +77,22 @@ let Background = {
 
 /* Create menutransparent object */
 let MenuTransparent = {
-    w: 900,
+    w: 790,
     h: Board.h,
-    x: -900,
+    x: -790,
     y: 0,
-    vx: 45,
+    vx: 39.5,
     color: "rgba(0, 0, 0, 0.85)",
     type: 0,
 };
 
-/* Create logo object */
-let Logo = {
-    w: 1200,
-    h: 300,
-    x: -1340,
-    y: 32,
-    vx: 60,
+/* Create title object */
+let Title = {
+    w: 1000,
+    h: 250,
+    x: -1160,
+    y: 16,
+    vx: 52.5,
     img: new Image(),
 };
 
@@ -82,7 +100,7 @@ let Logo = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Build 14 Made By CiupagaPL",
+    value: "Build 15 Made By CiupagaPL",
     x: -362,
     y: Board.h - 12,
     vx: 18.4,
@@ -93,11 +111,11 @@ let NormalModeText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "Normal Mode",
-    x: -368,
+    x: -384,
     y: Board.h * 1.2 / 3,
     fx: 0,
     fy: -52,
-    vx: 20.9,
+    vx: 21.7,
     w: 368,
     h: 52,
 };
@@ -107,13 +125,13 @@ let HardModeText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "Hard Mode",
-    x: -308,
+    x: -384,
     y: NormalModeText.y + 108,
     fx: 0,
-    fy: -52,
-    vx: 17.9,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
     w: 308,
-    h: 52,
+    h: NormalModeText.h,
 };
 
 /* Create tutorialtext object */
@@ -121,13 +139,13 @@ let TutorialText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "Tutorial",
-    x: -224,
+    x: -384,
     y: HardModeText.y + 108,
     fx: 0,
-    fy: -52,
-    vx: 13.7,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
     w: 224,
-    h: 52,
+    h: NormalModeText.h,
 };
 
 /* Create settingstext object */
@@ -135,13 +153,13 @@ let SettingsText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "Settings",
-    x: -232,
+    x: -384,
     y: TutorialText.y + 108,
     fx: 0,
-    fy: -52,
-    vx: 14.1,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
     w: 232,
-    h: 52,
+    h: NormalModeText.h,
 };
 
 /* Create abouttext object */
@@ -149,13 +167,13 @@ let AboutText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "About",
-    x: -172,
+    x: -384,
     y: SettingsText.y + 108,
     fx: 0,
-    fy: -52,
-    vx: 11.1,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
     w: 172,
-    h: 52,
+    h: NormalModeText.h,
 };
 
 /* Create sfxtext object */
@@ -163,13 +181,13 @@ let SfxText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "Sfx: On",
-    x: -218,
+    x: -444,
     y: NormalModeText.y,
     fx: 0,
-    fy: -52,
-    vx: 13.4,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
     w: 218,
-    h: 52,
+    h: NormalModeText.h,
 };
 
 /* Create musictext object */
@@ -177,13 +195,13 @@ let MusicText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "Music: On",
-    x: -284,
-    y: SfxText.y + 108,
+    x: -444,
+    y: HardModeText.y,
     fx: 0,
-    fy: -52,
-    vx: 16.7,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
     w: 284,
-    h: 52,
+    h: NormalModeText.h,
 };
 
 /* Create returntext object */
@@ -191,13 +209,60 @@ let ReturnText = {
     color: "white",
     font: "84px Orange_Kid",
     value: "Return",
-    x: -188,
-    y: MusicText.y + 324,
+    x: -444,
+    y: AboutText.y,
     fx: 0,
-    fy: -52,
-    vx: 11.9,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
     w: 188,
-    h: 52,
+    h: NormalModeText.h,
+};
+
+/* Create resumetext object */
+let ResumeText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Resume",
+    x: -444,
+    y: NormalModeText.y,
+    fx: 0,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
+    w: 200,
+    h: NormalModeText.h,
+};
+
+/* Create mainmenutext object */
+let MainMenuText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Main Menu",
+    x: -444,
+    y: HardModeText.y,
+    fx: 0,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
+    w: 200,
+    h: NormalModeText.h,
+};
+
+/* Create scoretext object */
+let ScoreText = {
+    color: "white",
+    font: "92px Orange_Kid",
+    value: "0",
+    x: 30,
+    y: 75,
+};
+
+/* Create statustransparent object */
+let StatusTransparent = {
+    w: Board.w,
+    h: 96,
+    x: 0,
+    y: 0,
+    vy: 6.4,
+    color: "rgba(0, 0, 0, 0.85)",
 };
 
 /* Create player object */
@@ -281,14 +346,5 @@ let Platform = {
     randomx1: 0,
     randomx2: 0,
     randomx3: 0,
-};
-
-/* Create scoretext object */
-let ScoreText = {
-    color: "black",
-    font: "128px Orange_Kid",
-    value: "0",
-    x: 128,
-    y: 128,
 };
 

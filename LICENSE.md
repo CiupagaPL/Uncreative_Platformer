@@ -1,5 +1,5 @@
 ![Logo](https://github.com/CiupagaPL/Uncreative_Platformer/blob/main/Sprites/Logo2.png)
-# License
+# LICENSE
 ## GNU 3.0
 **GNU GENERAL PUBLIC LICENSE
 Version 3, 29 June 2007**

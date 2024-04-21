@@ -12,17 +12,20 @@ document.addEventListener("keyup", function(Event) {
         }
     }
 
-    /* Test scene keys */
+    /* Game scene keys */
     if(Scene == 2) {
         switch(Event.key) {
             /* Pause game */
             case "Escape":
-                isPaused = true;
+                if(Pause == 0 && MenuTransparent.type == 0 && SceneStart) {
+                    Pause = 1;
+                }
+
                 break;
 
             /* Make player object jump */
             case " ":
-                if(!Player.jump && !isPaused) {
+                if(!Player.jump && Pause == 0 && SceneStart) {
                     /* Change value and jump */
                     Player.vy = Player.initvy;
                     Player.jump = true;
@@ -33,7 +36,7 @@ document.addEventListener("keyup", function(Event) {
             /* Stop player object */
             case "s":
                 /* Change side to none */
-                if(!Player.jump && !isPaused) {
+                if(!Player.jump && Pause == 0 && SceneStart) {
                     Player.side = 0;
                 }
 
@@ -42,14 +45,14 @@ document.addEventListener("keyup", function(Event) {
             /* Move player object left-right */
             case "d":
                 /* Change side to right */
-                if(!Player.jump && !isPaused) {
+                if(!Player.jump && Pause == 0 && SceneStart) {
                     Player.side = 1;
                 }
 
                 break;
             case "a":
                 /* Change side to left */
-                if(!Player.jump && !isPaused) {
+                if(!Player.jump && Pause == 0 && SceneStart) {
                     Player.side = 2;
                 }
 
@@ -137,6 +140,26 @@ window.addEventListener("mousemove", function(Event) {
         MusicText.color = "white";
     }
 
+    /* Check collision between cursor and resumetext object */
+    if(window.detectcollision(ResumeText, Mouse)) {
+        /* Change object color */
+        ResumeText.color = "blue";
+    }
+    else if(!window.detectcollision(ResumeText, Mouse)) {
+        /* Change object color */
+        ResumeText.color = "white";
+    }
+
+    /* Check collision between cursor and mainmenutext object */
+    if(window.detectcollision(MainMenuText, Mouse)) {
+        /* Change object color */
+        MainMenuText.color = "blue";
+    }
+    else if(!window.detectcollision(MainMenuText, Mouse)) {
+        /* Change object color */
+        MainMenuText.color = "white";
+    }
+
     /* Check collision between cursor and returntext object */
     if(window.detectcollision(ReturnText, Mouse)) {
         /* Change object color */
@@ -207,6 +230,18 @@ window.addEventListener("click", function(Event) {
             Music = true;
             MusicText.value = "Music: On";
         }
+    }
+
+    /* Resumetext object function */
+    if(window.detectcollision(ResumeText, Mouse) && SceneStart) {
+        /* Unpause game */
+        Pause = 3;
+    }
+
+    /* Mainmenutext object function */
+    if(window.detectcollision(MainMenuText, Mouse) && SceneStart) {
+        /* Start scenechange */
+        SceneChange = true;
     }
 
     /* Returntext object function */

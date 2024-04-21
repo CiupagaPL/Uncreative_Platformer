@@ -8,6 +8,11 @@ window.onload = function() {
     Board.base.height = Board.h;
     Context = Board.base.getContext("2d");
 
+    /* Turn on warning mode if resolution is too low */
+    if(Board.w < 1000 || Board.h < 800) {
+        Scene = 0;
+    }
+
     /* Start update function */
     window.onupdate();
 }
@@ -25,6 +30,9 @@ window.onresize = function() {
     /* Change board resolution */
     Board.base.width = Board.w;
     Board.base.height = Board.h;
+
+    /* Turn on warning mode */
+    Scene = 0;
 }
 
 /* Window update function */
@@ -36,6 +44,18 @@ window.onupdate = function() {
 
     /* Clear screen */
     Context.clearRect(0, 0, Board.w, Board.h);
+
+    /* Warning scene */
+    if(Scene == 0) {
+        /* Draw warning object */
+        Context.fillStyle = Warning.color;
+        Context.fillRect(Warning.x, Warning.y, Warning.w, Warning.h);
+
+        /* Draw warningtext object */
+        Context.fillStyle = WarningText.color;
+        Context.font = WarningText.font;
+        Context.fillText(WarningText.value, WarningText.x, WarningText.y);
+    }
     
     /* Menu scene */
     if(Scene == 1) {
@@ -59,7 +79,7 @@ window.onupdate = function() {
                 else if(Transition.y <= -Board.h) {
                     /* Animate menu start */
                     MenuTransparent.type = 1;
-                    window.animatemenu();
+                    window.animatehud();
 
                     /* End scene start */
                     if(MenuTransparent.type == 0) {
@@ -73,7 +93,7 @@ window.onupdate = function() {
         /* Things todo on scene change */
         if(SceneChange == true) {
             MenuTransparent.type = 2;
-            window.animatemenu();
+            window.animatehud();
 
             /* Animate menu end */
             if(MenuTransparent.type == 0) {
@@ -100,9 +120,9 @@ window.onupdate = function() {
         Context.fillStyle = MenuTransparent.color;
         Context.fillRect(MenuTransparent.x, MenuTransparent.y, MenuTransparent.w, MenuTransparent.h);
 
-        /* Draw logo object */
-        Logo.img.src = "Sprites/Logo1.png";
-        Context.drawImage(Logo.img, Logo.x, Logo.y, Logo.w, Logo.h);
+        /* Draw title object */
+        Title.img.src = "Sprites/Title.png";
+        Context.drawImage(Title.img, Title.x, Title.y, Title.w, Title.h);
 
         /* Draw versiontext object */
         Context.fillStyle = VersionText.color;
@@ -155,38 +175,46 @@ window.onupdate = function() {
 
         /* Settings section animation function */
         if(SettingsTransition == 1) {
+            /* Change loop value and start animating function */
             MenuTransparent.type = 3;
-            window.animatemenu();
+            window.animatehud();
         }
         if(SettingsTransition == 2) {
+            /* Change loop value and start animating function */
             MenuTransparent.type = 4;
-            window.animatemenu();
+            window.animatehud();
         }
         if(SettingsTransition == 4) {
+            /* Change loop value and start animating function */
             MenuTransparent.type = 5;
-            window.animatemenu();
+            window.animatehud();
         }
         if(SettingsTransition == 5) {
+            /* Change loop value and start animating function */
             MenuTransparent.type = 6;
-            window.animatemenu();
+            window.animatehud();
         }
 
         /* About section animation function */
         if(AboutTransition == 1) {
+            /* Change loop value and start animating function */
             MenuTransparent.type = 7;
-            window.animatemenu();
+            window.animatehud();
         }
         if(AboutTransition == 2) {
+            /* Change loop value and start animating function */
             MenuTransparent.type = 8;
-            window.animatemenu();
+            window.animatehud();
         }
         if(AboutTransition == 4) {
+            /* Change loop value and start animating function */
             MenuTransparent.type = 9;
-            window.animatemenu();
+            window.animatehud();
         }
         if(AboutTransition == 5) {
+            /* Change loop value and start animating function */
             MenuTransparent.type = 10;
-            window.animatemenu();
+            window.animatehud();
         }
     }
 
@@ -195,12 +223,10 @@ window.onupdate = function() {
         /* Things todo on scene start */
         if(SceneStart == false) {
             /* Gravity and physics generally */
-            if(!isPaused) {
-                Player.x = Board.w / 2 - 64;
-                Player.y = Board.h - 96 - 64;
-                Player.vy = 0;
-                Player.vx = 0;
-            }
+            Player.x = Board.w / 2 - 64;
+            Player.y = Board.h - 96 - 64;
+            Player.vy = 0;
+            Player.vx = 0;
 
             /* Set default position of transition object */
             if(Transition.timer == 0) {
@@ -227,11 +253,12 @@ window.onupdate = function() {
 
         /* Things todo on scene change */
         if(SceneChange == true) {
-            /* Start transition timer */
-            Transition.timer += 1;
+            /* Hide menu hud */
+            MenuTransparent.type = 12;
+            window.animatehud();
 
             /* Start transition animation */
-            if(Transition.timer >= 30) {
+            if(Pause == 0) {
                 /* Move transition object */
                 if(Transition.y > 0) {
                     Transition.y -= Transition.vx;
@@ -244,7 +271,17 @@ window.onupdate = function() {
                     SceneStart = false;
                     Scene = 1;
                 }
-            }
+            }          
+        }
+
+        /* Change hud animation depending on game statement */
+        if(Pause == 1) {
+            MenuTransparent.type = 11;
+            window.animatehud();
+        }
+        else if(Pause == 3) {
+            MenuTransparent.type = 12;
+            window.animatehud();
         }
 
         /* Draw background object */
@@ -265,7 +302,7 @@ window.onupdate = function() {
         }
 
         /* Move player object */
-        if(!isPaused) { 
+        if(Pause == 0) { 
             Player.x += Player.vx;
             Player.y += Player.vy;
             Player.vy += Player.gravity;
@@ -366,21 +403,120 @@ window.onupdate = function() {
             /* Update level */
             window.updatelevel(CurrentPlatform);
 
+            /* Move platforms */
+            if(Score >= 1) {
+                CurrentPlatform.y += 0.25;
+            }
+
             /* Change loop value */
             Platform.currentlenght += 1;
             Player.touch = 0;
-            CurrentPlatform.y += 0.25;
-
         }
+
+        /* Draw statustransparent object */
+        Context.fillStyle = StatusTransparent.color;
+        Context.fillRect(StatusTransparent.x, StatusTransparent.y, StatusTransparent.w, StatusTransparent.h);
 
         /* Draw scoretext object */
         Context.fillStyle = ScoreText.color;
         Context.font = ScoreText.font;
         Context.fillText(ScoreText.value, ScoreText.x, ScoreText.y);
 
+        /* Draw menutransparent object */
+        Context.fillStyle = MenuTransparent.color;
+        Context.fillRect(MenuTransparent.x, MenuTransparent.y, MenuTransparent.w, MenuTransparent.h);
+
+        /* Draw title object */
+        Title.img.src = "Sprites/Title.png";
+        Context.drawImage(Title.img, Title.x, Title.y, Title.w, Title.h);
+
+        /* Draw resumetext object */
+        Context.fillStyle = ResumeText.color;
+        Context.font = ResumeText.font;
+        Context.fillText(ResumeText.value, ResumeText.x, ResumeText.y);
+
+        /* Draw mainmenutext object */
+        Context.fillStyle = MainMenuText.color;
+        Context.font = MainMenuText.font;
+        Context.fillText(MainMenuText.value, MainMenuText.x, MainMenuText.y);
+
+        /* Draw versiontext object */
+        Context.fillStyle = VersionText.color;
+        Context.font = VersionText.font;
+        Context.fillText(VersionText.value, VersionText.x, VersionText.y);
+
+        /* Draw settingstext object */
+        Context.fillStyle = SettingsText.color;
+        Context.font = SettingsText.font;
+        Context.fillText(SettingsText.value, SettingsText.x, SettingsText.y);
+
+        /* Draw abouttext object */
+        Context.fillStyle = AboutText.color;
+        Context.font = AboutText.font;
+        Context.fillText(AboutText.value, AboutText.x, AboutText.y);
+
+        /* Draw sfxtext object */
+        Context.fillStyle = SfxText.color;
+        Context.font = SfxText.font;
+        Context.fillText(SfxText.value, SfxText.x, SfxText.y);
+
+        /* Draw musictext object */
+        Context.fillStyle = MusicText.color;
+        Context.font = MusicText.font;
+        Context.fillText(MusicText.value, MusicText.x, MusicText.y);
+
+        /* Draw returntext object */
+        Context.fillStyle = ReturnText.color;
+        Context.font = ReturnText.font;
+        Context.fillText(ReturnText.value, ReturnText.x, ReturnText.y);
+
         /* Draw transition object */
         Context.fillStyle = Transition.color;
         Context.fillRect(Transition.x, Transition.y, Transition.w, Transition.h);
+
+        /* Settings section animation function */
+        if(SettingsTransition == 1) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 13;
+            window.animatehud();
+        }
+        if(SettingsTransition == 2) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 14;
+            window.animatehud();
+        }
+        if(SettingsTransition == 4) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 15;
+            window.animatehud();
+        }
+        if(SettingsTransition == 5) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 16;
+            window.animatehud();
+        }
+
+        /* About section animation function */
+        if(AboutTransition == 1) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 17;
+            window.animatehud();
+        }
+        if(AboutTransition == 2) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 18;
+            window.animatehud();
+        }
+        if(AboutTransition == 4) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 19;
+            window.animatehud();
+        }
+        if(AboutTransition == 5) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 20;
+            window.animatehud();
+        }
     }
 }
 
@@ -393,14 +529,14 @@ window.detectcollision = function(First, Second) {
            First.y + First.fy + First.h > Second.y + Second.fy;
 }
 
-/* Window menu animating function */
-window.animatemenu = function() {
+/* Window hud animating function */
+window.animatehud = function() {
     /* Menu start animation */
     if(MenuTransparent.type == 1) {
         if(MenuTransparent.x < 0) {
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
-            Logo.x += Logo.vx;
+            Title.x += Title.vx;
             VersionText.x += VersionText.vx;
             NormalModeText.x += NormalModeText.vx;
             HardModeText.x += HardModeText.vx;
@@ -419,7 +555,7 @@ window.animatemenu = function() {
         if(MenuTransparent.x > -900) {
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
-            Logo.x -= Logo.vx;
+            Title.x -= Title.vx;
             VersionText.x -= VersionText.vx;
             NormalModeText.x -= NormalModeText.vx;
             HardModeText.x -= HardModeText.vx;
@@ -438,7 +574,7 @@ window.animatemenu = function() {
         if(MenuTransparent.x > -900) {
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
-            Logo.x -= Logo.vx;
+            Title.x -= Title.vx;
             VersionText.x -= VersionText.vx;
             NormalModeText.x -= NormalModeText.vx;
             HardModeText.x -= HardModeText.vx;
@@ -458,7 +594,7 @@ window.animatemenu = function() {
         if(MenuTransparent.x < 0) {
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
-            Logo.x += Logo.vx;
+            Title.x += Title.vx;
             VersionText.x += VersionText.vx;
             SfxText.x += SfxText.vx;
             MusicText.x += MusicText.vx;
@@ -476,7 +612,7 @@ window.animatemenu = function() {
         if(MenuTransparent.x > -900) {
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
-            Logo.x -= Logo.vx;
+            Title.x -= Title.vx;
             VersionText.x -= VersionText.vx;
             SfxText.x -= SfxText.vx;
             MusicText.x -= MusicText.vx;
@@ -494,7 +630,7 @@ window.animatemenu = function() {
         if(MenuTransparent.x < 0) {
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
-            Logo.x += Logo.vx;
+            Title.x += Title.vx;
             VersionText.x += VersionText.vx;
             NormalModeText.x += NormalModeText.vx;
             HardModeText.x += HardModeText.vx;
@@ -514,7 +650,7 @@ window.animatemenu = function() {
         if(MenuTransparent.x > -900) {
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
-            Logo.x -= Logo.vx;
+            Title.x -= Title.vx;
             VersionText.x -= VersionText.vx;
             NormalModeText.x -= NormalModeText.vx;
             HardModeText.x -= HardModeText.vx;
@@ -523,6 +659,7 @@ window.animatemenu = function() {
             AboutText.x -= AboutText.vx;
         }
         else if(MenuTransparent.x <= -900) {
+            /* Change loop value */
             AboutTransition = 2;
             MenuTransparent.type = 0;
         }
@@ -533,7 +670,7 @@ window.animatemenu = function() {
         if(MenuTransparent.x < 0) {
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
-            Logo.x += Logo.vx;
+            Title.x += Title.vx;
             VersionText.x += VersionText.vx;
             ReturnText.x += ReturnText.vx;
         }
@@ -549,7 +686,7 @@ window.animatemenu = function() {
         if(MenuTransparent.x > -900) {
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
-            Logo.x -= Logo.vx;
+            Title.x -= Title.vx;
             VersionText.x -= VersionText.vx;
             ReturnText.x -= ReturnText.vx;
         }
@@ -565,11 +702,194 @@ window.animatemenu = function() {
         if(MenuTransparent.x < 0) {
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
-            Logo.x += Logo.vx;
+            Title.x += Title.vx;
             VersionText.x += VersionText.vx;
             NormalModeText.x += NormalModeText.vx;
             HardModeText.x += HardModeText.vx;
             TutorialText.x += TutorialText.vx;
+            SettingsText.x += SettingsText.vx;
+            AboutText.x += AboutText.vx;
+        }
+        else if(MenuTransparent.x >= 0) {
+            /* Change loop value */
+            AboutTransition = 0;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    //ta
+    /* Menu ingame start animation */
+    if(MenuTransparent.type == 11) {
+        if(MenuTransparent.x < 0) {
+            /* Move objects */
+            MenuTransparent.x += MenuTransparent.vx;
+            Title.x += Title.vx;
+            VersionText.x += VersionText.vx;
+            ResumeText.x += ResumeText.vx;
+            MainMenuText.x += MainMenuText.vx;
+            SettingsText.x += SettingsText.vx;
+            AboutText.x += AboutText.vx;
+        }
+        else if(MenuTransparent.x >= 0) {
+            /* Change loop value */
+            Pause = 2;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Menu ingame end animation */
+    if(MenuTransparent.type == 12) {
+        if(MenuTransparent.x > -900) {
+            /* Move objects */
+            MenuTransparent.x -= MenuTransparent.vx;
+            Title.x -= Title.vx;
+            VersionText.x -= VersionText.vx;
+            ResumeText.x -= ResumeText.vx;
+            MainMenuText.x -= MainMenuText.vx;
+            SettingsText.x -= SettingsText.vx;
+            AboutText.x -= AboutText.vx;
+        }
+        else if(MenuTransparent.x <= -900) {
+            /* Change loop value */
+            Pause = 0;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Hide ingame main section */
+    if(MenuTransparent.type == 13) {
+        if(MenuTransparent.x > -900) {
+            /* Move objects */
+            MenuTransparent.x -= MenuTransparent.vx;
+            Title.x -= Title.vx;
+            VersionText.x -= VersionText.vx;
+            ResumeText.x -= ResumeText.vx;
+            MainMenuText.x -= MainMenuText.vx;
+            SettingsText.x -= SettingsText.vx;
+            AboutText.x -= AboutText.vx;
+        }
+        else if(MenuTransparent.x <= -900) {
+            /* Change loop value */
+            SettingsTransition = 2;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Show ingame settings section */
+    if(MenuTransparent.type == 14) {
+        if(MenuTransparent.x < 0) {
+            /* Move objects */
+            MenuTransparent.x += MenuTransparent.vx;
+            Title.x += Title.vx;
+            VersionText.x += VersionText.vx;
+            SfxText.x += SfxText.vx;
+            MusicText.x += MusicText.vx;
+            ReturnText.x += ReturnText.vx;
+        }
+        else if(MenuTransparent.x >= 0) {
+            /* Change loop value */
+            SettingsTransition = 3;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Hide ingame settings section */
+    if(MenuTransparent.type == 15) {
+        if(MenuTransparent.x > -900) {
+            /* Move objects */
+            MenuTransparent.x -= MenuTransparent.vx;
+            Title.x -= Title.vx;
+            VersionText.x -= VersionText.vx;
+            SfxText.x -= SfxText.vx;
+            MusicText.x -= MusicText.vx;
+            ReturnText.x -= ReturnText.vx;
+        }
+        else if(MenuTransparent.x <= -900) {
+            /* Change loop value */
+            SettingsTransition = 5;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Show ingame main section */
+    if(MenuTransparent.type == 16) {
+        if(MenuTransparent.x < 0) {
+            /* Move objects */
+            MenuTransparent.x += MenuTransparent.vx;
+            Title.x += Title.vx;
+            VersionText.x += VersionText.vx;
+            ResumeText.x += ResumeText.vx;
+            MainMenuText.x += MainMenuText.vx;
+            SettingsText.x += SettingsText.vx;
+            AboutText.x += AboutText.vx;
+        }
+        else if(MenuTransparent.x >= 0) {
+            /* Change loop value */
+            SettingsTransition = 0;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Hide ingame main section */
+    if(MenuTransparent.type == 17) {
+        if(MenuTransparent.x > -900) {
+            /* Move objects */
+            MenuTransparent.x -= MenuTransparent.vx;
+            Title.x -= Title.vx;
+            VersionText.x -= VersionText.vx;
+            ResumeText.x -= ResumeText.vx;
+            MainMenuText.x -= MainMenuText.vx;
+            SettingsText.x -= SettingsText.vx;
+            AboutText.x -= AboutText.vx;
+        }
+        else if(MenuTransparent.x <= -900) {
+            /* Change loop value */
+            AboutTransition = 2;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Show ingame about section */
+    if(MenuTransparent.type == 18) {
+        if(MenuTransparent.x < 0) {
+            /* Move objects */
+            MenuTransparent.x += MenuTransparent.vx;
+            Title.x += Title.vx;
+            VersionText.x += VersionText.vx;
+            ReturnText.x += ReturnText.vx;
+        }
+        else if(MenuTransparent.x >= 0) {
+            /* Change loop value */
+            AboutTransition = 3;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Hide ingame about section */
+    if(MenuTransparent.type == 19) {
+        if(MenuTransparent.x > -900) {
+            /* Move objects */
+            MenuTransparent.x -= MenuTransparent.vx;
+            Title.x -= Title.vx;
+            VersionText.x -= VersionText.vx;
+            ReturnText.x -= ReturnText.vx;
+        }
+        else if(MenuTransparent.x <= -900) {
+            /* Change loop value */
+            AboutTransition = 5;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Show ingame main section */
+    if(MenuTransparent.type == 20) {
+        if(MenuTransparent.x < 0) {
+            /* Move objects */
+            MenuTransparent.x += MenuTransparent.vx;
+            Title.x += Title.vx;
+            VersionText.x += VersionText.vx;
+            ResumeText.x += ResumeText.vx;
+            MainMenuText.x += MainMenuText.vx;
             SettingsText.x += SettingsText.vx;
             AboutText.x += AboutText.vx;
         }

@@ -1,13 +1,13 @@
-![Logo](https://github.com/CiupagaPL/Uncreative_Platformer/blob/main/Sprites/Logo2.png)
-# Uncreative Platformer
+![Logo](https://github.com/CiupagaPL/Uncreative_Platformer/blob/main/Sprites/Title.png)
+# UNCREATIVE PLATFORMER
 
 ## General Info
 Simple Uncreative Platformer made in JS.
 > Warning! This project is private!
 
 ## Project Status
-Newest Version: **Build 14**;
-Last Updated: **20.04.2024**;
+Newest Version: **Build 15**;
+Last Updated: **21.04.2024**;
 
 ## License
 **Project licence is based on GPL 3.0.** It uses some 3rd part assets that I'll list bellow.
