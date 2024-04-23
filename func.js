@@ -13,6 +13,11 @@ window.onload = function() {
         Scene = 0;
     }
 
+    /* Turn on warning mode if resolution is too high */
+    if(Board.w > 3840 || Board.h > 2168) {
+        Scene = 0;
+    }
+
     /* Start update function */
     window.onupdate();
 }
