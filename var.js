@@ -43,6 +43,8 @@ let Warning = {
     h: Board.h,
     x: 0,
     y: 0,
+    fx: 0,
+    fy: 0,
     color: "black",
 };
 
@@ -53,6 +55,8 @@ let WarningText = {
     value: "Resize Window and/or Refresh Page to Continue!",
     x: 32,
     y: 64,
+    fx: 0,
+    fy: 0,
 };
 
 /* Create transition object */
@@ -61,6 +65,8 @@ let Transition = {
     h: Board.h,
     x: 0,
     y: 0,
+    fx: 0,
+    fy: 0,
     vx: 40,
     color: "black",
     timer: 0,
@@ -72,6 +78,8 @@ let Background = {
     h: Board.h,
     x: 0,
     y: 0,
+    fx: 0,
+    fy: 0,
     img: new Image(),
 };
 
@@ -81,6 +89,8 @@ let MenuTransparent = {
     h: Board.h,
     x: -790,
     y: 0,
+    fx: 0,
+    fy: 0,
     vx: 39.5,
     color: "rgba(0, 0, 0, 0.85)",
     type: 0,
@@ -92,6 +102,8 @@ let Title = {
     h: 250,
     x: -1160,
     y: 16,
+    fx: 0,
+    fy: 0,
     vx: 52.5,
     img: new Image(),
 };
@@ -100,9 +112,11 @@ let Title = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Build 15 Made By CiupagaPL",
+    value: "Build 16 Made By CiupagaPL",
     x: -362,
     y: Board.h - 12,
+    fx: 0,
+    fy: 0,
     vx: 18.4,
 };
 
@@ -253,6 +267,8 @@ let ScoreText = {
     value: "0",
     x: 30,
     y: 75,
+    fx: 0,
+    fy: 0,
 };
 
 /* Create statustransparent object */
@@ -261,16 +277,18 @@ let StatusTransparent = {
     h: 96,
     x: 0,
     y: 0,
+    fx: 0,
+    fy: 0,
     vy: 6.4,
     color: "rgba(0, 0, 0, 0.85)",
 };
 
 /* Create player object */
 let Player = {
-    w: 96,
-    h: 96,
-    x: Board.w / 2 - 48,
-    y: Board.h - 96 - 128,
+    w: 128,
+    h: 128,
+    x: Board.w / 2 - 64,
+    y: Board.h - 128 - 84,
     fx: 0,
     fy: 0,
     vx: 0,
@@ -285,7 +303,7 @@ let Player = {
 
 /* Create groundchecktop object */
 let GroundCheckTop = {
-    w: 96,
+    w: 128,
     h: 2,
     x: Player.x + Player.vx,
     y: Player.y + Player.vy,
@@ -296,10 +314,10 @@ let GroundCheckTop = {
 
 /* Create groundcheckbottom object */
 let GroundCheckBottom = {
-    w: 96,
+    w: 128,
     h: 2,
     x: Player.x + Player.vx,
-    y: Player.y + 94 + Player.vy,
+    y: Player.y + 126 + Player.vy,
     fx: 0,
     fy: 0,
     color: "rgba(0, 0, 0, 0)",
@@ -308,8 +326,8 @@ let GroundCheckBottom = {
 /* Create groundcheckleft object */
 let GroundCheckLeft = {
     w: 2,
-    h: 72,
-    x: Player.x + 2 + Player.vx,
+    h: 104,
+    x: Player.x + Player.vx,
     y: Player.y + 12 + Player.vy,
     fx: 0,
     fy: 0,
@@ -319,8 +337,8 @@ let GroundCheckLeft = {
 /* Create groundcheckright object */
 let GroundCheckRight = {
     w: 2,
-    h: 72,
-    x: Player.x + 92 + Player.vx,
+    h: 104,
+    x: Player.x + 128 + Player.vx,
     y: Player.y + 12 + Player.vy,
     fx: 0,
     fy: 0,

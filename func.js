@@ -224,7 +224,7 @@ window.onupdate = function() {
         if(SceneStart == false) {
             /* Gravity and physics generally */
             Player.x = Board.w / 2 - 64;
-            Player.y = Board.h - 96 - 64;
+            Player.y = Board.h - 128 - 84;
             Player.vy = 0;
             Player.vx = 0;
 
@@ -313,19 +313,19 @@ window.onupdate = function() {
         Context.fillRect(Player.x, Player.y, Player.w, Player.h);
 
         /* Draw groundchecktop object */
-        Context.fillStyle = GroundCheckTop.color;
+        Context.fillStyle = Transition.color;
         Context.fillRect(GroundCheckTop.x, GroundCheckTop.y, GroundCheckTop.w, GroundCheckTop.h);
 
         /* Draw groundcheckbottom object */
-        Context.fillStyle = GroundCheckBottom.color;
+        Context.fillStyle = Transition.color;
         Context.fillRect(GroundCheckBottom.x, GroundCheckBottom.y, GroundCheckBottom.w, GroundCheckBottom.h);
 
         /* Draw groundcheckleft object */
-        Context.fillStyle = GroundCheckLeft.color;
+        Context.fillStyle = Transition.color;
         Context.fillRect(GroundCheckLeft.x, GroundCheckLeft.y, GroundCheckLeft.w, GroundCheckLeft.h);
 
         /* Draw groundcheckright object */
-        Context.fillStyle = GroundCheckRight.color;
+        Context.fillStyle = Transition.color;
         Context.fillRect(GroundCheckRight.x, GroundCheckRight.y, GroundCheckRight.w, GroundCheckRight.h);
 
         /* Refresh groundchecktop position */
@@ -334,14 +334,14 @@ window.onupdate = function() {
 
         /* Refresh groundcheckbottom position */
         GroundCheckBottom.x = Player.x + Player.vx;
-        GroundCheckBottom.y = Player.y + 94 + Player.vy;
+        GroundCheckBottom.y = Player.y + 126 + Player.vy;
 
         /* Refresh groundcheckleft position */
-        GroundCheckLeft.x = Player.x + 2 + Player.vx;
+        GroundCheckLeft.x = Player.x + Player.vx;
         GroundCheckLeft.y = Player.y + 12 + Player.vy;
 
         /* Refresh groundcheckright position */
-        GroundCheckRight.x = Player.x + 92 + Player.vx;
+        GroundCheckRight.x = Player.x + 128 + Player.vx;
         GroundCheckRight.y = Player.y + 12 + Player.vy;
 
         /* Update generate level function */
@@ -399,7 +399,7 @@ window.onupdate = function() {
                 Player.side = 2;
                 Player.touch = 1;
             }
-
+            
             /* Update level */
             window.updatelevel(CurrentPlatform);
 
@@ -527,6 +527,110 @@ window.detectcollision = function(First, Second) {
            First.x + First.fx + First.w > Second.x + Second.fx &&
            First.y + First.fy < Second.y + Second.fy + Second.h &&
            First.y + First.fy + First.h > Second.y + Second.fy;
+}
+
+/* Window generator update function */
+window.updatelevel = function(CurrentPlatform) {
+    if(CurrentPlatform.y - CurrentPlatform.h >= Board.h) {
+        CurrentPlatform = window.platformgenerator();
+    }
+}
+
+/* Window platform generator function */
+window.platformgenerator = function() {
+    /* Generate platform count */
+    Platform.count = Math.floor(Math.random() * 2);
+
+    /* Generate all platforms position */
+    if(Platform.count == 0) {
+        Platform.randomx1 = Math.floor(Math.random() * Board.w * 3/4) + Platform.w / 2;
+    }
+    if(Platform.count == 1) {
+        Platform.randomx1 = Math.floor(Math.random() * Board.w * 1.5/4 + Platform.w / 2) + 128;
+        Platform.randomx2 = Platform.randomx1 + Math.floor(Math.random() * Board.w * 1.5/4 + Platform.w / 2) + 128;
+    }
+
+    /* Create first current platform */
+    let CurrentPlatform = {
+        x: 0,
+        y: Board.h - 192 * Platform.currentload - 288,
+        fx: 0,
+        fy: 0,
+        w: Platform.randomx1,
+        h: Platform.h,
+        color: Platform.color,
+    };
+
+    /* Push current platform into array */
+    Platform.array.push(CurrentPlatform);
+
+    /* Create second platform */
+    if(Platform.count == 0) {
+        CurrentPlatform = {
+            x: Platform.randomx1 + Platform.w,
+            y: CurrentPlatform.y,
+            fx: 0,
+            fy: 0,
+            w: Board.w - Platform.randomx1 - Platform.w,
+            h: Platform.h,
+            color: Platform.color,
+        };
+    }
+
+    /* Create second and last platform */
+    if(Platform.count == 1) {
+        CurrentPlatform = {
+            x: Platform.randomx1 + Platform.w,
+            y: CurrentPlatform.y,
+            fx: 0,
+            fy: 0,
+            w: Platform.randomx2 - Platform.randomx1 - Platform.w,
+            h: Platform.h,
+            color: Platform.color,
+        };
+
+        /* Push current platform into array */
+        Platform.array.push(CurrentPlatform);
+
+        CurrentPlatform = {
+            x: Platform.randomx2 + Platform.w,
+            y: CurrentPlatform.y,
+            fx: 0,
+            fy: 0,
+            w: Board.w - Platform.randomx2 - Platform.w,
+            h: Platform.h,
+            color: Platform.color,
+        };
+    }
+
+    /* Push current platform into array */
+    Platform.array.push(CurrentPlatform);
+}
+
+/* Window level generator function */
+window.generatelevel = function() {
+    /* Create default platform */
+    let MainPlatform = {
+        w: Board.w,
+        h: 84,
+        x: 0,
+        y: Board.h - 84,
+        fx: 0,
+        fy: 0,
+        color: "brown",
+    };
+
+    /* Push main platform into array */
+    Platform.array.push(MainPlatform);
+
+    /* Generate rest platforms */
+    while(Platform.currentload <= Platform.load) {
+        /* Start platformgenerator function */
+        window.platformgenerator();
+
+        /* Change loop value */
+        Platform.currentload += 1;
+    }
 }
 
 /* Window hud animating function */
@@ -899,142 +1003,5 @@ window.animatehud = function() {
             MenuTransparent.type = 0;
         }
     }
-}
-
-/* Window level generator function */
-window.generatelevel = function() {
-    /* Create default platform */
-    let MainPlatform = {
-        w: Board.w,
-        h: 84,
-        x: 0,
-        y: Board.h - 84,
-        color: "brown",
-    };
-
-    /* Push main platform into array */
-    Platform.array.push(MainPlatform);
-
-    /* Generate rest platforms */
-    while(Platform.currentload <= Platform.load) {
-        /* Start platformgenerator function */
-        window.platformgenerator();
-
-        /* Change loop value */
-        Platform.currentload += 1;
-    }
-}
-
-/* Window generator update function */
-window.updatelevel = function(CurrentPlatform) {
-    if(CurrentPlatform.y - CurrentPlatform.h >= Board.h) {
-        CurrentPlatform = window.platformgenerator();
-    }
-}
-
-/* Window platform generator function */
-window.platformgenerator = function() {
-    /* Generate platform count */
-    if(Board.h < Board.w) {
-        Platform.count = Math.floor(Math.random() * 3);
-    }
-    else if(Board.h >= Board.w) {
-        Platform.count = 0;
-    }
-
-    /* Generate all platforms position */
-    if(Platform.count == 0) {
-        Platform.randomx1 = Math.floor(Math.random() * Board.w * 3/4) + Platform.w / 2;
-    }
-    if(Platform.count == 1) {
-        Platform.randomx1 = Math.floor(Math.random() * Board.w * 1.5/4 + Platform.w / 2);
-        Platform.randomx2 = Platform.randomx1 + Platform.w + Math.floor(Math.random() * Board.w * 1.5/4 + Platform.w / 2);
-    }
-    if(Platform.count == 2) {
-        Platform.randomx1 = Math.floor(Math.random() * Board.w * 1/4 + Platform.w / 2);
-        Platform.randomx2 = Platform.randomx1 + Platform.w + Math.floor(Math.random() * Board.w * 1/4) + Platform.w / 2;
-        Platform.randomx3 = Platform.randomx2 + Platform.w + Math.floor(Math.random() * Board.w * 1/4 + Platform.w / 2);
-    }
-
-    /* Create first current platform */
-    let CurrentPlatform = {
-        x: 0,
-        y: Board.h - 192 * Platform.currentload - 288,
-        w: Platform.randomx1,
-        h: Platform.h,
-        color: Platform.color,
-    };
-
-    /* Push current platform into array */
-    Platform.array.push(CurrentPlatform);
-
-    /* Create second platform */
-    if(Platform.count == 0) {
-        CurrentPlatform = {
-            x: Platform.randomx1 + Platform.w,
-            y: CurrentPlatform.y,
-            w: Board.w - Platform.randomx1 - Platform.w,
-            h: Platform.h,
-            color: Platform.color,
-        };
-    }
-
-    /* Create second and last platform */
-    if(Platform.count == 1) {
-        CurrentPlatform = {
-            x: Platform.randomx1 + Platform.w,
-            y: CurrentPlatform.y,
-            w: Platform.randomx2 - Platform.randomx1 - Platform.w,
-            h: Platform.h,
-            color: Platform.color,
-        };
-
-        /* Push current platform into array */
-        Platform.array.push(CurrentPlatform);
-
-        CurrentPlatform = {
-            x: Platform.randomx2 + Platform.w,
-            y: CurrentPlatform.y,
-            w: Board.w - Platform.randomx2 - Platform.w,
-            h: Platform.h,
-            color: Platform.color,
-        };
-    }
-
-    /* Create second, third and last platform */
-    else if(Platform.count == 2) {
-        CurrentPlatform = {
-            x: Platform.randomx1 + Platform.w,
-            y: CurrentPlatform.y,
-            w: Platform.randomx2 - Platform.randomx1 - Platform.w,
-            h: Platform.h,
-            color: Platform.color,
-        };
-
-        /* Push current platform into array */
-        Platform.array.push(CurrentPlatform);
-
-        CurrentPlatform = {
-            x: Platform.randomx2 + Platform.w,
-            y: CurrentPlatform.y,
-            w: Platform.randomx3 - Platform.randomx2 - Platform.w,
-            h: Platform.h,
-            color: Platform.color,
-        };
-
-        /* Push current platform into array */
-        Platform.array.push(CurrentPlatform);
-
-        CurrentPlatform = {
-            x: Platform.randomx3 + Platform.w,
-            y: CurrentPlatform.y,
-            w: Board.w - Platform.randomx3 - Platform.w,
-            h: Platform.h,
-            color: Platform.color,
-        };
-    }
-        
-    /* Push current platform into array */
-    Platform.array.push(CurrentPlatform);
 }
 
