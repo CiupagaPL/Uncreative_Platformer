@@ -25,10 +25,9 @@ document.addEventListener("keyup", function(Event) {
 
             /* Make player object jump */
             case " ":
-                if(!Player.jump && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && Pause == 0 && SceneStart) {
                     /* Change value and jump */
                     Player.vy = Player.initvy;
-                    Player.jump = true;
                 }
 
                 break;
@@ -36,7 +35,7 @@ document.addEventListener("keyup", function(Event) {
             /* Stop player object */
             case "s":
                 /* Change side to none */
-                if(!Player.jump && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && Pause == 0 && SceneStart) {
                     Player.side = 0;
                 }
 
@@ -45,14 +44,14 @@ document.addEventListener("keyup", function(Event) {
             /* Move player object left-right */
             case "d":
                 /* Change side to right */
-                if(!Player.jump && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && Pause == 0 && SceneStart) {
                     Player.side = 1;
                 }
 
                 break;
             case "a":
                 /* Change side to left */
-                if(!Player.jump && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && Pause == 0 && SceneStart) {
                     Player.side = 2;
                 }
 
@@ -150,6 +149,16 @@ window.addEventListener("mousemove", function(Event) {
         ResumeText.color = "white";
     }
 
+    /* Check collision between cursor and restarttext object */
+    if(window.detectcollision(RestartText, Mouse)) {
+        /* Change object color */
+        RestartText.color = "blue";
+    }
+    else if(!window.detectcollision(RestartText, Mouse)) {
+        /* Change object color */
+        RestartText.color = "white";
+    }
+
     /* Check collision between cursor and mainmenutext object */
     if(window.detectcollision(MainMenuText, Mouse)) {
         /* Change object color */
@@ -236,6 +245,12 @@ window.addEventListener("click", function(Event) {
     if(window.detectcollision(ResumeText, Mouse) && SceneStart) {
         /* Unpause game */
         Pause = 3;
+    }
+
+    /* Restarttext object function */
+    if(window.detectcollision(RestartText, Mouse) && SceneStart) {
+        /* Restart game */
+        SceneRestart = true;
     }
 
     /* Mainmenutext object function */

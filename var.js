@@ -4,9 +4,9 @@
 /* Variables */
 
 /* Create global variables */
-let Scene = 1, SceneStart = false, SceneChange = false;
+let Scene = 1, SceneStart = false, SceneChange = false, SceneRestart = false;
 let Sfx = true, Music = true;
-let AboutTransition = 0, SettingsTransition = 0, isDead = false;
+let AboutTransition = 0, SettingsTransition = 0;
 let Pause = 0, Mode = 0, Score = 0, Points = 0, Hp = 3;
 
 /* Objects */
@@ -70,6 +70,7 @@ let Transition = {
     vx: 40,
     color: "black",
     timer: 0,
+    type: 0,
 };
 
 /* Create background object */
@@ -112,7 +113,7 @@ let Title = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Build 16 Made By CiupagaPL",
+    value: "Build 17 Made By CiupagaPL",
     x: -362,
     y: Board.h - 12,
     fx: 0,
@@ -242,7 +243,21 @@ let ResumeText = {
     fx: 0,
     fy: NormalModeText.fy,
     vx: NormalModeText.vx,
-    w: 200,
+    w: 218,
+    h: NormalModeText.h,
+};
+
+/* Create restarttext object */
+let RestartText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Restart",
+    x: -444,
+    y: HardModeText.y,
+    fx: 0,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
+    w: 214,
     h: NormalModeText.h,
 };
 
@@ -252,7 +267,7 @@ let MainMenuText = {
     font: "84px Orange_Kid",
     value: "Main Menu",
     x: -444,
-    y: HardModeText.y,
+    y: TutorialText.y,
     fx: 0,
     fy: NormalModeText.fy,
     vx: NormalModeText.vx,
@@ -276,11 +291,12 @@ let StatusTransparent = {
     w: Board.w,
     h: 96,
     x: 0,
-    y: 0,
+    y: -96,
     fx: 0,
     fy: 0,
     vy: 6.4,
     color: "rgba(0, 0, 0, 0.85)",
+    type: 0,
 };
 
 /* Create player object */
@@ -288,17 +304,18 @@ let Player = {
     w: 128,
     h: 128,
     x: Board.w / 2 - 64,
-    y: Board.h - 128 - 84,
+    y: Board.h - 128 - 128,
     fx: 0,
     fy: 0,
     vx: 0,
     vy: 0,
     color: "green",
-    initvy: -20,
+    initvy: -24,
     gravity: 1,
     side: 0,
-    jumped: false,
-    touch: 0,
+    touched: 1,
+    isgrounded: false,
+    isdead: false,
 };
 
 /* Create groundchecktop object */
@@ -349,20 +366,40 @@ let GroundCheckRight = {
 let Platform = {
     array: [],
     w: 256,
-    h: 24,
+    h: 28,
     x: 0,
     y: 0,
     fx: 0,
     fy: 0,
-    color: "red",
+    color: "blue",
     lenght: 100,
     currentlenght: 0,
     load: 4,
     currentload: 0,
     count: 0,
-    speed: 1,
     randomx1: 0,
     randomx2: 0,
-    randomx3: 0,
+};
+
+/* Create main platform object */
+let MainPlatform = {
+    w: Board.w,
+    h: 128,
+    x: 0,
+    y: Board.h - 128,
+    fx: 0,
+    fy: 0,
+    color: "brown",
+};
+
+/* Create spike object */
+let Spike = {
+    w: 32,
+    h: 32,
+    x: 0,
+    y: 800,
+    fx: 0,
+    fy: 0,
+    color: "red",
 };
 
