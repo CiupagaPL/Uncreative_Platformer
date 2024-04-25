@@ -25,7 +25,7 @@ document.addEventListener("keyup", function(Event) {
 
             /* Make player object jump */
             case " ":
-                if(Player.isgrounded && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && !Player.isdead && Pause == 0 && SceneStart) {
                     /* Change value and jump */
                     Player.vy = Player.initvy;
                 }
@@ -35,7 +35,7 @@ document.addEventListener("keyup", function(Event) {
             /* Stop player object */
             case "s":
                 /* Change side to none */
-                if(Player.isgrounded && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && !Player.isdead && Pause == 0 && SceneStart) {
                     Player.side = 0;
                 }
 
@@ -44,14 +44,14 @@ document.addEventListener("keyup", function(Event) {
             /* Move player object left-right */
             case "d":
                 /* Change side to right */
-                if(Player.isgrounded && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && !Player.isdead && Pause == 0 && SceneStart) {
                     Player.side = 1;
                 }
 
                 break;
             case "a":
                 /* Change side to left */
-                if(Player.isgrounded && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && !Player.isdead && Pause == 0 && SceneStart) {
                     Player.side = 2;
                 }
 

@@ -275,13 +275,13 @@ window.onupdate = function() {
             }
 
             /* Detect collisions between groundchecktop and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheckTop) && Player.touch == 0 && !Player.isdead) {
+            if(window.detectcollision(CurrentPlatform, GroundCheckTop) && Player.touch == 0) {
                 /* Change y velocity of Player object */
                 Player.vy = 8;
                 Player.touch = 1;
             }
             /* Detect collisions between groundcheckbottom and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheckBottom) && Player.touch == 0 && !Player.isdead) {
+            if(window.detectcollision(CurrentPlatform, GroundCheckBottom) && Player.touch == 0) {
                 /* Change y velocity of Player object */
                 Player.vy = 0;
 
@@ -290,20 +290,20 @@ window.onupdate = function() {
                 Player.touch = 1;
             }
             /* Detect collisions between groundcheckleft and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheckLeft) && Player.touch == 0 && !Player.isdead) {
+            if(window.detectcollision(CurrentPlatform, GroundCheckLeft) && Player.touch == 0) {
                 /* Change x velocity of Player object */
                 Player.side = 1;
                 Player.touch = 1;
             }
             /* Detect collisions between groundcheckright and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheckRight) && Player.touch == 0 && !Player.isdead) {
+            if(window.detectcollision(CurrentPlatform, GroundCheckRight) && Player.touch == 0) {
                 /* Change x velocity of Player object */
                 Player.side = 2;
                 Player.touch = 1;
             }
 
             /* Detect collisions between groundcheckbottom and mainplatform object */
-            if(window.detectcollision(MainPlatform, GroundCheckBottom) && Player.touch == 0 && !Player.isdead) {
+            if(window.detectcollision(MainPlatform, GroundCheckBottom) && Player.touch == 0) {
                 /* Change y velocity of Player object */
                 Player.vy = 0;
 
@@ -347,19 +347,11 @@ window.onupdate = function() {
         }
 
         /* Move player object */
-        if(Pause == 0 && !Player.isdead) { 
-            Player.x += Player.vx;
+        if(Pause == 0) {
             Player.y += Player.vy;
-            Player.vy += Player.gravity;
-        }
-
-        /* Animate player when he's dwad */
-        if(Player.isDead) {
-            Player.vy = Player.initvy;
-            Player.y += Player.vy;
-
-            if(Player.y >= Board.h) {
-                SceneRestart = true;
+            if(!Player.isdead) {
+                Player.x += Player.vx;
+                Player.vy += Player.gravity;
             }
         }
 
@@ -367,6 +359,7 @@ window.onupdate = function() {
         if(window.detectcollision(Player, Spike) && Player.touch == 0) {
             /* Make player dead */
             Player.isdead = true;
+            SceneRestart = true;
         }
 
         /* Draw player object */
@@ -518,6 +511,11 @@ window.updatelevel = function(CurrentPlatform) {
     }
 }
 
+/* Window platform counter function */
+window.currentplatformgenerator = function() {
+    Platform.load = Math.round((Board.h - 384 - 64) / 256);
+}
+
 /* Window platform generator function */
 window.platformgenerator = function() {
     /* Generate platform count */
@@ -593,6 +591,9 @@ window.platformgenerator = function() {
 window.generatelevel = function() {
     /* Generate rest platforms */
     while(Platform.currentload <= Platform.load) {
+        /* Count platforms */
+        window.currentplatformgenerator();
+
         /* Start platformgenerator function */
         window.platformgenerator();
 

@@ -113,7 +113,7 @@ let Title = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Build 17 Made By CiupagaPL",
+    value: "Build 18 Made By CiupagaPL",
     x: -362,
     y: Board.h - 12,
     fx: 0,
@@ -281,9 +281,10 @@ let ScoreText = {
     font: "92px Orange_Kid",
     value: "0",
     x: 30,
-    y: 75,
+    y: 0,
     fx: 0,
     fy: 0,
+    vy: 4.26,
 };
 
 /* Create statustransparent object */
@@ -365,7 +366,7 @@ let GroundCheckRight = {
 /* Create platform object */
 let Platform = {
     array: [],
-    w: 256,
+    w: 320,
     h: 28,
     x: 0,
     y: 0,
@@ -374,7 +375,7 @@ let Platform = {
     color: "blue",
     lenght: 100,
     currentlenght: 0,
-    load: 4,
+    load: 3,
     currentload: 0,
     count: 0,
     randomx1: 0,

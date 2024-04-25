@@ -64,6 +64,7 @@ window.animatetransition = function() {
         Player.y = Board.h - 128 - 128;
         Player.vy = 0;
         Player.vx = 0;
+        Player.isdead = false;
 
         /* Start transition timer */ 
         Transition.timer += 1;
@@ -117,23 +118,33 @@ window.animatetransition = function() {
 
     /* Transition ingame restart animation */
     if(Transition.type == 5) {
-        /* Move transition object */
-        if(Transition.y > 0) {
-            Transition.y -= Transition.vx;
+        if(Pause == 0) {
+            /* Animate ingame hud */
+            StatusTransparent.type = 2;
+            window.animateingamehud();
         }
-        /* End animation */
-        else if(Transition.y <= 0) {
-            /* Hide menu hud */
-            MenuTransparent.type = 12;
-            window.animatehud();
 
-            /* Start transition animation */
-            if(MenuTransparent.type == 0) {
-                /* End scene start */
-                Transition.timer = 0;
-                SceneRestart = false;
-                SceneStart = false;
-                Transition.type = 0;
+        if(StatusTransparent.type == 0) {
+            /* Move transition object */
+            if(Transition.y > 0) {
+                Transition.y -= Transition.vx;
+            }
+            /* End animation */
+            else if(Transition.y <= 0) {
+                /* Hide menu hud */
+                if(Pause != 0) {
+                    MenuTransparent.type = 12;
+                    window.animatehud();
+                }
+
+                /* Start transition animation */
+                if(MenuTransparent.type == 0) {
+                    /* End scene start */
+                    Transition.timer = 0;
+                    SceneRestart = false;
+                    SceneStart = false;
+                    Transition.type = 0;
+                }
             }
         }
     }
@@ -143,11 +154,12 @@ window.animatetransition = function() {
 window.animateingamehud = function() {
     /* Show statustransparent section */
     if(StatusTransparent.type == 1) {
-        if(StatusTransparent.y > 0) {
+        if(StatusTransparent.y < 0) {
             /* Move objects */
             StatusTransparent.y += StatusTransparent.vy;
+            ScoreText.y += ScoreText.vy;
         }
-        else if(StatusTransparent.y <= 0) {
+        else if(StatusTransparent.y >= 0) {
             /* Change loop value */
             StatusTransparent.type = 0;
         }
@@ -155,13 +167,14 @@ window.animateingamehud = function() {
 
     /* Hide statustransparent section */
     if(StatusTransparent.type == 2) {
-        if(StatusTransparent.y < 0) {
+        if(StatusTransparent.y > -96) {
             /* Move objects */
             StatusTransparent.y -= StatusTransparent.vy;
+            ScoreText.y -= ScoreText.vy;
         }
-        else if(StatusTransparent.y >= 0) {
+        else if(StatusTransparent.y <= -96) {
             /* Change loop value */
-            StatusTransparen.type = 0;
+            StatusTransparent.type = 0;
         }
     }
 }
@@ -376,44 +389,55 @@ window.animatehud = function() {
         }
     }
 
-    //ta
     /* Menu ingame start animation */
     if(MenuTransparent.type == 11) {
-        if(MenuTransparent.x < 0) {
-            /* Move objects */
-            MenuTransparent.x += MenuTransparent.vx;
-            Title.x += Title.vx;
-            VersionText.x += VersionText.vx;
-            ResumeText.x += ResumeText.vx;
-            RestartText.x += RestartText.vx;
-            MainMenuText.x += MainMenuText.vx;
-            SettingsText.x += SettingsText.vx;
-            AboutText.x += AboutText.vx;
-        }
-        else if(MenuTransparent.x >= 0) {
-            /* Change loop value */
-            Pause = 2;
-            MenuTransparent.type = 0;
+        /* Animate ingame hud */
+        StatusTransparent.type = 2;
+        window.animateingamehud();
+
+        if(StatusTransparent.type == 0) {
+            if(MenuTransparent.x < 0) {
+                /* Move objects */
+                MenuTransparent.x += MenuTransparent.vx;
+                Title.x += Title.vx;
+                VersionText.x += VersionText.vx;
+                ResumeText.x += ResumeText.vx;
+                RestartText.x += RestartText.vx;
+                MainMenuText.x += MainMenuText.vx;
+                SettingsText.x += SettingsText.vx;
+                AboutText.x += AboutText.vx;
+            }
+            else if(MenuTransparent.x >= 0) {
+                /* Change loop value */
+                Pause = 2;
+                MenuTransparent.type = 0;
+            }
         }
     }
 
     /* Menu ingame end animation */
     if(MenuTransparent.type == 12) {
-        if(MenuTransparent.x > -900) {
-            /* Move objects */
-            MenuTransparent.x -= MenuTransparent.vx;
-            Title.x -= Title.vx;
-            VersionText.x -= VersionText.vx;
-            ResumeText.x -= ResumeText.vx;
-            RestartText.x -= RestartText.vx;
-            MainMenuText.x -= MainMenuText.vx;
-            SettingsText.x -= SettingsText.vx;
-            AboutText.x -= AboutText.vx;
-        }
-        else if(MenuTransparent.x <= -900) {
-            /* Change loop value */
-            Pause = 0;
-            MenuTransparent.type = 0;
+        /* Animate ingame hud */
+        StatusTransparent.type = 1;
+        window.animateingamehud();
+
+        if(StatusTransparent.type == 0) {
+            if(MenuTransparent.x > -900) {
+                /* Move objects */
+                MenuTransparent.x -= MenuTransparent.vx;
+                Title.x -= Title.vx;
+                VersionText.x -= VersionText.vx;
+                ResumeText.x -= ResumeText.vx;
+                RestartText.x -= RestartText.vx;
+                MainMenuText.x -= MainMenuText.vx;
+                SettingsText.x -= SettingsText.vx;
+                AboutText.x -= AboutText.vx;
+            }
+            else if(MenuTransparent.x <= -900) {
+                /* Change loop value */
+                Pause = 0;
+                MenuTransparent.type = 0;
+            }
         }
     }
 
