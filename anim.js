@@ -94,37 +94,11 @@ window.animatetransition = function() {
 
     /* Transition ingame last animation */
     if(Transition.type == 4) {
-        /* Move transition object */
-        if(Transition.y > 0) {
-            Transition.y -= Transition.vx;
-        }
-        /* End animation */
-        else if(Transition.y <= 0) {
-            /* Hide menu hud */
-            MenuTransparent.type = 12;
-            window.animatehud();
+        /* Animate hud object */
+        MenuTransparent.type = 12;
+        window.animatehud();
 
-            /* Start transition animation */
-            if(MenuTransparent.type == 0) {
-                /* End scene */
-                Transition.timer = 0;
-                SceneChange = false;
-                SceneStart = false;
-                Scene = 1;
-                Transition.type = 0;
-            }
-        }
-    }
-
-    /* Transition ingame restart animation */
-    if(Transition.type == 5) {
-        if(Pause == 0) {
-            /* Animate ingame hud */
-            StatusTransparent.type = 2;
-            window.animateingamehud();
-        }
-
-        if(StatusTransparent.type == 0) {
+        if(MenuTransparent.type == 0) {
             /* Move transition object */
             if(Transition.y > 0) {
                 Transition.y -= Transition.vx;
@@ -132,19 +106,47 @@ window.animatetransition = function() {
             /* End animation */
             else if(Transition.y <= 0) {
                 /* Hide menu hud */
-                if(Pause != 0) {
-                    MenuTransparent.type = 12;
-                    window.animatehud();
-                }
+                MenuTransparent.type = 12;
+                window.animatehud();
 
                 /* Start transition animation */
                 if(MenuTransparent.type == 0) {
-                    /* End scene start */
+                    /* End scene */
                     Transition.timer = 0;
-                    SceneRestart = false;
+                    SceneChange = false;
                     SceneStart = false;
+                    Scene = 1;
                     Transition.type = 0;
                 }
+            }
+        }
+    }
+
+    /* Transition ingame restart animation */
+    if(Transition.type == 5) {
+        /* Animate ingame hud */
+        if(Pause == 0) {
+            StatusTransparent.type = 2;
+            window.animateingamehud();
+        }
+        /* Hide menu hud */
+        if(Pause != 0) {
+            MenuTransparent.type = 12;
+            window.animatehud();
+        }
+
+        if(StatusTransparent.type == 0 && MenuTransparent.type == 0) {
+            /* Move transition object */
+            if(Transition.y > 0) {
+                Transition.y -= Transition.vx;
+            }
+            /* End animation */
+            else if(Transition.y <= 0) {
+                /* End scene start */
+                Transition.timer = 0;
+                SceneRestart = false;
+                SceneStart = false;
+                Transition.type = 0;
             }
         }
     }
@@ -161,6 +163,7 @@ window.animateingamehud = function() {
         }
         else if(StatusTransparent.y >= 0) {
             /* Change loop value */
+            Pause = 0;
             StatusTransparent.type = 0;
         }
     }
@@ -321,6 +324,12 @@ window.animatehud = function() {
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
+            DescriptionText1.x += DescriptionText1.vx;
+            DescriptionText2.x += DescriptionText2.vx;
+            DescriptionText3.x += DescriptionText3.vx;
+            DescriptionText4.x += DescriptionText4.vx;
+            DescriptionText5.x += DescriptionText5.vx;
+            DescriptionText6.x += DescriptionText6.vx;
             VersionText.x += VersionText.vx;
             ReturnText.x += ReturnText.vx;
         }
@@ -337,6 +346,12 @@ window.animatehud = function() {
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
+            DescriptionText1.x -= DescriptionText1.vx;
+            DescriptionText2.x -= DescriptionText2.vx;
+            DescriptionText3.x -= DescriptionText3.vx;
+            DescriptionText4.x -= DescriptionText4.vx;
+            DescriptionText5.x -= DescriptionText5.vx;
+            DescriptionText6.x -= DescriptionText6.vx;
             VersionText.x -= VersionText.vx;
             ReturnText.x -= ReturnText.vx;
         }
@@ -363,81 +378,46 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             AboutTransition = 0;
-         /* Show statustransparent section */
-    if(StatusTransparent.type == 1) {
-        if(StatusTransparent.y > 0) {
-            /* Move objects */
-            StatusTransparent.y += StatusTransparent.vy;
-        }
-        else if(StatusTransparent <= 0) {
-            /* Change loop value */
-            StatusTransparent = 0;
-        }
-    }
-
-    /* Hide statustransparent section */
-    if(StatusTransparent.type == 2) {
-        if(StatusTransparent.y < 0) {
-            /* Move objects */
-            StatusTransparent.y -= StatusTransparent.vy;
-        }
-        else if(StatusTransparent >= 0) {
-            /* Change loop value */
-            StatusTransparent = 0;
-        }
-    }       MenuTransparent.type = 0;
+            MenuTransparent.type = 0;
         }
     }
 
     /* Menu ingame start animation */
     if(MenuTransparent.type == 11) {
-        /* Animate ingame hud */
-        StatusTransparent.type = 2;
-        window.animateingamehud();
-
-        if(StatusTransparent.type == 0) {
-            if(MenuTransparent.x < 0) {
-                /* Move objects */
-                MenuTransparent.x += MenuTransparent.vx;
-                Title.x += Title.vx;
-                VersionText.x += VersionText.vx;
-                ResumeText.x += ResumeText.vx;
-                RestartText.x += RestartText.vx;
-                MainMenuText.x += MainMenuText.vx;
-                SettingsText.x += SettingsText.vx;
-                AboutText.x += AboutText.vx;
-            }
-            else if(MenuTransparent.x >= 0) {
-                /* Change loop value */
-                Pause = 2;
-                MenuTransparent.type = 0;
-            }
+        if(MenuTransparent.x < 0) {
+            /* Move objects */
+            MenuTransparent.x += MenuTransparent.vx;
+            Title.x += Title.vx;
+            VersionText.x += VersionText.vx;
+            ResumeText.x += ResumeText.vx;
+            RestartText.x += RestartText.vx;
+            MainMenuText.x += MainMenuText.vx;
+            SettingsText.x += SettingsText.vx;
+            AboutText.x += AboutText.vx;
+        }
+        else if(MenuTransparent.x >= 0) {
+            /* Change loop value */
+            Pause = 2;
+            MenuTransparent.type = 0;
         }
     }
 
     /* Menu ingame end animation */
     if(MenuTransparent.type == 12) {
-        /* Animate ingame hud */
-        StatusTransparent.type = 1;
-        window.animateingamehud();
-
-        if(StatusTransparent.type == 0) {
-            if(MenuTransparent.x > -900) {
-                /* Move objects */
-                MenuTransparent.x -= MenuTransparent.vx;
-                Title.x -= Title.vx;
-                VersionText.x -= VersionText.vx;
-                ResumeText.x -= ResumeText.vx;
-                RestartText.x -= RestartText.vx;
-                MainMenuText.x -= MainMenuText.vx;
-                SettingsText.x -= SettingsText.vx;
-                AboutText.x -= AboutText.vx;
-            }
-            else if(MenuTransparent.x <= -900) {
-                /* Change loop value */
-                Pause = 0;
-                MenuTransparent.type = 0;
-            }
+        if(MenuTransparent.x > -900) {
+            /* Move objects */
+            MenuTransparent.x -= MenuTransparent.vx;
+            Title.x -= Title.vx;
+            VersionText.x -= VersionText.vx;
+            ResumeText.x -= ResumeText.vx;
+            RestartText.x -= RestartText.vx;
+            MainMenuText.x -= MainMenuText.vx;
+            SettingsText.x -= SettingsText.vx;
+            AboutText.x -= AboutText.vx;
+        }
+        else if(MenuTransparent.x <= -900) {
+            /* Change loop value */
+            MenuTransparent.type = 0;
         }
     }
 
@@ -505,7 +485,7 @@ window.animatehud = function() {
             Title.x += Title.vx;
             VersionText.x += VersionText.vx;
             ResumeText.x += ResumeText.vx;
-            RestartText.x -= RestartText.vx;
+            RestartText.x += RestartText.vx;
             MainMenuText.x += MainMenuText.vx;
             SettingsText.x += SettingsText.vx;
             AboutText.x += AboutText.vx;
@@ -543,6 +523,12 @@ window.animatehud = function() {
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
+            DescriptionText1.x += DescriptionText1.vx;
+            DescriptionText2.x += DescriptionText2.vx;
+            DescriptionText3.x += DescriptionText3.vx;
+            DescriptionText4.x += DescriptionText4.vx;
+            DescriptionText5.x += DescriptionText5.vx;
+            DescriptionText6.x += DescriptionText6.vx;
             VersionText.x += VersionText.vx;
             ReturnText.x += ReturnText.vx;
         }
@@ -559,6 +545,12 @@ window.animatehud = function() {
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
+            DescriptionText1.x -= DescriptionText1.vx;
+            DescriptionText2.x -= DescriptionText2.vx;
+            DescriptionText3.x -= DescriptionText3.vx;
+            DescriptionText4.x -= DescriptionText4.vx;
+            DescriptionText5.x -= DescriptionText5.vx;
+            DescriptionText6.x -= DescriptionText6.vx;
             VersionText.x -= VersionText.vx;
             ReturnText.x -= ReturnText.vx;
         }

@@ -7,7 +7,7 @@
 let Scene = 1, SceneStart = false, SceneChange = false, SceneRestart = false;
 let Sfx = true, Music = true;
 let AboutTransition = 0, SettingsTransition = 0;
-let Pause = 0, Mode = 0, Score = 0, Points = 0, Hp = 3;
+let Pause = 0, Mode = 0, Score = 0, Coin = 0, Hp = 3;
 
 /* Objects */
 
@@ -113,7 +113,7 @@ let Title = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Build 18 Made By CiupagaPL",
+    value: "Public Build 1 Made By CiupagaPL",
     x: -362,
     y: Board.h - 12,
     fx: 0,
@@ -219,6 +219,78 @@ let MusicText = {
     h: NormalModeText.h,
 };
 
+/* Create descriptiontext1 object */
+let DescriptionText1 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "The Uncreative Platformer is a semester",
+    x: -750,
+    y: NormalModeText.y - 20,
+    vx: 35,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create descriptiontext2 object */
+let DescriptionText2 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "project created by CiupagaPL. It's a simple",
+    x: -750,
+    y: DescriptionText1.y + 60,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create descriptiontext3 object */
+let DescriptionText3 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "platformer that incorporates and combines",
+    x: -750,
+    y: DescriptionText2.y + 60,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create descriptiontext4 object */
+let DescriptionText4 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "ideas from other platformers. For more",
+    x: -750,
+    y: DescriptionText3.y + 60,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create descriptiontext5 object */
+let DescriptionText5 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "information, check out this git repo ->",
+    x: -750,
+    y: DescriptionText4.y + 60,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create descriptiontext6 object */
+let DescriptionText6 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "CiupagaPL/Uncreative_Platformer",
+    x: -750,
+    y: DescriptionText5.y + 60,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
 /* Create returntext object */
 let ReturnText = {
     color: "white",
@@ -274,6 +346,7 @@ let MainMenuText = {
     w: 200,
     h: NormalModeText.h,
 };
+
 
 /* Create scoretext object */
 let ScoreText = {

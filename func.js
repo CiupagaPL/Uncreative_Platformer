@@ -130,6 +130,36 @@ window.onupdate = function() {
         Context.font = MusicText.font;
         Context.fillText(MusicText.value, MusicText.x, MusicText.y);
 
+        /* Draw descriptiontext1 object */
+        Context.fillStyle = DescriptionText1.color;
+        Context.font = DescriptionText1.font;
+        Context.fillText(DescriptionText1.value, DescriptionText1.x, DescriptionText1.y);
+
+        /* Draw descriptiontext2 object */
+        Context.fillStyle = DescriptionText2.color;
+        Context.font = DescriptionText2.font;
+        Context.fillText(DescriptionText2.value, DescriptionText2.x, DescriptionText2.y);
+
+        /* Draw descriptiontext3 object */
+        Context.fillStyle = DescriptionText3.color;
+        Context.font = DescriptionText3.font;
+        Context.fillText(DescriptionText3.value, DescriptionText3.x, DescriptionText3.y);
+
+        /* Draw descriptiontext4 object */
+        Context.fillStyle = DescriptionText4.color;
+        Context.font = DescriptionText4.font;
+        Context.fillText(DescriptionText4.value, DescriptionText4.x, DescriptionText4.y);
+
+        /* Draw descriptiontext5 object */
+        Context.fillStyle = DescriptionText5.color;
+        Context.font = DescriptionText5.font;
+        Context.fillText(DescriptionText5.value, DescriptionText5.x, DescriptionText5.y);
+
+        /* Draw descriptiontext6 object */
+        Context.fillStyle = DescriptionText6.color;
+        Context.font = DescriptionText6.font;
+        Context.fillText(DescriptionText6.value, DescriptionText6.x, DescriptionText6.y);
+
         /* Draw returntext object */
         Context.fillStyle = ReturnText.color;
         Context.font = ReturnText.font;
@@ -209,12 +239,26 @@ window.onupdate = function() {
 
         /* Change hud animation depending on game statement */
         if(Pause == 1) {
-            MenuTransparent.type = 11;
-            window.animatehud();
+            /* Animate ingame hud */
+            StatusTransparent.type = 2;
+            window.animateingamehud();
+
+            /* Animate hud */
+            if(StatusTransparent.type == 0) {
+                MenuTransparent.type = 11;
+                window.animatehud();
+            }
         }
         else if(Pause == 3) {
+            /* Animate hud */
             MenuTransparent.type = 12;
             window.animatehud();
+
+            /* Animate ingame hud */
+            if(MenuTransparent.type == 0) {
+                StatusTransparent.type = 1;
+                window.animateingamehud();
+            }
         }
 
         /* Draw background object */
@@ -439,6 +483,36 @@ window.onupdate = function() {
         Context.font = MusicText.font;
         Context.fillText(MusicText.value, MusicText.x, MusicText.y);
 
+        /* Draw descriptiontext1 object */
+        Context.fillStyle = DescriptionText1.color;
+        Context.font = DescriptionText1.font;
+        Context.fillText(DescriptionText1.value, DescriptionText1.x, DescriptionText1.y);
+
+        /* Draw descriptiontext2 object */
+        Context.fillStyle = DescriptionText2.color;
+        Context.font = DescriptionText2.font;
+        Context.fillText(DescriptionText2.value, DescriptionText2.x, DescriptionText2.y);
+
+        /* Draw descriptiontext3 object */
+        Context.fillStyle = DescriptionText3.color;
+        Context.font = DescriptionText3.font;
+        Context.fillText(DescriptionText3.value, DescriptionText3.x, DescriptionText3.y);
+
+        /* Draw descriptiontext4 object */
+        Context.fillStyle = DescriptionText4.color;
+        Context.font = DescriptionText4.font;
+        Context.fillText(DescriptionText4.value, DescriptionText4.x, DescriptionText4.y);
+
+        /* Draw descriptiontext5 object */
+        Context.fillStyle = DescriptionText5.color;
+        Context.font = DescriptionText5.font;
+        Context.fillText(DescriptionText5.value, DescriptionText5.x, DescriptionText5.y);
+
+        /* Draw descriptiontext6 object */
+        Context.fillStyle = DescriptionText6.color;
+        Context.font = DescriptionText6.font;
+        Context.fillText(DescriptionText6.value, DescriptionText6.x, DescriptionText6.y);
+
         /* Draw returntext object */
         Context.fillStyle = ReturnText.color;
         Context.font = ReturnText.font;
@@ -513,7 +587,7 @@ window.updatelevel = function(CurrentPlatform) {
 
 /* Window platform counter function */
 window.currentplatformgenerator = function() {
-    Platform.load = Math.round((Board.h - 384 - 64) / 256);
+    Platform.load = Math.round((Board.h - 384) / 256);
 }
 
 /* Window platform generator function */
