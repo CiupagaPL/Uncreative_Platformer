@@ -1,4 +1,4 @@
-/* Uncreative Platformer made by CiupagaPL; Simple platformer made in JS.
+/* Uncreative Platformer made by CiupagaPL
  * GPL 3.0 (C) 2024 CiupagaPL */
 
 /* Variables */
@@ -7,7 +7,7 @@
 let Scene = 1, SceneStart = false, SceneChange = false, SceneRestart = false;
 let Sfx = true, Music = true;
 let AboutTransition = 0, SettingsTransition = 0;
-let Pause = 0, Mode = 0, Score = 0, Coin = 0, Hp = 3;
+let Pause = 0, Mode = 0, Score = 0, Coins = 0;
 
 /* Objects */
 
@@ -113,7 +113,7 @@ let Title = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public Build 1 Made By CiupagaPL",
+    value: "Public Build 2 Made By CiupagaPL",
     x: -362,
     y: Board.h - 12,
     fx: 0,
@@ -343,7 +343,7 @@ let MainMenuText = {
     fx: 0,
     fy: NormalModeText.fy,
     vx: NormalModeText.vx,
-    w: 200,
+    w: 302,
     h: NormalModeText.h,
 };
 
@@ -357,7 +357,19 @@ let ScoreText = {
     y: 0,
     fx: 0,
     fy: 0,
-    vy: 4.26,
+    vy: 4.9,
+};
+
+/* Create coinstext object */
+let CoinsText = {
+    color: "white",
+    font: "92px Orange_Kid",
+    value: "0",
+    x: 130,
+    y: ScoreText.y,
+    fx: 0,
+    fy: 0,
+    vy: ScoreText.vy,
 };
 
 /* Create statustransparent object */
@@ -446,13 +458,15 @@ let Platform = {
     fx: 0,
     fy: 0,
     color: "blue",
-    lenght: 100,
+    lenght: -1,
     currentlenght: 0,
     load: 3,
     currentload: 0,
     count: 0,
     randomx1: 0,
     randomx2: 0,
+    level: 0,
+    disabled: false,
 };
 
 /* Create main platform object */
@@ -475,5 +489,17 @@ let Spike = {
     fx: 0,
     fy: 0,
     color: "red",
+};
+
+/* Create coin object */
+let Coin = {
+    w: 32,
+    h: 32,
+    x: Board.w - 32,
+    y: 800,
+    fx: 0,
+    fy: 0,
+    color: "yellow",
+    used: false,
 };
 

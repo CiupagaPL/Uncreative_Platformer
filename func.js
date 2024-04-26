@@ -1,5 +1,5 @@
-// Uncreative Platformer made by CiupagaPL; Simple platformer made in JS.
-/* GPL 3.0 (C) 2024 CiupagaPL */
+/* Uncreative Platformer made by CiupagaPL
+ * GPL 3.0 (C) 2024 CiupagaPL */
 
 /* Window create function */
 window.onload = function() {
@@ -251,8 +251,18 @@ window.onupdate = function() {
         }
         else if(Pause == 3) {
             /* Animate hud */
-            MenuTransparent.type = 12;
-            window.animatehud();
+            if(SettingsTransition != 0) {
+                MenuTransparent.type = 21;
+                window.animatehud();
+            }
+            if(AboutTransition != 0) {
+                MenuTransparent.type = 22;
+                window.animatehud();
+            }
+            else if(SettingsTransition == 0 && AboutTransition == 0) {
+                MenuTransparent.type = 12;
+                window.animatehud();
+            }
 
             /* Animate ingame hud */
             if(MenuTransparent.type == 0) {
@@ -286,6 +296,9 @@ window.onupdate = function() {
         window.generatelevel();
         Platform.currentlenght = 0;
 
+        /* Update texts value */
+        window.updatetext();
+
         /* Refresh player object movement */
         if(Player.side == 0) {
             /* Stop player object */
@@ -307,6 +320,12 @@ window.onupdate = function() {
         /* Draw spike object */
         Context.fillStyle = Spike.color;
         Context.fillRect(Spike.x, Spike.y, Spike.w, Spike.h);
+
+        /* Draw coin object */
+        if(!Coin.used) {
+            Context.fillStyle = Coin.color;
+            Context.fillRect(Coin.x, Coin.y, Coin.w, Coin.h);
+        }
 
         /* Generate level */
         while(Platform.lenght >= Platform.currentlenght) {
@@ -332,6 +351,11 @@ window.onupdate = function() {
                 /* End jumping function */
                 Player.jump = 0;
                 Player.touch = 1;
+
+                /* Change score */
+                if(CurrentPlatform.level + 1 > Score) {
+                    Score += 1;
+                }
             }
             /* Detect collisions between groundcheckleft and platform object */
             if(window.detectcollision(CurrentPlatform, GroundCheckLeft) && Player.touch == 0) {
@@ -368,9 +392,16 @@ window.onupdate = function() {
             // window.updatelevel(CurrentPlatform);
 
             /* Move platforms */
-
             // if(Score >= 1) {
             //     CurrentPlatform.y += 0.25;
+            // }
+            
+            /* Move objects if Player is too high */
+            // if(Player.y < Board.h / 4 && Pause == 0 && !Player.isdead) {
+            //     CurrentPlatform.y += 1;
+            //     MainPlatform.y += 0.25;
+            //     Coin.y += 0.25;
+            //     Spike.y += 0.25;
             // }
 
             /* Change loop value */
@@ -399,11 +430,28 @@ window.onupdate = function() {
             }
         }
 
+        /* Kill player object if it is falling */
+        if(Player.y + Player.h >= Board.h) {
+            Player.isdead = true;
+            SceneRestart = true;
+        }
+
         /* Detect collisions between player and spike object */
-        if(window.detectcollision(Player, Spike) && Player.touch == 0) {
+        if(window.detectcollision(Player, Spike)) {
             /* Make player dead */
             Player.isdead = true;
             SceneRestart = true;
+        }
+
+        /* Detect collisions between player and coin object */
+        if(window.detectcollision(Player, Coin)) {
+            /* Add one to coins variable */
+            if(!Coin.used) {
+                Coins += 1;
+            }
+
+            /* Disable coin */
+            Coin.used = true;
         }
 
         /* Draw player object */
@@ -434,6 +482,11 @@ window.onupdate = function() {
         Context.fillStyle = ScoreText.color;
         Context.font = ScoreText.font;
         Context.fillText(ScoreText.value, ScoreText.x, ScoreText.y);
+
+        /* Draw coinstext object */
+        Context.fillStyle = CoinsText.color;
+        Context.font = CoinsText.font;
+        Context.fillText(CoinsText.value, CoinsText.x, CoinsText.y);
 
         /* Draw menutransparent object */
         Context.fillStyle = MenuTransparent.color;
@@ -579,29 +632,47 @@ window.detectcollision = function(First, Second) {
 
 /* Window generator update function */
 window.updatelevel = function(CurrentPlatform) {
-    /* Update platform if it is under screen */
+    /* Generate next platform */
     if(CurrentPlatform.y >= Board.h) {
-        CurrentPlatform = window.platformgenerator();
+        if(!CurrentPlatform.disabled) {
+            /* Calculate platform h */
+            CurrentPlatform.y = 0;
+            CurrentPlatform.level = Score + 1;
+
+            /* Disable platform */
+            CurrentPlatform.disabled = true;
+        }
+    }
+    /* Enable platform */
+    else if(CurrentPlatform.y < Board.h) {
+        CurrentPlatform.disabled = false;
     }
 }
 
-/* Window platform counter function */
-window.currentplatformgenerator = function() {
-    Platform.load = Math.round((Board.h - 384) / 256);
+/* Window objects counter function */
+window.currentobjectsgenerator = function() {
+    /* Generate number */
+    Platform.load = Math.round((Board.h - 384) / 256) + 1;
 }
 
-/* Window platform generator function */
-window.platformgenerator = function() {
+/* Window object generator function */
+window.objectsgenerator = function() {
     /* Generate platform count */
     Platform.count = Math.floor(Math.random() * 2);
 
     /* Generate all platforms position */
     if(Platform.count == 0) {
         Platform.randomx1 = Math.floor(Math.random() * Board.w * 3/4) + Platform.w / 2;
+
+        /* Change platform lenght */
+        Platform.lenght += 2;
     }
     if(Platform.count == 1) {
-        Platform.randomx1 = Math.floor(Math.random() * Board.w * 1.5/4 + Platform.w / 2);
-        Platform.randomx2 = Platform.randomx1 + Math.floor(Math.random() * Board.w * 1.5/4 + Platform.w / 2) + 192;
+        Platform.randomx1 = Math.floor(Math.random() * Board.w * 1.25/4 + Platform.w / 2);
+        Platform.randomx2 = Platform.randomx1 + Math.floor(Math.random() * Board.w * 1/4 + Platform.w / 2);
+
+        /* Change platform lenght */
+        Platform.lenght += 3;
     }
 
     /* Create first current platform */
@@ -613,6 +684,8 @@ window.platformgenerator = function() {
         w: Platform.randomx1,
         h: Platform.h,
         color: Platform.color,
+        level: Platform.currentload,
+        disabled: false,
     };
 
     /* Push current platform into array */
@@ -628,7 +701,10 @@ window.platformgenerator = function() {
             w: Board.w - Platform.randomx1 - Platform.w,
             h: Platform.h,
             color: Platform.color,
+            level: Platform.currentload,
+            disabled: false,
         };
+
     }
 
     /* Create second and last platform */
@@ -638,23 +714,28 @@ window.platformgenerator = function() {
             y: CurrentPlatform.y,
             fx: 0,
             fy: 0,
-            w: Platform.randomx2 - Platform.randomx1 - Platform.w,
+            w: Platform.randomx2 - Platform.randomx1 - Platform.w + 256,
             h: Platform.h,
             color: Platform.color,
+            level: Platform.currentload,
+            disabled: false,
         };
 
         /* Push current platform into array */
         Platform.array.push(CurrentPlatform);
 
         CurrentPlatform = {
-            x: Platform.randomx2 + Platform.w,
+            x: Platform.randomx2 + Platform.w + 256,
             y: CurrentPlatform.y,
             fx: 0,
             fy: 0,
-            w: Board.w - Platform.randomx2 - Platform.w,
+            w: Board.w - Platform.randomx2 - Platform.w - 256,
             h: Platform.h,
             color: Platform.color,
+            level: Platform.currentload,
+            disabled: false,
         };
+
     }
 
     /* Push current platform into array */
@@ -665,14 +746,33 @@ window.platformgenerator = function() {
 window.generatelevel = function() {
     /* Generate rest platforms */
     while(Platform.currentload <= Platform.load) {
-        /* Count platforms */
-        window.currentplatformgenerator();
+        /* Count objects */
+        window.currentobjectsgenerator();
 
-        /* Start platformgenerator function */
-        window.platformgenerator();
+        /* Start objects generator function */
+        window.objectsgenerator();
 
         /* Change loop value */
         Platform.currentload += 1;
     }
+}
+
+/* Window reset level function */
+window.resetlevel = function() {
+    /* Reset platform array */
+    Platform.array = [];
+
+    /* Reset platform values */
+    Platform.lenght = -1;
+    Platform.currentload = 0;
+}
+
+/* Window update texts function */
+window.updatetext = function() {
+    /* Update scoretext value */
+    ScoreText.value = Score.toString();
+
+    /* Update coinstext value */
+    CoinsText.value = Coins.toString();
 }
 

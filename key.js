@@ -1,4 +1,4 @@
-/* Uncreative Platformer made by CiupagaPL; Simple platformer made in JS.
+/* Uncreative Platformer made by CiupagaPL
  * GPL 3.0 (C) 2024 CiupagaPL */
 
 /* Key input handler */
@@ -17,8 +17,13 @@ document.addEventListener("keyup", function(Event) {
         switch(Event.key) {
             /* Pause game */
             case "Escape":
-                if(Pause == 0 && MenuTransparent.type == 0 && SceneStart) {
+                if(Pause == 0 && MenuTransparent.type == 0 && SceneStart && !Player.isdead) {
                     Pause = 1;
+                }
+            /* Unpause game */
+            case "Escape":
+                if(Pause == 2 && MenuTransparent.type == 0 && SceneStart && !Player.isdead) {
+                    Pause = 3;
                 }
 
                 break;

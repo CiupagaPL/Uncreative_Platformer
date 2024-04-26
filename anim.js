@@ -1,3 +1,6 @@
+/* Uncreative Platformer made by CiupagaPL
+ * GPL 3.0 (C) 2024 CiupagaPL */
+
 /* Window transition animating function */
 window.animatetransition = function() {
     /* Transition menu first animation */
@@ -64,7 +67,13 @@ window.animatetransition = function() {
         Player.y = Board.h - 128 - 128;
         Player.vy = 0;
         Player.vx = 0;
+        Player.side = 0;
         Player.isdead = false;
+        Coin.y = 800;
+        Coin.used = false;
+        Spike.y = 800;
+        MainPlatform.y = Board.h - 128;
+        Score = 0;
 
         /* Start transition timer */ 
         Transition.timer += 1;
@@ -117,6 +126,7 @@ window.animatetransition = function() {
                     SceneStart = false;
                     Scene = 1;
                     Transition.type = 0;
+                    window.resetlevel();
                 }
             }
         }
@@ -147,6 +157,7 @@ window.animatetransition = function() {
                 SceneRestart = false;
                 SceneStart = false;
                 Transition.type = 0;
+                window.resetlevel();
             }
         }
     }
@@ -160,6 +171,7 @@ window.animateingamehud = function() {
             /* Move objects */
             StatusTransparent.y += StatusTransparent.vy;
             ScoreText.y += ScoreText.vy;
+            CoinsText.y += CoinsText.vy;
         }
         else if(StatusTransparent.y >= 0) {
             /* Change loop value */
@@ -174,6 +186,7 @@ window.animateingamehud = function() {
             /* Move objects */
             StatusTransparent.y -= StatusTransparent.vy;
             ScoreText.y -= ScoreText.vy;
+            CoinsText.y -= CoinsText.vy;
         }
         else if(StatusTransparent.y <= -96) {
             /* Change loop value */
@@ -575,6 +588,46 @@ window.animatehud = function() {
             AboutText.x += AboutText.vx;
         }
         else if(MenuTransparent.x >= 0) {
+            /* Change loop value */
+            AboutTransition = 0;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Show ingame settings section when paused */
+    if(MenuTransparent.type == 21) {
+        if(MenuTransparent.x > -900) {
+            /* Move objects */
+            MenuTransparent.x -= MenuTransparent.vx;
+            Title.x -= Title.vx;
+            VersionText.x -= VersionText.vx;
+            SfxText.x -= SfxText.vx;
+            MusicText.x -= MusicText.vx;
+            ReturnText.x -= ReturnText.vx;
+        }
+        else if(MenuTransparent.x <= -900) {
+            /* Change loop value */
+            SettingsTransition = 0;
+            MenuTransparent.type = 0;
+        }
+    }
+
+    /* Show ingame about section when paused */
+    if(MenuTransparent.type == 22) {
+        if(MenuTransparent.x > -900) {
+            /* Move objects */
+            MenuTransparent.x -= MenuTransparent.vx;
+            Title.x -= Title.vx;
+            DescriptionText1.x -= DescriptionText1.vx;
+            DescriptionText2.x -= DescriptionText2.vx;
+            DescriptionText3.x -= DescriptionText3.vx;
+            DescriptionText4.x -= DescriptionText4.vx;
+            DescriptionText5.x -= DescriptionText5.vx;
+            DescriptionText6.x -= DescriptionText6.vx;
+            VersionText.x -= VersionText.vx;
+            ReturnText.x -= ReturnText.vx;
+        }
+        else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             AboutTransition = 0;
             MenuTransparent.type = 0;
