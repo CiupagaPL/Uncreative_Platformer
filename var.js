@@ -113,7 +113,7 @@ let Title = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public Build 2 Made By CiupagaPL",
+    value: "Public Build 3 Made By CiupagaPL",
     x: -362,
     y: Board.h - 12,
     fx: 0,
@@ -399,16 +399,16 @@ let Player = {
     initvy: -24,
     gravity: 1,
     side: 0,
-    touched: 1,
+    touched: false,
     isgrounded: false,
     isdead: false,
 };
 
 /* Create groundchecktop object */
 let GroundCheckTop = {
-    w: 128,
-    h: 2,
-    x: Player.x + Player.vx,
+    w: 96,
+    h: 16,
+    x: Player.x + 16 + Player.vx,
     y: Player.y + Player.vy,
     fx: 0,
     fy: 0,
@@ -417,10 +417,10 @@ let GroundCheckTop = {
 
 /* Create groundcheckbottom object */
 let GroundCheckBottom = {
-    w: 128,
-    h: 2,
-    x: Player.x + Player.vx,
-    y: Player.y + 126 + Player.vy,
+    w: 96,
+    h: 16,
+    x: Player.x + 16 + Player.vx,
+    y: Player.y + 112 + Player.vy,
     fx: 0,
     fy: 0,
     color: "rgba(0, 0, 0, 0)",
@@ -428,10 +428,10 @@ let GroundCheckBottom = {
 
 /* Create groundcheckleft object */
 let GroundCheckLeft = {
-    w: 2,
-    h: 104,
+    w: 16,
+    h: 128,
     x: Player.x + Player.vx,
-    y: Player.y + 12 + Player.vy,
+    y: Player.y + Player.vy,
     fx: 0,
     fy: 0,
     color: "rgba(0, 0, 0, 0)",
@@ -439,10 +439,10 @@ let GroundCheckLeft = {
 
 /* Create groundcheckright object */
 let GroundCheckRight = {
-    w: 2,
-    h: 104,
-    x: Player.x + 128 + Player.vx,
-    y: Player.y + 12 + Player.vy,
+    w: 16,
+    h: 128,
+    x: Player.x + 112 + Player.vx,
+    y: Player.y + Player.vy,
     fx: 0,
     fy: 0,
     color: "rgba(0, 0, 0, 0)",
@@ -460,12 +460,13 @@ let Platform = {
     color: "blue",
     lenght: -1,
     currentlenght: 0,
-    load: 3,
+    load: 0,
     currentload: 0,
     count: 0,
     randomx1: 0,
     randomx2: 0,
     level: 0,
+    lastlevel: 0,
     disabled: false,
 };
 
@@ -482,24 +483,30 @@ let MainPlatform = {
 
 /* Create spike object */
 let Spike = {
+    array: [],
     w: 32,
     h: 32,
     x: 0,
-    y: 800,
+    y: 0,
     fx: 0,
     fy: 0,
     color: "red",
+    lenght: -1,
+    currentlenght: 0,
 };
 
 /* Create coin object */
 let Coin = {
+    array: [],
     w: 32,
     h: 32,
-    x: Board.w - 32,
-    y: 800,
+    x: 0,
+    y: 0,
     fx: 0,
     fy: 0,
     color: "yellow",
     used: false,
+    lenght: -1,
+    currentlenght: 0,
 };
 

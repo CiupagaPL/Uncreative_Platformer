@@ -33,6 +33,11 @@ document.addEventListener("keyup", function(Event) {
                 if(Player.isgrounded && !Player.isdead && Pause == 0 && SceneStart) {
                     /* Change value and jump */
                     Player.vy = Player.initvy;
+
+                    /* Play jump sound */
+                    if(Sfx) {
+                        new Audio("Sounds/Jump.wav").play();
+                    }
                 }
 
                 break;
@@ -192,6 +197,11 @@ window.addEventListener("click", function(Event) {
         /* Set mode and change scene */
         Mode = 1;
         SceneChange = true;
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
+        }
     }
 
     /* Hardmodetext object function */
@@ -199,6 +209,11 @@ window.addEventListener("click", function(Event) {
         /* Set mode and change scene */
         Mode = 2;
         SceneChange = true;
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
+        }
     }
 
     /* Tutorialtext object function */
@@ -206,18 +221,33 @@ window.addEventListener("click", function(Event) {
         /* Set mode and change scene */
         Mode = 0;
         SceneChange = true;
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
+        }
     }
 
     /* Settingstext object function */
     if(window.detectcollision(SettingsText, Mouse) && SceneStart) {
         /* Turn on settings section */
         SettingsTransition = 1;
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
+        }
     }
 
     /* Abouttext object function */
     if(window.detectcollision(AboutText, Mouse) && SceneStart) {
         /* Turn on about section */
         AboutTransition = 1;
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
+        }
     }
 
     /* Sfxtext object function */
@@ -230,6 +260,11 @@ window.addEventListener("click", function(Event) {
         else if(!Sfx) {
             Sfx = true;
             SfxText.value = "Sfx: On";
+        }
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
         }
     }
 
@@ -244,24 +279,44 @@ window.addEventListener("click", function(Event) {
             Music = true;
             MusicText.value = "Music: On";
         }
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
+        }
     }
 
     /* Resumetext object function */
     if(window.detectcollision(ResumeText, Mouse) && SceneStart) {
         /* Unpause game */
         Pause = 3;
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
+        }
     }
 
     /* Restarttext object function */
     if(window.detectcollision(RestartText, Mouse) && SceneStart) {
         /* Restart game */
         SceneRestart = true;
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
+        }
     }
 
     /* Mainmenutext object function */
     if(window.detectcollision(MainMenuText, Mouse) && SceneStart) {
         /* Start scenechange */
         SceneChange = true;
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
+        }
     }
 
     /* Returntext object function */
@@ -272,6 +327,11 @@ window.addEventListener("click", function(Event) {
         }
         else if(AboutTransition == 3) {
             AboutTransition = 4;
+        }
+
+        /* Play select sfx */
+        if(Sfx) {
+            new Audio("Sounds/Select.wav").play();
         }
     }
 });

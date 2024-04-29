@@ -62,16 +62,16 @@ window.animatetransition = function() {
 
     /* Transition ingame first animation */
     if(Transition.type == 3) {
+        /* Reset level */
+        if(Transition.timer == 0) {
+            window.resetlevel();
+        }
+
         /* Gravity and physics generally */
         Player.x = Board.w / 2 - 64;
         Player.y = Board.h - 128 - 128;
-        Player.vy = 0;
-        Player.vx = 0;
         Player.side = 0;
         Player.isdead = false;
-        Coin.y = 800;
-        Coin.used = false;
-        Spike.y = 800;
         MainPlatform.y = Board.h - 128;
         Score = 0;
 
@@ -126,7 +126,6 @@ window.animatetransition = function() {
                     SceneStart = false;
                     Scene = 1;
                     Transition.type = 0;
-                    window.resetlevel();
                 }
             }
         }
@@ -157,7 +156,6 @@ window.animatetransition = function() {
                 SceneRestart = false;
                 SceneStart = false;
                 Transition.type = 0;
-                window.resetlevel();
             }
         }
     }
