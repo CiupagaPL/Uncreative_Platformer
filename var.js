@@ -113,7 +113,7 @@ let Title = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public Build 3 Made By CiupagaPL",
+    value: "Public Build 4 Made By CiupagaPL",
     x: -362,
     y: Board.h - 12,
     fx: 0,
@@ -395,13 +395,39 @@ let Player = {
     fy: 0,
     vx: 0,
     vy: 0,
-    color: "green",
+    imgafk1: new Image(),
+    imgafk2: new Image(),
+    imgafk3: new Image(),
+    imgafk4: new Image(),
+    imgdead1: new Image(),
+    imgdead2: new Image(),
+    imgdead3: new Image(),
+    imgdead4: new Image(),
+    imgdead5: new Image(),
+    imgfall1: new Image(),
+    imgfall2: new Image(),
+    imgfall3: new Image(),
+    imgfall4: new Image(),
+    imgjump1: new Image(),
+    imgjump2: new Image(),
+    imgjump3: new Image(),
+    imgjump4: new Image(),
+    imgleft1: new Image(),
+    imgleft2: new Image(),
+    imgleft3: new Image(),
+    imgleft4: new Image(),
+    imgright1: new Image(),
+    imgright2: new Image(),
+    imgright3: new Image(),
+    imgright4: new Image(),
     initvy: -24,
     gravity: 1,
     side: 0,
     touched: false,
     isgrounded: false,
     isdead: false,
+    timer: 0,
+    checked: false,
 };
 
 /* Create groundchecktop object */
@@ -509,4 +535,44 @@ let Coin = {
     lenght: -1,
     currentlenght: 0,
 };
+
+/* Textures */
+
+/* Set source of bakcground image */
+Background.img.src = "Sprites/Background1.png";
+
+/* Set source of title image */
+Title.img.src = "Sprites/Title.png";
+
+/* Set source of player image */
+Player.imgafk1.src = "Sprites/Player/Afk1.png";
+Player.imgafk2.src = "Sprites/Player/Afk2.png";
+Player.imgafk3.src = "Sprites/Player/Afk3.png";
+Player.imgafk4.src = "Sprites/Player/Afk4.png";
+
+Player.imgdead1.src = "Sprites/Player/Dead1.png";
+Player.imgdead2.src = "Sprites/Player/Dead2.png";
+Player.imgdead3.src = "Sprites/Player/Dead3.png";
+Player.imgdead4.src = "Sprites/Player/Dead4.png";
+Player.imgdead5.src = "Sprites/Player/Dead5.png";
+
+Player.imgfall1.src = "Sprites/Player/Fall1.png";
+Player.imgfall2.src = "Sprites/Player/Fall2.png";
+Player.imgfall3.src = "Sprites/Player/Fall3.png";
+Player.imgfall4.src = "Sprites/Player/Fall4.png";
+
+Player.imgjump1.src = "Sprites/Player/Jump1.png";
+Player.imgjump2.src = "Sprites/Player/Jump2.png";
+Player.imgjump3.src = "Sprites/Player/Jump3.png";
+Player.imgjump4.src = "Sprites/Player/Jump4.png";
+
+Player.imgleft1.src = "Sprites/Player/Left1.png";
+Player.imgleft2.src = "Sprites/Player/Left2.png";
+Player.imgleft3.src = "Sprites/Player/Left3.png";
+Player.imgleft4.src = "Sprites/Player/Left4.png";
+
+Player.imgright1.src = "Sprites/Player/Right1.png";
+Player.imgright2.src = "Sprites/Player/Right2.png";
+Player.imgright3.src = "Sprites/Player/Right3.png";
+Player.imgright4.src = "Sprites/Player/Right4.png";
 

@@ -1,6 +1,213 @@
 /* Uncreative Platformer made by CiupagaPL
  * GPL 3.0 (C) 2024 CiupagaPL */
 
+/* Window player animating function */
+window.animateplayer = function() {
+    /* Animate player */
+    if(!Player.isdead) {
+        /* Afk player object animation */
+        if(Player.side == 0 && Player.isgrounded) {
+            if(Player.timer < 180) {
+                /* Draw player object */
+                Context.drawImage(Player.imgafk1, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 180 && Player.timer < 190) {
+                /* Draw player object */
+                Context.drawImage(Player.imgafk2, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 190 && Player.timer < 200) {
+                /* Draw player object */
+                Context.drawImage(Player.imgafk3, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 200 && Player.timer < 220) {
+                /* Draw player object */
+                Context.drawImage(Player.imgafk4, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 220 && Player.timer < 230) {
+                /* Draw player object */
+                Context.drawImage(Player.imgafk3, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 230 && Player.timer < 240) {
+                /* Draw player object */
+                Context.drawImage(Player.imgafk2, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 240) {
+                /* Draw player object */
+                Context.drawImage(Player.imgafk1, Player.x, Player.y, Player.w, Player.h);
+
+                /* Change loop value */
+                Player.timer = 0;
+            }
+        }
+
+        /* Right player object animation */
+        if(Player.side == 1 && Player.isgrounded) {
+            if(Player.timer < 180) {
+                /* Draw player object */
+                Context.drawImage(Player.imgright1, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 180 && Player.timer < 190) {
+                /* Draw player object */
+                Context.drawImage(Player.imgright2, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 190 && Player.timer < 200) {
+                /* Draw player object */
+                Context.drawImage(Player.imgright3, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 200 && Player.timer < 220) {
+                /* Draw player object */
+                Context.drawImage(Player.imgright4, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 220 && Player.timer < 230) {
+                /* Draw player object */
+                Context.drawImage(Player.imgright3, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 230 && Player.timer < 240) {
+                /* Draw player object */
+                Context.drawImage(Player.imgright2, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 240) {
+                /* Draw player object */
+                Context.drawImage(Player.imgright1, Player.x, Player.y, Player.w, Player.h);
+
+                /* Change loop value */
+                Player.timer = 0;
+            }
+        }
+
+        /* Left player object animation */
+        if(Player.side == 2 && Player.isgrounded) {
+            if(Player.timer < 180) {
+                /* Draw player object */
+                Context.drawImage(Player.imgleft1, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 180 && Player.timer < 190) {
+                /* Draw player object */
+                Context.drawImage(Player.imgleft2, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 190 && Player.timer < 200) {
+                /* Draw player object */
+                Context.drawImage(Player.imgleft3, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 200 && Player.timer < 220) {
+                /* Draw player object */
+                Context.drawImage(Player.imgleft4, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 220 && Player.timer < 230) {
+                /* Draw player object */
+                Context.drawImage(Player.imgleft3, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 230 && Player.timer < 240) {
+                /* Draw player object */
+                Context.drawImage(Player.imgleft2, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 240) {
+                /* Draw player object */
+                Context.drawImage(Player.imgleft1, Player.x, Player.y, Player.w, Player.h);
+
+                /* Change loop value */
+                Player.timer = 0;
+            }
+        }
+
+        /* Jump player object animation */
+        if(Player.vy < 0 && !Player.isgrounded) {
+            if(Player.timer < 180) {
+                /* Draw player object */
+                Context.drawImage(Player.imgjump1, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 180 && Player.timer < 190) {
+                /* Draw player object */
+                Context.drawImage(Player.imgjump2, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 190 && Player.timer < 200) {
+                /* Draw player object */
+                Context.drawImage(Player.imgjump3, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 200 && Player.timer < 220) {
+                /* Draw player object */
+                Context.drawImage(Player.imgjump4, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 220 && Player.timer < 230) {
+                /* Draw player object */
+                Context.drawImage(Player.imgjump3, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 230 && Player.timer < 240) {
+                /* Draw player object */
+                Context.drawImage(Player.imgjump2, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 240) {
+                /* Draw player object */
+                Context.drawImage(Player.imgjump1, Player.x, Player.y, Player.w, Player.h);
+
+                /* Change loop value */
+                Player.timer = 0;
+            }
+        }
+
+        /* Fall player object animation */
+        if(Player.vy >= 0 && !Player.isgrounded) {
+            if(Player.timer < 180) {
+                /* Draw player object */
+                Context.drawImage(Player.imgfall1, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 180 && Player.timer < 190) {
+                /* Draw player object */
+                Context.drawImage(Player.imgfall2, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 190 && Player.timer < 200) {
+                /* Draw player object */
+                Context.drawImage(Player.imgfall3, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 200 && Player.timer < 220) {
+                /* Draw player object */
+                Context.drawImage(Player.imgfall4, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 220 && Player.timer < 230) {
+                /* Draw player object */
+                Context.drawImage(Player.imgfall3, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 230 && Player.timer < 240) {
+                /* Draw player object */
+                Context.drawImage(Player.imgfall2, Player.x, Player.y, Player.w, Player.h);
+            }
+            if(Player.timer >= 240) {
+                /* Draw player object */
+                Context.drawImage(Player.imgfall1, Player.x, Player.y, Player.w, Player.h);
+
+                /* Change loop value */
+                Player.timer = 0;
+            }
+        }
+    }
+    else {
+        /* Afk player object animation */
+        if(Player.side == 0 && Player.isgrounded) {
+            Context.drawImage(Player.imgdead1, Player.x, Player.y, Player.w, Player.h);
+        }
+
+        /* Right player object animation */
+        if(Player.side == 1 && Player.isgrounded) {
+            Context.drawImage(Player.imgdead5, Player.x, Player.y, Player.w, Player.h);
+        }
+
+        /* Left player object animation */
+        if(Player.side == 2 && Player.isgrounded) {
+            Context.drawImage(Player.imgdead4, Player.x, Player.y, Player.w, Player.h);
+        }
+
+        /* Jump player object animation */
+        if(Player.vy < 0 && !Player.isgrounded) {
+            Context.drawImage(Player.imgdead3, Player.x, Player.y, Player.w, Player.h);
+        }
+
+        /* Fall player object animation */
+        if(Player.vy >= 0 && !Player.isgrounded) {
+            Context.drawImage(Player.imgdead2, Player.x, Player.y, Player.w, Player.h);
+        }
+    }
+}
+
 /* Window transition animating function */
 window.animatetransition = function() {
     /* Transition menu first animation */
@@ -71,6 +278,7 @@ window.animatetransition = function() {
         Player.x = Board.w / 2 - 64;
         Player.y = Board.h - 128 - 128;
         Player.side = 0;
+        Player.timer = 0;
         Player.isdead = false;
         MainPlatform.y = Board.h - 128;
         Score = 0;

@@ -65,21 +65,20 @@ window.onupdate = function() {
     /* Menu scene */
     if(Scene == 1) {
         /* Things todo on scene start */
-        if(SceneStart == false) {
+        if(!SceneStart) {
             /* Turn on transition animation */
             Transition.type = 1;
             window.animatetransition();
         }
 
         /* Things todo on scene change */
-        if(SceneChange == true) {
+        if(SceneChange) {
             /* Turn on transition animation */ 
             Transition.type = 2;
             window.animatetransition();
         }
 
         /* Draw background object */
-        Background.img.src = "Sprites/Background1.png";
         Context.drawImage(Background.img, Background.x, Background.y, Background.w, Background.h);
 
         /* Draw menutransparent object */
@@ -87,7 +86,6 @@ window.onupdate = function() {
         Context.fillRect(MenuTransparent.x, MenuTransparent.y, MenuTransparent.w, MenuTransparent.h);
 
         /* Draw title object */
-        Title.img.src = "Sprites/Title.png";
         Context.drawImage(Title.img, Title.x, Title.y, Title.w, Title.h);
 
         /* Draw versiontext object */
@@ -217,21 +215,21 @@ window.onupdate = function() {
     /* Game scene */
     if(Scene == 2) {
         /* Things todo on scene start */
-        if(SceneStart == false) {
+        if(!SceneStart) {
             /* Turn on transition animation */
             Transition.type = 3;
             window.animatetransition();
         }
 
         /* Things todo on scene change */
-        if(SceneChange == true) {
+        if(SceneChange) {
             /* Turn on transition animation */
             Transition.type = 4;
             window.animatetransition();
         }
 
         /* Things todo on scene restart */
-        if(SceneRestart == true) {
+        if(SceneRestart) {
             /* Turn on transition animation */
             Transition.type = 5;
             window.animatetransition();
@@ -272,8 +270,6 @@ window.onupdate = function() {
         }
 
         /* Draw background object */
-        Background.img = new Image();
-        Background.img.src = "Sprites/Background1.png";
         Context.drawImage(Background.img, Background.x, Background.y, Background.w, Background.h);
 
         /* Refresh groundchecktop position */
@@ -297,9 +293,15 @@ window.onupdate = function() {
         Platform.currentlenght = 0;
         Spike.currentlenght = 0;
         Coin.currentlenght = 0;
+        Player.checked = false;
 
         /* Update texts value */
         window.updatetext();
+
+        /* Start player timer */
+        if(Pause == 0 && !Player.isdead) {
+            Player.timer += 1;
+        }
 
         /* Refresh player object movement */
         if(Player.side == 0) {
@@ -315,13 +317,12 @@ window.onupdate = function() {
             Player.vx = -8;
         }
 
+        /* Animate player */
+        window.animateplayer();
+
         /* Draw mainplatform object */
         Context.fillStyle = MainPlatform.color;
         Context.fillRect(MainPlatform.x, MainPlatform.y, MainPlatform.w, MainPlatform.h);
-
-        /* Draw player object */
-        Context.fillStyle = Player.color;
-        Context.fillRect(Player.x, Player.y, Player.w, Player.h);
 
         /* Draw groundchecktop object */
         Context.fillStyle = GroundCheckTop.color;
@@ -349,18 +350,25 @@ window.onupdate = function() {
             /* Update platforms */
             window.updateplatforms(CurrentPlatform);
 
-            /* Move platforms */
-            // if(Score >= 1 && Pause == 0) {
-            //     CurrentPlatform.y += 0.25;
-            // }
+            /* Check if player object is grounded */
+            if(!window.detectcollision(MainPlatform, GroundCheckBottom) && !window.detectcollision(CurrentPlatform, GroundCheckBottom) && !Player.checked) {
+                /* Make player object ungrounded */
+                Player.isgrounded = false;
+            }
+            else if(window.detectcollision(MainPlatform, GroundCheckBottom) && !Player.checked) {
+                /* Make player object grounded */
+                Player.isgrounded = true;
 
-            /* Move objects if Player is too high */
-            // if(Player.y < Board.h / 4 && Pause == 0 && !Player.isdead) {
-            //     CurrentPlatform.y += 1;
-            //     MainPlatform.y += 0.25;
-            //     Coin.y += 0.25;
-            //     Spike.y += 0.25;
-            // }
+                /* Change loop value */
+                Player.checked = true;
+            }
+            else if(window.detectcollision(CurrentPlatform, GroundCheckBottom) && !Player.checked) {
+                /* Make player object grounded */
+                Player.isgrounded = true;
+
+                /* Change loop value */
+                Player.checked = true;
+            }
 
             /* Detect collisions between groundchecktop and platform object */
             if(window.detectcollision(CurrentPlatform, GroundCheckTop) && !Player.touched) {
@@ -378,7 +386,7 @@ window.onupdate = function() {
                 Player.jump = 0;
                 Player.touched = true;
 
-                /* Change score */
+                /* Change score value */
                 if(CurrentPlatform.level + 1 > Score) {
                     Score += 1;
                 }
@@ -408,14 +416,6 @@ window.onupdate = function() {
                 Player.touched = true;
             }
 
-            /* Check if player is grounded */
-            if(Player.vy != 0) {
-                Player.isgrounded = false;
-            }
-            else if(Player.vy == 0) {
-                Player.isgrounded = true;
-            }
-
             /* Change loop value */
             Platform.currentlenght += 1;
             Player.touched = false;
@@ -429,7 +429,7 @@ window.onupdate = function() {
             Context.fillRect(CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
 
             /* Update spikes */
-            window.updatespikes(CurrentSpike);
+            // window.updatespikes(CurrentSpike);
 
             /* Detect collisions between player and currentspike object */
             if(window.detectcollision(Player, CurrentSpike)) {
