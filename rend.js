@@ -112,7 +112,7 @@ window.platformsgenerator = function() {
     }
 
     /* Create first current platform */
-    let CurrentPlatform = {
+    CurrentPlatform = {
         x: 0,
         y: Board.h - 256 * Platform.currentload - 384,
         fx: 0,
@@ -152,10 +152,10 @@ window.platformsgenerator = function() {
         Platform.lastlevel = CurrentPlatform.level + 1;
 
         /* Generate coins for current platform */
-        window.coinsgenerator(CurrentPlatform);
+        // window.coinsgenerator(CurrentPlatform);
 
         /* Generate spikes for current platform */
-        window.spikesgenerator(CurrentPlatform);
+        // window.spikesgenerator(CurrentPlatform);
     }
 
     /* Create second and last platform */
@@ -177,10 +177,10 @@ window.platformsgenerator = function() {
         Platform.array.push(CurrentPlatform);
 
         /* Generate coins for current platform */
-        window.coinsgenerator(CurrentPlatform);
+        // window.coinsgenerator(CurrentPlatform);
 
         /* Generate spikes for current platform */
-        window.spikesgenerator(CurrentPlatform);
+        // window.spikesgenerator(CurrentPlatform);
 
         /* Create current platform object */
         CurrentPlatform = {
@@ -199,10 +199,10 @@ window.platformsgenerator = function() {
         Platform.lastlevel = CurrentPlatform.level + 1;
 
         /* Generate coins for current platform */
-        window.coinsgenerator(CurrentPlatform);
+        // window.coinsgenerator(CurrentPlatform);
 
         /* Generate spikes for current platform */
-        window.spikesgenerator(CurrentPlatform);
+        // window.spikesgenerator(CurrentPlatform);
     }
 
     /* Push current platform into array */
@@ -212,7 +212,7 @@ window.platformsgenerator = function() {
 /* Window spikes generator function */
 window.spikesgenerator = function(CurrentPlatform) {
     /* Create current spike object */
-    let CurrentSpike = {
+    CurrentSpike = {
         x: CurrentPlatform.x + 32,
         y: CurrentPlatform.y - Spike.h,
         fx: 0,
@@ -232,7 +232,7 @@ window.spikesgenerator = function(CurrentPlatform) {
 /* Window coins generator function */
 window.coinsgenerator = function(CurrentPlatform) {
     /* Create current coin object */
-    let CurrentCoin = {
+    CurrentCoin = {
         x: CurrentPlatform.x + 128,
         y: CurrentPlatform.y - Coin.h,
         fx: 0,

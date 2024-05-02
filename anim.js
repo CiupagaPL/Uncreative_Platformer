@@ -4,34 +4,34 @@
 /* Window player animating function */
 window.animateplayer = function() {
     /* Animate player */
-    if(!Player.isdead) {
+    if(!Player.isdead && Pause == 0) {
         /* Afk player object animation */
         if(Player.side == 0 && Player.isgrounded) {
             if(Player.timer < 180) {
                 /* Draw player object */
                 Context.drawImage(Player.imgafk1, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 180 && Player.timer < 190) {
+            if(Player.timer >= 180 && Player.timer < 195) {
                 /* Draw player object */
                 Context.drawImage(Player.imgafk2, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 190 && Player.timer < 200) {
+            if(Player.timer >= 195 && Player.timer < 210) {
                 /* Draw player object */
                 Context.drawImage(Player.imgafk3, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 200 && Player.timer < 220) {
+            if(Player.timer >= 210 && Player.timer < 240) {
                 /* Draw player object */
                 Context.drawImage(Player.imgafk4, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 220 && Player.timer < 230) {
+            if(Player.timer >= 240 && Player.timer < 255) {
                 /* Draw player object */
                 Context.drawImage(Player.imgafk3, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 230 && Player.timer < 240) {
+            if(Player.timer >= 255 && Player.timer < 270) {
                 /* Draw player object */
                 Context.drawImage(Player.imgafk2, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 240) {
+            if(Player.timer >= 270) {
                 /* Draw player object */
                 Context.drawImage(Player.imgafk1, Player.x, Player.y, Player.w, Player.h);
 
@@ -46,27 +46,27 @@ window.animateplayer = function() {
                 /* Draw player object */
                 Context.drawImage(Player.imgright1, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 180 && Player.timer < 190) {
+            if(Player.timer >= 180 && Player.timer < 195) {
                 /* Draw player object */
                 Context.drawImage(Player.imgright2, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 190 && Player.timer < 200) {
+            if(Player.timer >= 195 && Player.timer < 210) {
                 /* Draw player object */
                 Context.drawImage(Player.imgright3, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 200 && Player.timer < 220) {
+            if(Player.timer >= 210 && Player.timer < 240) {
                 /* Draw player object */
                 Context.drawImage(Player.imgright4, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 220 && Player.timer < 230) {
+            if(Player.timer >= 240 && Player.timer < 255) {
                 /* Draw player object */
                 Context.drawImage(Player.imgright3, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 230 && Player.timer < 240) {
+            if(Player.timer >= 255 && Player.timer < 270) {
                 /* Draw player object */
                 Context.drawImage(Player.imgright2, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 240) {
+            if(Player.timer >= 270) {
                 /* Draw player object */
                 Context.drawImage(Player.imgright1, Player.x, Player.y, Player.w, Player.h);
 
@@ -81,27 +81,27 @@ window.animateplayer = function() {
                 /* Draw player object */
                 Context.drawImage(Player.imgleft1, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 180 && Player.timer < 190) {
+            if(Player.timer >= 180 && Player.timer < 195) {
                 /* Draw player object */
                 Context.drawImage(Player.imgleft2, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 190 && Player.timer < 200) {
+            if(Player.timer >= 195 && Player.timer < 210) {
                 /* Draw player object */
                 Context.drawImage(Player.imgleft3, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 200 && Player.timer < 220) {
+            if(Player.timer >= 210 && Player.timer < 240) {
                 /* Draw player object */
                 Context.drawImage(Player.imgleft4, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 220 && Player.timer < 230) {
+            if(Player.timer >= 240 && Player.timer < 255) {
                 /* Draw player object */
                 Context.drawImage(Player.imgleft3, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 230 && Player.timer < 240) {
+            if(Player.timer >= 255 && Player.timer < 270) {
                 /* Draw player object */
                 Context.drawImage(Player.imgleft2, Player.x, Player.y, Player.w, Player.h);
             }
-            if(Player.timer >= 240) {
+            if(Player.timer >= 270) {
                 /* Draw player object */
                 Context.drawImage(Player.imgleft1, Player.x, Player.y, Player.w, Player.h);
 
@@ -110,100 +110,285 @@ window.animateplayer = function() {
             }
         }
 
-        /* Jump player object animation */
-        if(Player.vy < 0 && !Player.isgrounded) {
-            if(Player.timer < 180) {
-                /* Draw player object */
-                Context.drawImage(Player.imgjump1, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 180 && Player.timer < 190) {
-                /* Draw player object */
-                Context.drawImage(Player.imgjump2, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 190 && Player.timer < 200) {
-                /* Draw player object */
-                Context.drawImage(Player.imgjump3, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 200 && Player.timer < 220) {
-                /* Draw player object */
-                Context.drawImage(Player.imgjump4, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 220 && Player.timer < 230) {
-                /* Draw player object */
-                Context.drawImage(Player.imgjump3, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 230 && Player.timer < 240) {
-                /* Draw player object */
-                Context.drawImage(Player.imgjump2, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 240) {
-                /* Draw player object */
-                Context.drawImage(Player.imgjump1, Player.x, Player.y, Player.w, Player.h);
+        /* In air player object animation */
+        if(!Player.isgrounded) {
+            /* Jump player object animation */
+            if(Player.jumped && Player.side == 0) {
+                if(Player.timer < 180) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjump1, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 180 && Player.timer < 195) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjump2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 195 && Player.timer < 210) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjump3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 210 && Player.timer < 240) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjump4, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 240 && Player.timer < 255) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjump3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 255 && Player.timer < 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjump2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjump1, Player.x, Player.y, Player.w, Player.h);
 
-                /* Change loop value */
-                Player.timer = 0;
+                    /* Change loop value */
+                    Player.timer = 0;
+                }
             }
-        }
 
-        /* Fall player object animation */
-        if(Player.vy >= 0 && !Player.isgrounded) {
-            if(Player.timer < 180) {
-                /* Draw player object */
-                Context.drawImage(Player.imgfall1, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 180 && Player.timer < 190) {
-                /* Draw player object */
-                Context.drawImage(Player.imgfall2, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 190 && Player.timer < 200) {
-                /* Draw player object */
-                Context.drawImage(Player.imgfall3, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 200 && Player.timer < 220) {
-                /* Draw player object */
-                Context.drawImage(Player.imgfall4, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 220 && Player.timer < 230) {
-                /* Draw player object */
-                Context.drawImage(Player.imgfall3, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 230 && Player.timer < 240) {
-                /* Draw player object */
-                Context.drawImage(Player.imgfall2, Player.x, Player.y, Player.w, Player.h);
-            }
-            if(Player.timer >= 240) {
-                /* Draw player object */
-                Context.drawImage(Player.imgfall1, Player.x, Player.y, Player.w, Player.h);
+            /* Jump right player object animation */
+            if(Player.jumped && Player.side == 1) {
+                if(Player.timer < 180) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpright1, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 180 && Player.timer < 195) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpright2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 195 && Player.timer < 210) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpright3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 210 && Player.timer < 240) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpright4, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 240 && Player.timer < 255) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpright3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 255 && Player.timer < 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpright2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpright1, Player.x, Player.y, Player.w, Player.h);
 
-                /* Change loop value */
-                Player.timer = 0;
+                    /* Change loop value */
+                    Player.timer = 0;
+                }
+            }
+
+            /* Jump left player object animation */
+            if(Player.jumped && Player.side == 2) {
+                if(Player.timer < 180) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpleft1, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 180 && Player.timer < 195) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpleft2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 195 && Player.timer < 210) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpleft3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 210 && Player.timer < 240) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpleft4, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 240 && Player.timer < 255) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpleft3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 255 && Player.timer < 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpleft2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgjumpleft1, Player.x, Player.y, Player.w, Player.h);
+
+                    /* Change loop value */
+                    Player.timer = 0;
+                }
+            }
+
+            /* Fall player object animation */
+            if(!Player.jumped && Player.side == 0) {
+                if(Player.timer < 180) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfall1, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 180 && Player.timer < 195) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfall2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 195 && Player.timer < 210) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfall3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 210 && Player.timer < 240) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfall4, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 240 && Player.timer < 255) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfall3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 255 && Player.timer < 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfall2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfall1, Player.x, Player.y, Player.w, Player.h);
+
+                    /* Change loop value */
+                    Player.timer = 0;
+                }
+            }
+
+            /* Fall right player object animation */
+            if(!Player.jumped && Player.side == 1) {
+                if(Player.timer < 180) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallright1, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 180 && Player.timer < 195) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallright2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 195 && Player.timer < 210) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallright3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 210 && Player.timer < 240) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallright4, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 240 && Player.timer < 255) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallright3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 255 && Player.timer < 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallright2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallright1, Player.x, Player.y, Player.w, Player.h);
+
+                    /* Change loop value */
+                    Player.timer = 0;
+                }
+            }
+
+            /* Fall left player object animation */
+            if(!Player.jumped && Player.side == 2) {
+                if(Player.timer < 180) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallleft1, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 180 && Player.timer < 195) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallleft2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 195 && Player.timer < 210) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallleft3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 210 && Player.timer < 240) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallleft4, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 240 && Player.timer < 255) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallleft3, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 255 && Player.timer < 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallleft2, Player.x, Player.y, Player.w, Player.h);
+                }
+                if(Player.timer >= 270) {
+                    /* Draw player object */
+                    Context.drawImage(Player.imgfallleft1, Player.x, Player.y, Player.w, Player.h);
+
+                    /* Change loop value */
+                    Player.timer = 0;
+                }
             }
         }
     }
-    else {
-        /* Afk player object animation */
-        if(Player.side == 0 && Player.isgrounded) {
+    /* Animate dead player */
+    else if(Player.isdead) {
+        if(Player.timer < 180) {
+            /* Draw player object */
             Context.drawImage(Player.imgdead1, Player.x, Player.y, Player.w, Player.h);
         }
-
-        /* Right player object animation */
-        if(Player.side == 1 && Player.isgrounded) {
-            Context.drawImage(Player.imgdead5, Player.x, Player.y, Player.w, Player.h);
+        if(Player.timer >= 180 && Player.timer < 195) {
+            /* Draw player object */
+            Context.drawImage(Player.imgdead2, Player.x, Player.y, Player.w, Player.h);
         }
-
-        /* Left player object animation */
-        if(Player.side == 2 && Player.isgrounded) {
-            Context.drawImage(Player.imgdead4, Player.x, Player.y, Player.w, Player.h);
-        }
-
-        /* Jump player object animation */
-        if(Player.vy < 0 && !Player.isgrounded) {
+        if(Player.timer >= 195 && Player.timer < 210) {
+            /* Draw player object */
             Context.drawImage(Player.imgdead3, Player.x, Player.y, Player.w, Player.h);
         }
-
-        /* Fall player object animation */
-        if(Player.vy >= 0 && !Player.isgrounded) {
+        if(Player.timer >= 210 && Player.timer < 240) {
+            /* Draw player object */
+            Context.drawImage(Player.imgdead4, Player.x, Player.y, Player.w, Player.h);
+        }
+        if(Player.timer >= 240 && Player.timer < 255) {
+            /* Draw player object */
+            Context.drawImage(Player.imgdead3, Player.x, Player.y, Player.w, Player.h);
+        }
+        if(Player.timer >= 255 && Player.timer < 270) {
+            /* Draw player object */
             Context.drawImage(Player.imgdead2, Player.x, Player.y, Player.w, Player.h);
+        }
+        if(Player.timer >= 270) {
+            /* Draw player object */
+            Context.drawImage(Player.imgdead1, Player.x, Player.y, Player.w, Player.h);
+
+            /* Change loop value */
+            Player.timer = 0;
+        }
+    }
+    /* Animate paused player */
+    else if(Pause != 0) {
+        if(Player.timer < 180) {
+            /* Draw player object */
+            Context.drawImage(Player.imgpause1, Player.x, Player.y, Player.w, Player.h);
+        }
+        if(Player.timer >= 180 && Player.timer < 195) {
+            /* Draw player object */
+            Context.drawImage(Player.imgpause2, Player.x, Player.y, Player.w, Player.h);
+        }
+        if(Player.timer >= 195 && Player.timer < 210) {
+            /* Draw player object */
+            Context.drawImage(Player.imgpause3, Player.x, Player.y, Player.w, Player.h);
+        }
+        if(Player.timer >= 210 && Player.timer < 240) {
+            /* Draw player object */
+            Context.drawImage(Player.imgpause4, Player.x, Player.y, Player.w, Player.h);
+        }
+        if(Player.timer >= 240 && Player.timer < 255) {
+            /* Draw player object */
+            Context.drawImage(Player.imgpause3, Player.x, Player.y, Player.w, Player.h);
+        }
+        if(Player.timer >= 255 && Player.timer < 270) {
+            /* Draw player object */
+            Context.drawImage(Player.imgpause2, Player.x, Player.y, Player.w, Player.h);
+        }
+        if(Player.timer >= 270) {
+            /* Draw player object */
+            Context.drawImage(Player.imgpause1, Player.x, Player.y, Player.w, Player.h);
+
+            /* Change loop value */
+            Player.timer = 0;
         }
     }
 }
@@ -406,6 +591,13 @@ window.animatehud = function() {
     /* Menu start animation */
     if(MenuTransparent.type == 1) {
         if(MenuTransparent.x < 0) {
+            /* Make objects unusable */
+            NormalModeText.used = true;
+            HardModeText.used = true;
+            TutorialText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
@@ -419,12 +611,24 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             MenuTransparent.type = 0;
+            NormalModeText.used = false;
+            HardModeText.used = false;
+            TutorialText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
         }
     }
 
     /* Menu end animation */
     if(MenuTransparent.type == 2) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            NormalModeText.used = true;
+            HardModeText.used = true;
+            TutorialText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -438,12 +642,24 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             MenuTransparent.type = 0;
+            NormalModeText.used = false;
+            HardModeText.used = false;
+            TutorialText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
         }
     }
 
     /* Hide main section */
     if(MenuTransparent.type == 3) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            NormalModeText.used = true;
+            HardModeText.used = true;
+            TutorialText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -457,6 +673,11 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             SettingsTransition = 2;
+            NormalModeText.used = false;
+            HardModeText.used = false;
+            TutorialText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -464,6 +685,11 @@ window.animatehud = function() {
     /* Show settings section */
     if(MenuTransparent.type == 4) {
         if(MenuTransparent.x < 0) {
+            /* Make objects unusable */
+            SfxText.used = true;
+            MusicText.used = true;
+            ReturnText.used = true;
+
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
@@ -475,6 +701,9 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             SettingsTransition = 3;
+            SfxText.used = false;
+            MusicText.used = false;
+            ReturnText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -482,6 +711,11 @@ window.animatehud = function() {
     /* Hide settings section */
     if(MenuTransparent.type == 5) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            SfxText.used = true;
+            MusicText.used = true;
+            ReturnText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -493,6 +727,9 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             SettingsTransition = 5;
+            SfxText.used = false;
+            MusicText.used = false;
+            ReturnText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -500,6 +737,13 @@ window.animatehud = function() {
     /* Show main section */
     if(MenuTransparent.type == 6) {
         if(MenuTransparent.x < 0) {
+            /* Make objects unusable */
+            NormalModeText.used = true;
+            HardModeText.used = true;
+            TutorialText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
@@ -513,6 +757,11 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             SettingsTransition = 0;
+            NormalModeText.used = false;
+            HardModeText.used = false;
+            TutorialText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -520,6 +769,13 @@ window.animatehud = function() {
     /* Hide main section */
     if(MenuTransparent.type == 7) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            NormalModeText.used = true;
+            HardModeText.used = true;
+            TutorialText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -533,6 +789,11 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             AboutTransition = 2;
+            NormalModeText.used = false;
+            HardModeText.used = false;
+            TutorialText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -540,6 +801,9 @@ window.animatehud = function() {
     /* Show about section */
     if(MenuTransparent.type == 8) {
         if(MenuTransparent.x < 0) {
+            /* Make objects unusable */
+            ReturnText.used = true;
+
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
@@ -555,6 +819,7 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             AboutTransition = 3;
+            ReturnText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -562,6 +827,9 @@ window.animatehud = function() {
     /* Hide about section */
     if(MenuTransparent.type == 9) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            ReturnText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -577,6 +845,7 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             AboutTransition = 5;
+            ReturnText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -584,6 +853,13 @@ window.animatehud = function() {
     /* Show main section */
     if(MenuTransparent.type == 10) {
         if(MenuTransparent.x < 0) {
+            /* Make objects unusable */
+            NormalModeText.used = true;
+            HardModeText.used = true;
+            TutorialText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
@@ -597,6 +873,11 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             AboutTransition = 0;
+            NormalModeText.used = false;
+            HardModeText.used = false;
+            TutorialText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -604,6 +885,13 @@ window.animatehud = function() {
     /* Menu ingame start animation */
     if(MenuTransparent.type == 11) {
         if(MenuTransparent.x < 0) {
+            /* Make objects unusable */
+            ResumeText.used = true;
+            RestartText.used = true;
+            MainMenuText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
@@ -617,6 +905,11 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             Pause = 2;
+            ResumeText.used = false;
+            RestartText.used = false;
+            MainMenuText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -624,6 +917,13 @@ window.animatehud = function() {
     /* Menu ingame end animation */
     if(MenuTransparent.type == 12) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            ResumeText.used = true;
+            RestartText.used = true;
+            MainMenuText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -637,17 +937,30 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             MenuTransparent.type = 0;
+            ResumeText.used = false;
+            RestartText.used = false;
+            MainMenuText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
         }
     }
 
     /* Hide ingame main section */
     if(MenuTransparent.type == 13) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            ResumeText.used = true;
+            RestartText.used = true;
+            MainMenuText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
             VersionText.x -= VersionText.vx;
             ResumeText.x -= ResumeText.vx;
+            MusicText.used = true;
             RestartText.x -= RestartText.vx;
             MainMenuText.x -= MainMenuText.vx;
             SettingsText.x -= SettingsText.vx;
@@ -656,6 +969,12 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             SettingsTransition = 2;
+            MusicText.used = true;
+            ResumeText.used = false;
+            RestartText.used = false;
+            MainMenuText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -663,6 +982,11 @@ window.animatehud = function() {
     /* Show ingame settings section */
     if(MenuTransparent.type == 14) {
         if(MenuTransparent.x < 0) {
+            /* Make objects unusable */
+            SfxText.used = true;
+            MusicText.used = true;
+            ReturnText.used = true;
+
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
@@ -674,6 +998,9 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             SettingsTransition = 3;
+            SfxText.used = false;
+            MusicText.used = false;
+            ReturnText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -681,6 +1008,11 @@ window.animatehud = function() {
     /* Hide ingame settings section */
     if(MenuTransparent.type == 15) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            SfxText.used = true;
+            MusicText.used = true;
+            ReturnText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -692,6 +1024,9 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             SettingsTransition = 5;
+            SfxText.used = false;
+            MusicText.used = false;
+            ReturnText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -699,6 +1034,13 @@ window.animatehud = function() {
     /* Show ingame main section */
     if(MenuTransparent.type == 16) {
         if(MenuTransparent.x < 0) {
+            /* Make objects unusable */
+            ResumeText.used = true;
+            RestartText.used = true;
+            MainMenuText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
@@ -712,6 +1054,11 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             SettingsTransition = 0;
+            ResumeText.used = false;
+            RestartText.used = false;
+            MainMenuText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -719,6 +1066,13 @@ window.animatehud = function() {
     /* Hide ingame main section */
     if(MenuTransparent.type == 17) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            ResumeText.used = true;
+            RestartText.used = true;
+            MainMenuText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -732,6 +1086,11 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             AboutTransition = 2;
+            ResumeText.used = false;
+            RestartText.used = false;
+            MainMenuText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -739,6 +1098,9 @@ window.animatehud = function() {
     /* Show ingame about section */
     if(MenuTransparent.type == 18) {
         if(MenuTransparent.x < 0) {
+            /* Make objects unusable */
+            ReturnText.used = true;
+
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
@@ -754,6 +1116,7 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             AboutTransition = 3;
+            ReturnText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -761,6 +1124,9 @@ window.animatehud = function() {
     /* Hide ingame about section */
     if(MenuTransparent.type == 19) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            ReturnText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -776,6 +1142,7 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             AboutTransition = 5;
+            ReturnText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -783,6 +1150,13 @@ window.animatehud = function() {
     /* Show ingame main section */
     if(MenuTransparent.type == 20) {
         if(MenuTransparent.x < 0) {
+            /* Make objects unusable */
+            ResumeText.used = true;
+            RestartText.used = true;
+            MainMenuText.used = true;
+            SettingsText.used = true;
+            AboutText.used = true;
+
             /* Move objects */
             MenuTransparent.x += MenuTransparent.vx;
             Title.x += Title.vx;
@@ -796,6 +1170,11 @@ window.animatehud = function() {
         else if(MenuTransparent.x >= 0) {
             /* Change loop value */
             AboutTransition = 0;
+            ResumeText.used = false;
+            RestartText.used = false;
+            MainMenuText.used = false;
+            SettingsText.used = false;
+            AboutText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -803,6 +1182,11 @@ window.animatehud = function() {
     /* Show ingame settings section when paused */
     if(MenuTransparent.type == 21) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            SfxText.used = true;
+            MusicText.used = true;
+            ReturnText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -814,6 +1198,9 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             SettingsTransition = 0;
+            SfxText.used = false;
+            MusicText.used = false;
+            ReturnText.used = false;
             MenuTransparent.type = 0;
         }
     }
@@ -821,6 +1208,9 @@ window.animatehud = function() {
     /* Show ingame about section when paused */
     if(MenuTransparent.type == 22) {
         if(MenuTransparent.x > -900) {
+            /* Make objects unusable */
+            ReturnText.used = true;
+
             /* Move objects */
             MenuTransparent.x -= MenuTransparent.vx;
             Title.x -= Title.vx;
@@ -836,6 +1226,7 @@ window.animatehud = function() {
         else if(MenuTransparent.x <= -900) {
             /* Change loop value */
             AboutTransition = 0;
+            ReturnText.used = false;
             MenuTransparent.type = 0;
         }
     }

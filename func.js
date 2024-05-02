@@ -18,6 +18,9 @@ window.onload = function() {
         Scene = 0;
     }
 
+    /* Write welcome message */
+    console.log("Thank you for playing and have a good one <3");
+
     /* Start update function */
     window.onupdate();
 }
@@ -293,7 +296,6 @@ window.onupdate = function() {
         Platform.currentlenght = 0;
         Spike.currentlenght = 0;
         Coin.currentlenght = 0;
-        Player.checked = false;
 
         /* Update texts value */
         window.updatetext();
@@ -301,6 +303,16 @@ window.onupdate = function() {
         /* Start player timer */
         if(Pause == 0 && !Player.isdead) {
             Player.timer += 1;
+        }
+
+        /* Start player checktimer */
+        if(Pause == 0 && !Player.isdead) {
+            Player.checktimer += 1;
+        }
+
+        /* Make player checked false */
+        if(Player.checktimer >= 4) {
+            Player.checked = false;
         }
 
         /* Refresh player object movement */
@@ -343,37 +355,19 @@ window.onupdate = function() {
         /* Generate platforms */
         while(Platform.lenght >= Platform.currentlenght) {
             /* Draw current array platform */
-            let CurrentPlatform = Platform.array[Platform.currentlenght];
+            CurrentPlatform = Platform.array[Platform.currentlenght];
             Context.fillStyle = CurrentPlatform.color;
             Context.fillRect(CurrentPlatform.x, CurrentPlatform.y, CurrentPlatform.w, CurrentPlatform.h);
 
             /* Update platforms */
             window.updateplatforms(CurrentPlatform);
 
-            /* Check if player object is grounded */
-            if(!window.detectcollision(MainPlatform, GroundCheckBottom) && !window.detectcollision(CurrentPlatform, GroundCheckBottom) && !Player.checked) {
-                /* Make player object ungrounded */
-                Player.isgrounded = false;
-            }
-            else if(window.detectcollision(MainPlatform, GroundCheckBottom) && !Player.checked) {
-                /* Make player object grounded */
-                Player.isgrounded = true;
-
-                /* Change loop value */
-                Player.checked = true;
-            }
-            else if(window.detectcollision(CurrentPlatform, GroundCheckBottom) && !Player.checked) {
-                /* Make player object grounded */
-                Player.isgrounded = true;
-
-                /* Change loop value */
-                Player.checked = true;
-            }
-
             /* Detect collisions between groundchecktop and platform object */
             if(window.detectcollision(CurrentPlatform, GroundCheckTop) && !Player.touched) {
                 /* Change y velocity of Player object */
                 Player.vy = 8;
+
+                /* Fix some update problems */
                 Player.touched = true;
             }
 
@@ -382,8 +376,7 @@ window.onupdate = function() {
                 /* Change y velocity of Player object */
                 Player.vy = 0;
 
-                /* End jumping function */
-                Player.jump = 0;
+                /* Fix some update problems */
                 Player.touched = true;
 
                 /* Change score value */
@@ -396,6 +389,8 @@ window.onupdate = function() {
             if(window.detectcollision(CurrentPlatform, GroundCheckLeft) && !Player.touched) {
                 /* Change x velocity of Player object */
                 Player.side = 1;
+
+                /* Fix some update problems */
                 Player.touched = true;
             }
 
@@ -403,6 +398,8 @@ window.onupdate = function() {
             if(window.detectcollision(CurrentPlatform, GroundCheckRight) && !Player.touched) {
                 /* Change x velocity of Player object */
                 Player.side = 2;
+
+                /* Fix some update problems */
                 Player.touched = true;
             }
 
@@ -411,20 +408,38 @@ window.onupdate = function() {
                 /* Change y velocity of Player object */
                 Player.vy = 0;
 
-                /* End jumping function */
-                Player.jump = 0;
+                /* Fix some update problems */
                 Player.touched = true;
             }
 
             /* Change loop value */
             Platform.currentlenght += 1;
             Player.touched = false;
+
+            /* Check if player object is grounded */
+            if(Player.checktimer >= 4) {
+                if(window.detectcollision(MainPlatform, GroundCheckBottom) || window.detectcollision(CurrentPlatform, GroundCheckBottom)) {
+                    /* Make player object grounded */
+                    Player.isgrounded = true;
+                    Player.checked = true;
+                    Player.jumped = false;
+                    Player.checktimer = 0;
+                }
+                else if(!window.detectcollision(MainPlatform, GroundCheckBottom) && !window.detectcollision(CurrentPlatform, GroundCheckBottom)) {
+                    if(!Player.checked && Platform.lenght == Platform.currentlenght) {
+                        /* Make player object ungrounded */
+                        Player.isgrounded = false;
+                        Player.checked = false;
+                        Player.checktimer = 0;
+                    }
+                }
+            }
         }
 
         /* Generate spikes */
         while(Spike.lenght >= Spike.currentlenght) {
             /* Draw current array spike */
-            let CurrentSpike = Spike.array[Spike.currentlenght];
+            CurrentSpike = Spike.array[Spike.currentlenght];
             Context.fillStyle = CurrentSpike.color;
             Context.fillRect(CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
 
@@ -450,7 +465,7 @@ window.onupdate = function() {
         /* Generate coins */
         while(Coin.lenght >= Coin.currentlenght) {
             /* Draw current array spike */
-            let CurrentCoin = Coin.array[Coin.currentlenght];
+            CurrentCoin = Coin.array[Coin.currentlenght];
             if(!CurrentCoin.used) {
                 Context.fillStyle = CurrentCoin.color;
                 Context.fillRect(CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);

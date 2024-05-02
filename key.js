@@ -33,6 +33,7 @@ document.addEventListener("keyup", function(Event) {
                 if(Player.isgrounded && !Player.isdead && Pause == 0 && SceneStart) {
                     /* Change value and jump */
                     Player.vy = Player.initvy;
+                    Player.jumped = true;
 
                     /* Play jump sound */
                     if(Sfx) {
@@ -193,7 +194,7 @@ window.addEventListener("mousemove", function(Event) {
 /* Mouse input handler */
 window.addEventListener("click", function(Event) {
     /* Normalmodetext object function */
-    if(window.detectcollision(NormalModeText, Mouse) && SceneStart) {
+    if(window.detectcollision(NormalModeText, Mouse) && !NormalModeText.used) {
         /* Set mode and change scene */
         Mode = 1;
         SceneChange = true;
@@ -205,7 +206,7 @@ window.addEventListener("click", function(Event) {
     }
 
     /* Hardmodetext object function */
-    if(window.detectcollision(HardModeText, Mouse) && SceneStart) {
+    if(window.detectcollision(HardModeText, Mouse) && !HardModeText.used) {
         /* Set mode and change scene */
         Mode = 2;
         SceneChange = true;
@@ -217,7 +218,7 @@ window.addEventListener("click", function(Event) {
     }
 
     /* Tutorialtext object function */
-    if(window.detectcollision(TutorialText, Mouse) && SceneStart) {
+    if(window.detectcollision(TutorialText, Mouse) && !TutorialText.used) {
         /* Set mode and change scene */
         Mode = 0;
         SceneChange = true;
@@ -229,7 +230,7 @@ window.addEventListener("click", function(Event) {
     }
 
     /* Settingstext object function */
-    if(window.detectcollision(SettingsText, Mouse) && SceneStart) {
+    if(window.detectcollision(SettingsText, Mouse) && !SettingsText.used) {
         /* Turn on settings section */
         SettingsTransition = 1;
 
@@ -240,7 +241,7 @@ window.addEventListener("click", function(Event) {
     }
 
     /* Abouttext object function */
-    if(window.detectcollision(AboutText, Mouse) && SceneStart) {
+    if(window.detectcollision(AboutText, Mouse) && !AboutText.used) {
         /* Turn on about section */
         AboutTransition = 1;
 
@@ -251,7 +252,7 @@ window.addEventListener("click", function(Event) {
     }
 
     /* Sfxtext object function */
-    if(window.detectcollision(SfxText, Mouse) && SceneStart) {
+    if(window.detectcollision(SfxText, Mouse) && !SfxText.used) {
         /* Change value of boolen and sfxtext */
         if(Sfx) {
             Sfx = false;
@@ -269,7 +270,7 @@ window.addEventListener("click", function(Event) {
     }
 
     /* Musictext object function */
-    if(window.detectcollision(MusicText, Mouse) && SceneStart) {
+    if(window.detectcollision(MusicText, Mouse) && !MusicText.used) {
         /* Change value of boolen and musictext */
         if(Music) {
             Music = false;
@@ -287,7 +288,7 @@ window.addEventListener("click", function(Event) {
     }
 
     /* Resumetext object function */
-    if(window.detectcollision(ResumeText, Mouse) && SceneStart) {
+    if(window.detectcollision(ResumeText, Mouse) && !ResumeText.used) {
         /* Unpause game */
         Pause = 3;
 
@@ -298,7 +299,7 @@ window.addEventListener("click", function(Event) {
     }
 
     /* Restarttext object function */
-    if(window.detectcollision(RestartText, Mouse) && SceneStart) {
+    if(window.detectcollision(RestartText, Mouse) && !RestartText.used) {
         /* Restart game */
         SceneRestart = true;
 
@@ -309,7 +310,7 @@ window.addEventListener("click", function(Event) {
     }
 
     /* Mainmenutext object function */
-    if(window.detectcollision(MainMenuText, Mouse) && SceneStart) {
+    if(window.detectcollision(MainMenuText, Mouse) && !MainMenuText.used) {
         /* Start scenechange */
         SceneChange = true;
 
@@ -320,7 +321,7 @@ window.addEventListener("click", function(Event) {
     }
 
     /* Returntext object function */
-    if(window.detectcollision(ReturnText, Mouse) && SceneStart) {
+    if(window.detectcollision(ReturnText, Mouse) && !ReturnText.used) {
         /* Turn off about and settings section */
         if(SettingsTransition == 3) {
             SettingsTransition = 4;
