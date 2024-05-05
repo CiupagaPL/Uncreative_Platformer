@@ -2,7 +2,7 @@
  * GPL 3.0 (C) 2024 CiupagaPL */
 
 /* Window generator platforms update function */
-window.updateplatforms = function(CurrentPlatform) {
+window.updateplatforms = function() {
     /* Generate next platform */
     if(CurrentPlatform.y >= Board.h) {
         if(!CurrentPlatform.disabled) {
@@ -28,12 +28,12 @@ window.updateplatforms = function(CurrentPlatform) {
 }
 
 /* Window generator spikes update function */
-window.updatespikes = function(CurrentSpike) {
+window.updatespikes = function() {
 
 }
 
 /* Window generator coins update function */
-window.updatecoins = function(CurrentCoin) {
+window.updatecoins = function() {
 
 }
 
@@ -82,15 +82,6 @@ window.resetlevel = function() {
     Coin.currentload = 0;
 }
 
-/* Window update texts function */
-window.updatetext = function() {
-    /* Update scoretext value */
-    ScoreText.value = Score.toString();
-
-    /* Update coinstext value */
-    CoinsText.value = Coins.toString();
-}
-
 /* Window platforms generator function */
 window.platformsgenerator = function() {
     /* Generate platform count */
@@ -128,10 +119,10 @@ window.platformsgenerator = function() {
     Platform.array.push(CurrentPlatform);
 
     /* Generate coins for current platform */
-    window.coinsgenerator(CurrentPlatform);
+    window.coinsgenerator();
 
     /* Generate spikes for current platform */
-    window.spikesgenerator(CurrentPlatform);
+    window.spikesgenerator();
 
     /* Create second platform */
     if(Platform.count == 0) {
@@ -152,10 +143,10 @@ window.platformsgenerator = function() {
         Platform.lastlevel = CurrentPlatform.level + 1;
 
         /* Generate coins for current platform */
-        // window.coinsgenerator(CurrentPlatform);
+        window.coinsgenerator();
 
         /* Generate spikes for current platform */
-        // window.spikesgenerator(CurrentPlatform);
+        // window.spikesgenerator();
     }
 
     /* Create second and last platform */
@@ -177,10 +168,10 @@ window.platformsgenerator = function() {
         Platform.array.push(CurrentPlatform);
 
         /* Generate coins for current platform */
-        // window.coinsgenerator(CurrentPlatform);
+        window.coinsgenerator();
 
         /* Generate spikes for current platform */
-        // window.spikesgenerator(CurrentPlatform);
+        // window.spikesgenerator();
 
         /* Create current platform object */
         CurrentPlatform = {
@@ -199,10 +190,10 @@ window.platformsgenerator = function() {
         Platform.lastlevel = CurrentPlatform.level + 1;
 
         /* Generate coins for current platform */
-        // window.coinsgenerator(CurrentPlatform);
+        window.coinsgenerator();
 
         /* Generate spikes for current platform */
-        // window.spikesgenerator(CurrentPlatform);
+        // window.spikesgenerator();
     }
 
     /* Push current platform into array */
@@ -210,16 +201,16 @@ window.platformsgenerator = function() {
 }
 
 /* Window spikes generator function */
-window.spikesgenerator = function(CurrentPlatform) {
+window.spikesgenerator = function() {
     /* Create current spike object */
     CurrentSpike = {
-        x: CurrentPlatform.x + 32,
+        x: CurrentPlatform.x,
         y: CurrentPlatform.y - Spike.h,
         fx: 0,
         fy: 0,
         w: Spike.w,
         h: Spike.h,
-        color: Spike.color,
+        img: Spike.img,
     };
 
     /* Push current spike into array */
@@ -230,22 +221,29 @@ window.spikesgenerator = function(CurrentPlatform) {
 }
 
 /* Window coins generator function */
-window.coinsgenerator = function(CurrentPlatform) {
-    /* Create current coin object */
-    CurrentCoin = {
-        x: CurrentPlatform.x + 128,
-        y: CurrentPlatform.y - Coin.h,
-        fx: 0,
-        fy: 0,
-        w: Coin.w,
-        h: Coin.h,
-        color: Coin.color,
-    };
+window.coinsgenerator = function() {
+    /* Calculate coins count */
+    Coin.calc = (Math.floor(CurrentPlatform.w) / 320) - 1;
 
-    /* Push current coin into array */
-    Coin.array.push(CurrentCoin);
+    /* Create coin rendering loop */
+    while(Coin.calc >= 0) {
+        /* Create current coin object */
+        CurrentCoin = {
+            x: CurrentPlatform.x + (320 * Coin.calc),
+            y: CurrentPlatform.y - Coin.h - 32,
+            fx: 0,
+            fy: 0,
+            w: Coin.w,
+            h: Coin.h,
+            img: Coin.img,
+        };
 
-    /* Change value of loop */
-    Coin.lenght += 1;
+        /* Push current coin into array */
+        Coin.array.push(CurrentCoin);
+
+        /* Change loop value */
+        Coin.calc -= 1;
+        Coin.lenght += 1;
+    }
 }
 

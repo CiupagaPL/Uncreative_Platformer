@@ -63,10 +63,14 @@ window.onupdate = function() {
         Context.fillStyle = WarningText.color;
         Context.font = WarningText.font;
         Context.fillText(WarningText.value, WarningText.x, WarningText.y);
+
+        /* Stop music */
+        TimeMusic.game.pause();
+        TimeMusic.menu.pause();
     }
     
     /* Menu scene */
-    if(Scene == 1) {
+    if(Scene == 1){
         /* Things todo on scene start */
         if(!SceneStart) {
             /* Turn on transition animation */
@@ -82,7 +86,8 @@ window.onupdate = function() {
         }
 
         /* Draw background object */
-        Context.drawImage(Background.img, Background.x, Background.y, Background.w, Background.h);
+        Context.fillStyle = Background.color;
+        Context.fillRect(Background.x, Background.y, Background.w, Background.h);
 
         /* Draw menutransparent object */
         Context.fillStyle = MenuTransparent.color;
@@ -96,6 +101,11 @@ window.onupdate = function() {
         Context.font = VersionText.font;
         Context.fillText(VersionText.value, VersionText.x, VersionText.y);
 
+        /* Draw authortext object */
+        Context.fillStyle = AuthorText.color;
+        Context.font = AuthorText.font;
+        Context.fillText(AuthorText.value, AuthorText.x, AuthorText.y);
+
         /* Draw normalmodetext object */
         Context.fillStyle = NormalModeText.color;
         Context.font = NormalModeText.font;
@@ -106,10 +116,10 @@ window.onupdate = function() {
         Context.font = HardModeText.font;
         Context.fillText(HardModeText.value, HardModeText.x, HardModeText.y);
 
-        /* Draw tutorialtext object */
-        Context.fillStyle = TutorialText.color;
+        /* Draw keybindstext object */
+        Context.fillStyle = KeybindsText.color;
         Context.font = NormalModeText.font;
-        Context.fillText(TutorialText.value, TutorialText.x, TutorialText.y);
+        Context.fillText(KeybindsText.value, KeybindsText.x, KeybindsText.y);
 
         /* Draw settingstext object */
         Context.fillStyle = SettingsText.color;
@@ -170,6 +180,27 @@ window.onupdate = function() {
         Context.fillStyle = Transition.color;
         Context.fillRect(Transition.x, Transition.y, Transition.w, Transition.h);
 
+        /* Animate up object */
+        window.animateup();
+
+        /* Play music */
+        if(Music) {
+            TimeMusic.timer += 1;
+            if(TimeMusic.timer == 10) {
+                TimeMusic.menu.volume = 0.35;
+                TimeMusic.menu.play();
+            }
+            if(TimeMusic.timer >= 1650) {
+                TimeMusic.menu.load();
+                TimeMusic.timer = 0;
+            }
+        }
+        /* Stop music */
+        else if(!Music) {
+            TimeMusic.menu.load();
+            TimeMusic.timer = 0;
+        }
+
         /* Settings section animation function */
         if(SettingsTransition == 1) {
             /* Change loop value and start animating function */
@@ -213,6 +244,28 @@ window.onupdate = function() {
             MenuTransparent.type = 10;
             window.animatehud();
         }
+
+        /* Keybinds section animation function */
+        if(KeybindsTransition == 1) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 11;
+            window.animatehud();
+        }
+        if(KeybindsTransition == 2) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 12;
+            window.animatehud();
+        }
+        if(KeybindsTransition == 4) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 13;
+            window.animatehud();
+        }
+        if(KeybindsTransition == 5) {
+            /* Change loop value and start animating function */
+            MenuTransparent.type = 14;
+            window.animatehud();
+        }
     }
 
     /* Game scene */
@@ -239,29 +292,29 @@ window.onupdate = function() {
         }
 
         /* Change hud animation depending on game statement */
-        if(Pause == 1) {
+        if(PauseTransition == 1) {
             /* Animate ingame hud */
             StatusTransparent.type = 2;
             window.animateingamehud();
 
             /* Animate hud */
             if(StatusTransparent.type == 0) {
-                MenuTransparent.type = 11;
+                MenuTransparent.type = 15;
                 window.animatehud();
             }
         }
-        else if(Pause == 3) {
+        else if(PauseTransition == 3) {
             /* Animate hud */
             if(SettingsTransition != 0) {
-                MenuTransparent.type = 21;
+                MenuTransparent.type = 25;
                 window.animatehud();
             }
             if(AboutTransition != 0) {
-                MenuTransparent.type = 22;
+                MenuTransparent.type = 26;
                 window.animatehud();
             }
             else if(SettingsTransition == 0 && AboutTransition == 0) {
-                MenuTransparent.type = 12;
+                MenuTransparent.type = 16;
                 window.animatehud();
             }
 
@@ -273,7 +326,8 @@ window.onupdate = function() {
         }
 
         /* Draw background object */
-        Context.drawImage(Background.img, Background.x, Background.y, Background.w, Background.h);
+        Context.fillStyle = Background.color;
+        Context.fillRect(Background.x, Background.y, Background.w, Background.h);
 
         /* Refresh groundchecktop position */
         GroundCheckTop.x = Player.x + 16 + Player.vx;
@@ -301,12 +355,12 @@ window.onupdate = function() {
         window.updatetext();
 
         /* Start player timer */
-        if(Pause == 0 && !Player.isdead) {
+        if(PauseTransition == 0 && !Player.isdead) {
             Player.timer += 1;
         }
 
         /* Start player checktimer */
-        if(Pause == 0 && !Player.isdead) {
+        if(PauseTransition == 0 && !Player.isdead) {
             Player.checktimer += 1;
         }
 
@@ -360,7 +414,7 @@ window.onupdate = function() {
             Context.fillRect(CurrentPlatform.x, CurrentPlatform.y, CurrentPlatform.w, CurrentPlatform.h);
 
             /* Update platforms */
-            window.updateplatforms(CurrentPlatform);
+            window.updateplatforms();
 
             /* Detect collisions between groundchecktop and platform object */
             if(window.detectcollision(CurrentPlatform, GroundCheckTop) && !Player.touched) {
@@ -440,17 +494,17 @@ window.onupdate = function() {
         while(Spike.lenght >= Spike.currentlenght) {
             /* Draw current array spike */
             CurrentSpike = Spike.array[Spike.currentlenght];
-            Context.fillStyle = CurrentSpike.color;
-            Context.fillRect(CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
+            Context.drawImage(CurrentSpike.img, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
 
             /* Update spikes */
-            // window.updatespikes(CurrentSpike);
+            // window.updatespikes();
 
             /* Detect collisions between player and currentspike object */
             if(window.detectcollision(Player, CurrentSpike)) {
                 /* Play dead sound */
                 if(!Player.isdead && Sfx) {
-                    new Audio("Sounds/Hit.wav").play();
+                    TimeSfx.hit.load();
+                    TimeSfx.hit.play();
                 }
 
                 /* Make player dead */
@@ -467,12 +521,11 @@ window.onupdate = function() {
             /* Draw current array spike */
             CurrentCoin = Coin.array[Coin.currentlenght];
             if(!CurrentCoin.used) {
-                Context.fillStyle = CurrentCoin.color;
-                Context.fillRect(CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
+                Context.drawImage(CurrentCoin.img, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
             }
 
             /* Update coins */
-            // window.updatecoins(CurrentCoin);
+            // window.updatecoins();
 
             /* Detect collisions between player and currentcoin object */
             if(window.detectcollision(Player, CurrentCoin)) {
@@ -482,7 +535,8 @@ window.onupdate = function() {
 
                     /* Play coin sound */
                     if(Sfx) {
-                        new Audio("Sounds/Coin.wav").play();
+                        TimeSfx.coin.load();
+                        TimeSfx.coin.play();
                     }
                 }
 
@@ -507,7 +561,7 @@ window.onupdate = function() {
         }
 
         /* Move player object */
-        if(Pause == 0 && !Player.isdead) {
+        if(PauseTransition == 0 && !Player.isdead) {
             Player.y += Player.vy;
             Player.x += Player.vx;
             Player.vy += Player.gravity;
@@ -517,7 +571,8 @@ window.onupdate = function() {
         if(Player.y + Player.h >= Board.h) {
             /* Play dead sound */
             if(!Player.isdead && Sfx) {
-                new Audio("Sounds/Hit.wav").play();
+                TimeSfx.hit.load();
+                TimeSfx.hit.play();
             }
 
             Player.isdead = true;
@@ -528,7 +583,8 @@ window.onupdate = function() {
         if(window.detectcollision(Player, Spike)) {
             /* Play dead sound */
             if(!Player.isdead && Sfx) {
-                new Audio("Sounds/Hit.wav").play();
+                TimeSfx.hit.load();
+                TimeSfx.hit.play();
             }
 
             /* Make player dead */
@@ -544,10 +600,10 @@ window.onupdate = function() {
 
                 /* Play coin sound */
                 if(Sfx) {
-                    new Audio("Sounds/Coin.wav").play();
+                    TimeSfx.coin.load();
+                    TimeSfx.coin.play();
                 }
             }
-
             /* Disable coin */
             Coin.used = true;
         }
@@ -593,6 +649,11 @@ window.onupdate = function() {
         Context.fillStyle = VersionText.color;
         Context.font = VersionText.font;
         Context.fillText(VersionText.value, VersionText.x, VersionText.y);
+
+        /* Draw authortext object */
+        Context.fillStyle = AuthorText.color;
+        Context.font = AuthorText.font;
+        Context.fillText(AuthorText.value, AuthorText.x, AuthorText.y);
 
         /* Draw settingstext object */
         Context.fillStyle = SettingsText.color;
@@ -649,51 +710,77 @@ window.onupdate = function() {
         Context.font = ReturnText.font;
         Context.fillText(ReturnText.value, ReturnText.x, ReturnText.y);
 
+        /* Draw pausetext object */
+        Context.fillStyle = PauseText.color;
+        Context.font = PauseText.font;
+        Context.fillText(PauseText.value, PauseText.x, PauseText.y);
+
         /* Draw transition object */
         Context.fillStyle = Transition.color;
         Context.fillRect(Transition.x, Transition.y, Transition.w, Transition.h);
 
+        /* Animate up object */
+        window.animateup();
+
+        /* Play music */
+        if(Music) {
+            TimeMusic.timer += 1;
+            if(TimeMusic.timer == 10) {
+                TimeMusic.game.volume = 0.35;
+                TimeMusic.game.play();
+            }
+            if(TimeMusic.timer >= 3700) {
+                TimeMusic.game.load();
+                TimeMusic.timer = 0;
+            }
+        }
+        /* Stop music */
+        else if(!Music) {
+            TimeMusic.game.load();
+            TimeMusic.timer = 0;
+        }
+
         /* Settings section animation function */
         if(SettingsTransition == 1) {
             /* Change loop value and start animating function */
-            MenuTransparent.type = 13;
+            MenuTransparent.type = 17;
             window.animatehud();
         }
         if(SettingsTransition == 2) {
             /* Change loop value and start animating function */
-            MenuTransparent.type = 14;
+            MenuTransparent.type = 18;
             window.animatehud();
         }
         if(SettingsTransition == 4) {
             /* Change loop value and start animating function */
-            MenuTransparent.type = 15;
+            MenuTransparent.type = 19;
             window.animatehud();
         }
         if(SettingsTransition == 5) {
             /* Change loop value and start animating function */
-            MenuTransparent.type = 16;
+            MenuTransparent.type = 20;
             window.animatehud();
         }
 
         /* About section animation function */
         if(AboutTransition == 1) {
             /* Change loop value and start animating function */
-            MenuTransparent.type = 17;
+            MenuTransparent.type = 21;
             window.animatehud();
         }
         if(AboutTransition == 2) {
             /* Change loop value and start animating function */
-            MenuTransparent.type = 18;
+            MenuTransparent.type = 22;
             window.animatehud();
         }
         if(AboutTransition == 4) {
             /* Change loop value and start animating function */
-            MenuTransparent.type = 19;
+            MenuTransparent.type = 23;
             window.animatehud();
         }
         if(AboutTransition == 5) {
             /* Change loop value and start animating function */
-            MenuTransparent.type = 20;
+            MenuTransparent.type = 24;
             window.animatehud();
         }
     }
@@ -706,5 +793,21 @@ window.detectcollision = function(First, Second) {
            First.x + First.fx + First.w > Second.x + Second.fx &&
            First.y + First.fy < Second.y + Second.fy + Second.h &&
            First.y + First.fy + First.h > Second.y + Second.fy;
+}
+
+/* Window update texts function */
+window.updatetext = function() {
+    /* Update scoretext value */
+    ScoreText.value = "Score: " + Score.toString();
+
+    /* Update coinstext value */
+    CoinsText.value = "Coins: " + Coins.toString();
+    CoinsText.char = Coins.toString().length;
+
+    /* Update coinstext position */
+    if(CoinsText.lastchar < CoinsText.char) {
+        CoinsText.x -= 34;
+        CoinsText.lastchar += 1;
+    }
 }
 

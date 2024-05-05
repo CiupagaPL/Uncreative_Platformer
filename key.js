@@ -1,11 +1,45 @@
 /* Uncreative Platformer made by CiupagaPL
  * GPL 3.0 (C) 2024 CiupagaPL */
 
-/* Key input handler */
+/* Document key input handler */
 document.addEventListener("keyup", function(Event) {
     /* Menu scene keys */
     if(Scene == 1) {
         switch(Event.key) {
+            /* Hide sections */
+            case "Escape":
+                /* Turn off about, settings and keybinds section */
+                if(SettingsTransition == 3) {
+                    /* Change loop value */
+                    SettingsTransition = 4;
+
+                    /* Play select sfx */
+                    if(Sfx) {
+                        TimeSfx.select.load();
+                        TimeSfx.select.play();
+                    }
+                }
+                if(AboutTransition == 3) {
+                    /* Change loop value */
+                    AboutTransition = 4;
+
+                    /* Play select sfx */
+                    if(Sfx) {
+                        TimeSfx.select.load();
+                        TimeSfx.select.play();
+                    }
+                }
+                if(KeybindsTransition == 3) {
+                    /* Change loop value */
+                    KeybindsTransition = 4;
+
+                    /* Play select sfx */
+                    if(Sfx) {
+                        TimeSfx.select.load();
+                        TimeSfx.select.play();
+                    }
+                }
+
             /* Default */
             default:
                 break;
@@ -17,27 +51,40 @@ document.addEventListener("keyup", function(Event) {
         switch(Event.key) {
             /* Pause game */
             case "Escape":
-                if(Pause == 0 && MenuTransparent.type == 0 && SceneStart && !Player.isdead) {
-                    Pause = 1;
+                if(PauseTransition == 0 && MenuTransparent.type == 0 && SceneStart && !Player.isdead) {
+                    PauseTransition = 1;
+
+                    /* Play select sfx */
+                    if(Sfx) {
+                        TimeSfx.select.load();
+                        TimeSfx.select.play();
+                    }
                 }
             /* Unpause game */
             case "Escape":
-                if(Pause == 2 && MenuTransparent.type == 0 && SceneStart && !Player.isdead) {
-                    Pause = 3;
+                if(PauseTransition == 2 && MenuTransparent.type == 0 && SceneStart && !Player.isdead) {
+                    PauseTransition = 3;
+
+                    /* Play select sfx */
+                    if(Sfx) {
+                        TimeSfx.select.load();
+                        TimeSfx.select.play();
+                    }
                 }
 
                 break;
 
             /* Make player object jump */
             case " ":
-                if(Player.isgrounded && !Player.isdead && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
                     /* Change value and jump */
                     Player.vy = Player.initvy;
                     Player.jumped = true;
 
                     /* Play jump sound */
                     if(Sfx) {
-                        new Audio("Sounds/Jump.wav").play();
+                        TimeSfx.jump.load();
+                        TimeSfx.jump.play();
                     }
                 }
 
@@ -46,7 +93,7 @@ document.addEventListener("keyup", function(Event) {
             /* Stop player object */
             case "s":
                 /* Change side to none */
-                if(Player.isgrounded && !Player.isdead && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
                     Player.side = 0;
                 }
 
@@ -55,14 +102,14 @@ document.addEventListener("keyup", function(Event) {
             /* Move player object left-right */
             case "d":
                 /* Change side to right */
-                if(Player.isgrounded && !Player.isdead && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
                     Player.side = 1;
                 }
 
                 break;
             case "a":
                 /* Change side to left */
-                if(Player.isgrounded && !Player.isdead && Pause == 0 && SceneStart) {
+                if(Player.isgrounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
                     Player.side = 2;
                 }
 
@@ -77,8 +124,29 @@ document.addEventListener("keyup", function(Event) {
 
 /* Mouse position updater */
 window.addEventListener("mousemove", function(Event) {
+    /* Set proper value */
     Mouse.x = Event.clientX;
     Mouse.y = Event.clientY;
+
+    /* Check collision between cursor and versiontext object */
+    if(window.detectcollision(VersionText, Mouse)) {
+        /* Change object color */
+        VersionText.color = "blue";
+    }
+    else if(!window.detectcollision(VersionText, Mouse)) {
+        /* Change object color */
+        VersionText.color = "white";
+    }
+
+    /* Check collision between cursor and authortext object */
+    if(window.detectcollision(AuthorText, Mouse)) {
+        /* Change object color */
+        AuthorText.color = "yellow";
+    }
+    else if(!window.detectcollision(AuthorText, Mouse)) {
+        /* Change object color */
+        AuthorText.color = "white";
+    }
 
     /* Check collision between cursor and normalmodetext object */
     if(window.detectcollision(NormalModeText, Mouse)) {
@@ -100,14 +168,14 @@ window.addEventListener("mousemove", function(Event) {
         HardModeText.color = "white";
     }
 
-    /* Check collision between cursor and tutorialtext object */
-    if(window.detectcollision(TutorialText, Mouse)) {
+    /* Check collision between cursor and keybindstext object */
+    if(window.detectcollision(KeybindsText, Mouse)) {
         /* Change object color */
-        TutorialText.color = "blue";
+        KeybindsText.color = "yellow";
     }
-    else if(!window.detectcollision(TutorialText, Mouse)) {
+    else if(!window.detectcollision(KeybindsText, Mouse)) {
         /* Change object color */
-        TutorialText.color = "white";
+        KeybindsText.color = "white";
     }
 
     /* Check collision between cursor and settingstext object */
@@ -189,43 +257,79 @@ window.addEventListener("mousemove", function(Event) {
         /* Change object color */
         ReturnText.color = "white";
     }
+
+    /* Check collision between cursor and pausetext object */
+    if(window.detectcollision(PauseText, Mouse)) {
+        /* Change object color */
+        PauseText.color = "blue";
+    }
+    else if(!window.detectcollision(PauseText, Mouse)) {
+        /* Change object color */
+        PauseText.color = "white";
+    }
 });
 
 /* Mouse input handler */
 window.addEventListener("click", function(Event) {
+    /* Versiontext object function */
+    if(window.detectcollision(VersionText, Mouse) && !VersionText.used) {
+        /* Turn on 3-rd party website */
+        window.open("https://github.com/CiupagaPL/Uncreative_Platformer", "_blank");
+
+        /* Play select sfx */
+        if(Sfx) {
+            TimeSfx.select.load();
+            TimeSfx.select.play();
+        }
+    }
+
+    /* Authortext object function */
+    if(window.detectcollision(AuthorText, Mouse) && !AuthorText.used) {
+        /* Turn on 3-rd party website */
+        window.open("https://github.com/CiupagaPL", "_blank");
+
+        /* Play select sfx */
+        if(Sfx) {
+            TimeSfx.select.load();
+            TimeSfx.select.play();
+        }
+    }
+
     /* Normalmodetext object function */
     if(window.detectcollision(NormalModeText, Mouse) && !NormalModeText.used) {
         /* Set mode and change scene */
-        Mode = 1;
+        NormalMode = true;
         SceneChange = true;
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 
     /* Hardmodetext object function */
     if(window.detectcollision(HardModeText, Mouse) && !HardModeText.used) {
         /* Set mode and change scene */
-        Mode = 2;
+        NormalMode = false;
         SceneChange = true;
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 
-    /* Tutorialtext object function */
-    if(window.detectcollision(TutorialText, Mouse) && !TutorialText.used) {
-        /* Set mode and change scene */
-        Mode = 0;
-        SceneChange = true;
+    /* Keybindstext object function */
+    if(window.detectcollision(KeybindsText, Mouse) && !KeybindsText.used) {
+        /* Turn on keybinds section */
+        KeybindsTransition = 1;
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 
@@ -236,7 +340,8 @@ window.addEventListener("click", function(Event) {
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 
@@ -247,7 +352,8 @@ window.addEventListener("click", function(Event) {
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 
@@ -265,7 +371,8 @@ window.addEventListener("click", function(Event) {
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 
@@ -283,18 +390,20 @@ window.addEventListener("click", function(Event) {
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 
     /* Resumetext object function */
     if(window.detectcollision(ResumeText, Mouse) && !ResumeText.used) {
         /* Unpause game */
-        Pause = 3;
+        PauseTransition = 3;
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 
@@ -305,7 +414,8 @@ window.addEventListener("click", function(Event) {
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 
@@ -316,24 +426,52 @@ window.addEventListener("click", function(Event) {
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 
     /* Returntext object function */
     if(window.detectcollision(ReturnText, Mouse) && !ReturnText.used) {
-        /* Turn off about and settings section */
+        /* Turn off about, settings and keybinds section */
         if(SettingsTransition == 3) {
+            /* Change loop value */
             SettingsTransition = 4;
         }
-        else if(AboutTransition == 3) {
+        if(AboutTransition == 3) {
+            /* Change loop value */
             AboutTransition = 4;
+        }
+        if(KeybindsTransition == 3) {
+            /* Change loop value */
+            KeybindsTransition = 4;
         }
 
         /* Play select sfx */
         if(Sfx) {
-            new Audio("Sounds/Select.wav").play();
+            TimeSfx.select.load();
+            TimeSfx.select.play();
+        }
+    }
+
+    /* Pausetext object function */
+    if(window.detectcollision(PauseText, Mouse) && !PauseText.used) {
+        /* Pause game */
+        PauseTransition = 1;
+
+        /* Play select sfx */
+        if(Sfx) {
+            TimeSfx.select.load();
+            TimeSfx.select.play();
         }
     }
 });
+
+/* Document focus checker */
+document.addEventListener("visibilitychange", function(Event) {
+    if(document.hidden && Scene == 2) {
+        /* Pause game */
+        PauseTransition = 1;
+    }
+})
 

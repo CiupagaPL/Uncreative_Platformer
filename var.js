@@ -5,9 +5,9 @@
 
 /* Create global variables */
 let Scene = 1, SceneStart = false, SceneChange = false, SceneRestart = false;
-let Sfx = true, Music = true;
-let AboutTransition = 0, SettingsTransition = 0;
-let Pause = 0, Mode = 0, Score = 0, Coins = 0;
+let Sfx = true, Music = false, NormalMode = false;
+let AboutTransition = 0, SettingsTransition = 0, KeybindsTransition = 0;
+let PauseTransition = 0, Score = 0, Coins = 0;
 
 /* Objects */
 
@@ -36,6 +36,21 @@ let Board = {
     base: document.getElementById("Board"),
     w: Screen.w,
     h: Screen.h,
+};
+
+/* Create timemusic object */
+let TimeMusic = {
+    menu: new Audio("Sounds/Menu.wav"),
+    game: new Audio("Sounds/Game.wav"),
+    timer: 0,
+};
+
+/* Create timesfx object */
+let TimeSfx = {
+    coin: new Audio("Sounds/Coin.wav"),
+    hit: new Audio("Sounds/Hit.wav"),
+    jump: new Audio("Sounds/Jump.wav"),
+    select: new Audio("Sounds/Select.wav"),
 };
 
 /* Create warning object */
@@ -70,8 +85,8 @@ let Transition = {
     fy: 0,
     vx: 40,
     color: "black",
-    timer: 0,
     type: 0,
+    started: false,
 };
 
 /* Create background object */
@@ -82,7 +97,7 @@ let Background = {
     y: 0,
     fx: 0,
     fy: 0,
-    img: new Image(),
+    color: "rgb(102, 255, 102)",
 };
 
 /* Create menutransparent object */
@@ -110,16 +125,68 @@ let Title = {
     img: new Image(),
 };
 
+/* Create up object */
+let UP = {
+    w: 256,
+    h: 256,
+    x: Board.w - 224,
+    y: Board.h - 256,
+    fx: 0,
+    fy: 0,
+    img0: new Image(),
+    img1: new Image(),
+    img2: new Image(),
+    img3: new Image(),
+    img4: new Image(),
+    img5: new Image(),
+    img6: new Image(),
+    img7: new Image(),
+    img8: new Image(),
+    img9: new Image(),
+    img10: new Image(),
+    timer: 0,
+    type: 0,
+};
+
+/* Create uptext object */
+let UPText = {
+    color: "rgba(255, 255, 255, 0)",
+    font: "96px Orange_Kid",
+    value: "Main Menu",
+    x: 42,
+    y: 96,
+    fx: 0,
+    fy: 0,
+};
+
 /* Create versiontext object */
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public Build 5 Made By CiupagaPL",
-    x: -362,
+    value: "Public Build 6",
+    x: -192,
     y: Board.h - 12,
-    fx: 0,
-    fy: 0,
-    vx: 18.4,
+    fx: 4,
+    fy: -24,
+    w: 142,
+    h: 24,
+    vx: 10.0,
+    used: true,
+};
+
+/* Create authortext object */
+let AuthorText = {
+    color: "white",
+    font: "32px Orange_Kid",
+    value: "Made By CiupagaPL",
+    x: -256,
+    y: Board.h - 12,
+    fx: 4,
+    fy: -24,
+    w: 208,
+    h: 24,
+    vx: 41.5,
+    used: true,
 };
 
 /* Create normalmodetext object */
@@ -152,17 +219,17 @@ let HardModeText = {
     used: true,
 };
 
-/* Create tutorialtext object */
-let TutorialText = {
+/* Create keybindstext object */
+let KeybindsText = {
     color: "white",
     font: "84px Orange_Kid",
-    value: "Tutorial",
+    value: "Keybinds",
     x: -384,
     y: HardModeText.y + 108,
     fx: 0,
     fy: NormalModeText.fy,
     vx: NormalModeText.vx,
-    w: 224,
+    w: 244,
     h: NormalModeText.h,
     used: true,
 };
@@ -173,7 +240,7 @@ let SettingsText = {
     font: "84px Orange_Kid",
     value: "Settings",
     x: -384,
-    y: TutorialText.y + 108,
+    y: KeybindsText.y + 108,
     fx: 0,
     fy: NormalModeText.fy,
     vx: NormalModeText.vx,
@@ -216,7 +283,7 @@ let SfxText = {
 let MusicText = {
     color: "white",
     font: "84px Orange_Kid",
-    value: "Music: On",
+    value: "Music: Off",
     x: -444,
     y: HardModeText.y,
     fx: 0,
@@ -350,7 +417,7 @@ let MainMenuText = {
     font: "84px Orange_Kid",
     value: "Main Menu",
     x: -444,
-    y: TutorialText.y,
+    y: KeybindsText.y,
     fx: 0,
     fy: NormalModeText.fy,
     vx: NormalModeText.vx,
@@ -359,29 +426,45 @@ let MainMenuText = {
     used: true,
 };
 
+/* Create pausetext object */
+let PauseText = {
+    color: "white",
+    font: "92px Orange_Kid",
+    value: "II",
+    x: 40,
+    y: 0,
+    fx: 0,
+    fy: -54,
+    w: 36,
+    h: 60,
+    vy: 4.9,
+    used: true,
+};
 
 /* Create scoretext object */
 let ScoreText = {
     color: "white",
     font: "92px Orange_Kid",
-    value: "0",
-    x: 30,
-    y: 0,
+    value: "Score: 0",
+    x: 128,
+    y: PauseText.y,
     fx: 0,
     fy: 0,
-    vy: 4.9,
+    vy: PauseText.vy,
 };
 
 /* Create coinstext object */
 let CoinsText = {
     color: "white",
     font: "92px Orange_Kid",
-    value: "0",
-    x: 130,
-    y: ScoreText.y,
+    value: "Coins: 0",
+    x: Board.w - 256,
+    y: PauseText.y,
     fx: 0,
     fy: 0,
-    vy: ScoreText.vy,
+    vy: PauseText.vy,
+    char: 0,
+    lastchar: 1,
 };
 
 /* Create statustransparent object */
@@ -510,7 +593,7 @@ let GroundCheckRight = {
 /* Create platform object */
 let Platform = {
     array: [],
-    w: 320,
+    w: 256,
     h: 32,
     x: 0,
     y: 0,
@@ -543,13 +626,13 @@ let MainPlatform = {
 /* Create spike object */
 let Spike = {
     array: [],
-    w: 48,
-    h: 48,
+    w: 64,
+    h: 64,
     x: 0,
     y: 0,
     fx: 0,
     fy: 0,
-    color: "red",
+    img: new Image(),
     lenght: -1,
     currentlenght: 0,
 };
@@ -557,25 +640,36 @@ let Spike = {
 /* Create coin object */
 let Coin = {
     array: [],
-    w: 48,
-    h: 48,
+    w: 64,
+    h: 64,
     x: 0,
     y: 0,
     fx: 0,
     fy: 0,
-    color: "yellow",
+    img: new Image(),
     used: false,
     lenght: -1,
     currentlenght: 0,
+    calc: 0,
 };
 
 /* Textures */
 
-/* Set source of bakcground image */
-Background.img.src = "Sprites/Background1.png";
-
 /* Set source of title image */
 Title.img.src = "Sprites/Title.png";
+
+/* Set source of up image */
+UP.img0.src = "Sprites/UP/0.png";
+UP.img1.src = "Sprites/UP/1.png";
+UP.img2.src = "Sprites/UP/2.png";
+UP.img3.src = "Sprites/UP/3.png";
+UP.img4.src = "Sprites/UP/4.png";
+UP.img5.src = "Sprites/UP/5.png";
+UP.img6.src = "Sprites/UP/6.png";
+UP.img7.src = "Sprites/UP/7.png";
+UP.img8.src = "Sprites/UP/8.png";
+UP.img9.src = "Sprites/UP/9.png";
+UP.img10.src = "Sprites/UP/10.png";
 
 /* Set source of player image */
 Player.imgafk1.src = "Sprites/Player/Afk1.png";
@@ -632,4 +726,10 @@ Player.imgright1.src = "Sprites/Player/Right1.png";
 Player.imgright2.src = "Sprites/Player/Right2.png";
 Player.imgright3.src = "Sprites/Player/Right3.png";
 Player.imgright4.src = "Sprites/Player/Right4.png";
+
+/* Set source of coin image */
+Coin.img.src = "Sprites/Coin.png";
+
+/* Set source of spike image */
+Spike.img.src = "Sprites/Spike.png";
 

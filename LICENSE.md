@@ -1,4 +1,4 @@
-![Logo](https://github.com/CiupagaPL/Uncreative_Platformer/blob/main/Sprites/Title_Background.png)
+![Logo](https://github.com/CiupagaPL/Uncreative_Platformer/blob/main/Sprites/Title_Alt.png)
 # LICENSE
 ## GNU 3.0
 **GNU GENERAL PUBLIC LICENSE
