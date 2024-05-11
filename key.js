@@ -8,7 +8,7 @@ document.addEventListener("keyup", function(Event) {
         switch(Event.key) {
             /* Hide sections */
             case "Escape":
-                /* Turn off about, settings and keybinds section */
+                /* Turn off about, settings, keybinds and statistics section */
                 if(SettingsTransition == 3) {
                     /* Change loop value */
                     SettingsTransition = 4;
@@ -39,6 +39,16 @@ document.addEventListener("keyup", function(Event) {
                         TimeSfx.select.play();
                     }
                 }
+                if(StatisticsTransition == 3) {
+                    /* Change loop value */
+                    StatisticsTransition = 4;
+
+                    /* Play select sfx */
+                    if(Sfx) {
+                        timeSfx.select.load();
+                        TimeSfx.select.play();
+                    }
+                }
 
             /* Default */
             default:
@@ -49,7 +59,7 @@ document.addEventListener("keyup", function(Event) {
     /* Game scene keys */
     if(Scene == 2) {
         switch(Event.key) {
-            /* Pause game */
+            /* Pause and unpause game */
             case "Escape":
                 if(PauseTransition == 0 && MenuTransparent.type == 0 && SceneStart && !Player.isdead) {
                     PauseTransition = 1;
@@ -60,8 +70,6 @@ document.addEventListener("keyup", function(Event) {
                         TimeSfx.select.play();
                     }
                 }
-            /* Unpause game */
-            case "Escape":
                 if(PauseTransition == 2 && MenuTransparent.type == 0 && SceneStart && !Player.isdead) {
                     PauseTransition = 3;
 
@@ -74,27 +82,102 @@ document.addEventListener("keyup", function(Event) {
 
                 break;
 
-            /* Make player object jump */
+            /* Rotate player object */
             case " ":
-                if(Player.isgrounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
-                    /* Change value and jump */
-                    Player.vy = Player.initvy;
-                    Player.jumped = true;
+                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                    /* Rotate player */
+                    if(!Player.rotated) {
+                        Player.rotated = true;
+                        Player.fallen = false;
+                    }
+                    else if(Player.rotated) {
+                        Player.rotated = false;
+                        Player.fallen = false;
+                    }
 
-                    /* Play jump sound */
+                    /* Play rotating sound */
                     if(Sfx) {
-                        TimeSfx.jump.load();
-                        TimeSfx.jump.play();
+                        TimeSfx.rotate.load();
+                        TimeSfx.rotate.play();
                     }
                 }
 
                 break;
 
-            /* Stop player object */
+            /* Rotate player object and stop it from moving */
+            case "w":
+                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                    /* Rotate player */
+                    if(!Player.rotated) {
+                        Player.rotated = true;
+                        Player.fallen = false;
+
+                        /* Play rotating sound */
+                        if(Sfx) {
+                            TimeSfx.rotate.load();
+                            TimeSfx.rotate.play();
+                        }
+                    }
+                    else if(Player.rotated) {
+                        Player.side = 0;
+                    }
+                }
+
+                break;
+            case "ArrowUp":
+                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                    /* Rotate player */
+                    if(!Player.rotated) {
+                        Player.rotated = true;
+                        Player.fallen = false;
+
+                        /* Play rotating sound */
+                        if(Sfx) {
+                            TimeSfx.rotate.load();
+                            TimeSfx.rotate.play();
+                        }
+                    }
+                    else if(Player.rotated) {
+                        Player.side = 0;
+                    }
+                }
+
+                break;
             case "s":
-                /* Change side to none */
-                if(Player.isgrounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
-                    Player.side = 0;
+                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                    /* Rotate player */
+                    if(Player.rotated) {
+                        Player.rotated = false;
+                        Player.fallen = false;
+
+                        /* Play rotating sound */
+                        if(Sfx) {
+                            TimeSfx.rotate.load();
+                            TimeSfx.rotate.play();
+                        }
+                    }
+                    else if(!Player.rotated) {
+                        Player.side = 0;
+                    }
+                }
+
+                break;
+            case "ArrowDown":
+                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                    /* Rotate player */
+                    if(Player.rotated) {
+                        Player.rotated = false;
+                        Player.fallen = false;
+                    }
+                    else if(!Player.rotated) {
+                        Player.side = 0;
+                    }
+
+                    /* Play rotating sound */
+                    if(Sfx) {
+                        TimeSfx.rotate.load();
+                        TimeSfx.rotate.play();
+                    }
                 }
 
                 break;
@@ -102,14 +185,28 @@ document.addEventListener("keyup", function(Event) {
             /* Move player object left-right */
             case "d":
                 /* Change side to right */
-                if(Player.isgrounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart && Player.fallen) {
                     Player.side = 1;
                 }
 
                 break;
             case "a":
                 /* Change side to left */
-                if(Player.isgrounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart && Player.fallen) {
+                    Player.side = 2;
+                }
+
+                break;
+            case "ArrowRight":
+                /* Change side to right */
+                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart && Player.fallen) {
+                    Player.side = 1;
+                }
+
+                break;
+            case "ArrowLeft":
+                /* Change side to left */
+                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart && Player.fallen) {
                     Player.side = 2;
                 }
 
@@ -246,6 +343,14 @@ window.addEventListener("mousemove", function(Event) {
     else if(!window.detectcollision(MainMenuText, Mouse)) {
         /* Change object color */
         MainMenuText.color = "white";
+    }
+
+    /* Check collision between cursor and statisticstext object */
+    if(window.detectcollision(StatisticsText, Mouse)) {
+        StatisticsText.color = "yellow";
+    }
+    else if(!window.detectcollision(StatisticsText, Mouse)) {
+        StatisticsText.color = "white";
     }
 
     /* Check collision between cursor and returntext object */
@@ -431,9 +536,21 @@ window.addEventListener("click", function(Event) {
         }
     }
 
+    /* Statisticstext object function */
+    if(window.detectcollision(StatisticsText, Mouse) && !StatisticsText.used) {
+        /* Turn on statistics section */
+        StatisticsTransition = 1;
+
+        /* Play select sfx */
+        if(Sfx) {
+            TimeSfx.select.load();
+            TimeSfx.select.play();
+        }
+    }
+
     /* Returntext object function */
     if(window.detectcollision(ReturnText, Mouse) && !ReturnText.used) {
-        /* Turn off about, settings and keybinds section */
+        /* Turn off about, settings, keybinds and statistics section */
         if(SettingsTransition == 3) {
             /* Change loop value */
             SettingsTransition = 4;
@@ -445,6 +562,10 @@ window.addEventListener("click", function(Event) {
         if(KeybindsTransition == 3) {
             /* Change loop value */
             KeybindsTransition = 4;
+        }
+        if(StatisticsTransition == 3) {
+            /* Change loop value */
+            StatisticsTransition = 4;
         }
 
         /* Play select sfx */

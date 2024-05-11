@@ -5,15 +5,15 @@
 
 /* Create global variables */
 let Scene = 1, SceneStart = false, SceneChange = false, SceneRestart = false;
-let Sfx = true, Music = false, NormalMode = false;
-let AboutTransition = 0, SettingsTransition = 0, KeybindsTransition = 0;
-let PauseTransition = 0, Score = 0, Coins = 0;
+let Sfx = true, Music = false, NormalMode = false, Generated = false;
+let AboutTransition = 0, SettingsTransition = 0, KeybindsTransition = 0, StatisticsTransition = 0, PauseTransition = 0;
+let FPS = 120, Score = 0, BestScore = 0, Coins = 0, GlobalMovement = 0;
 
 /* Objects */
 
 /* Create global objects */
 let Context;
-let CurrentPlatform, CurrentCoin, CurrentSpike;
+let CurrentPlatform, CurrentCoin, CurrentSpike, CurrentCorner;
 
 /* Create screen object */
 let Screen = {
@@ -49,7 +49,7 @@ let TimeMusic = {
 let TimeSfx = {
     coin: new Audio("Sounds/Coin.wav"),
     hit: new Audio("Sounds/Hit.wav"),
-    jump: new Audio("Sounds/Jump.wav"),
+    rotate: new Audio("Sounds/Rotate.wav"),
     select: new Audio("Sounds/Select.wav"),
 };
 
@@ -97,7 +97,11 @@ let Background = {
     y: 0,
     fx: 0,
     fy: 0,
-    color: "rgb(102, 255, 102)",
+    color: "rgb(255, 255, 100)",
+    randomcolor: "rgb(255, 255, 100)",
+    random1: 0,
+    random2: 0,
+    random3: 0,
 };
 
 /* Create menutransparent object */
@@ -163,12 +167,12 @@ let UPText = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public Build 6",
+    value: "Public PreBuild 7",
     x: -192,
     y: Board.h - 12,
     fx: 4,
     fy: -24,
-    w: 142,
+    w: 172,
     h: 24,
     vx: 10.0,
     used: true,
@@ -298,7 +302,7 @@ let MusicText = {
 let DescriptionText1 = {
     color: "white",
     font: "48px Orange_Kid",
-    value: "The Uncreative Platformer is a semester",
+    value: "Uncreative Platformer is a semester",
     x: -750,
     y: NormalModeText.y - 20,
     vx: 35,
@@ -310,7 +314,7 @@ let DescriptionText1 = {
 let DescriptionText2 = {
     color: "white",
     font: "48px Orange_Kid",
-    value: "project created by CiupagaPL. It's a simple",
+    value: "project that I made using JavaScript.",
     x: -750,
     y: DescriptionText1.y + 60,
     vx: DescriptionText1.vx,
@@ -322,7 +326,7 @@ let DescriptionText2 = {
 let DescriptionText3 = {
     color: "white",
     font: "48px Orange_Kid",
-    value: "platformer that incorporates and combines",
+    value: "It's a simple platformer that",
     x: -750,
     y: DescriptionText2.y + 60,
     vx: DescriptionText1.vx,
@@ -334,7 +338,7 @@ let DescriptionText3 = {
 let DescriptionText4 = {
     color: "white",
     font: "48px Orange_Kid",
-    value: "ideas from other platformers. For more",
+    value: "incorporates and combines ideas",
     x: -750,
     y: DescriptionText3.y + 60,
     vx: DescriptionText1.vx,
@@ -346,7 +350,7 @@ let DescriptionText4 = {
 let DescriptionText5 = {
     color: "white",
     font: "48px Orange_Kid",
-    value: "information, check out this git repo ->",
+    value: "from other platformers.",
     x: -750,
     y: DescriptionText4.y + 60,
     vx: DescriptionText1.vx,
@@ -354,13 +358,97 @@ let DescriptionText5 = {
     fy: 0,
 };
 
-/* Create descriptiontext6 object */
-let DescriptionText6 = {
+/* Create instructiontext1 object */
+let InstructionText1 = {
     color: "white",
     font: "48px Orange_Kid",
-    value: "CiupagaPL/Uncreative_Platformer",
+    value: "A, ←, D, → - Move Player",
     x: -750,
-    y: DescriptionText5.y + 60,
+    y: DescriptionText1.y,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create instructiontext2 object */
+let InstructionText2 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "Space - Change Gravity",
+    x: -750,
+    y: DescriptionText2.y,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create instructiontext3 object */
+let InstructionText3 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "W, ↑ - Change Gravity Up",
+    x: -750,
+    y: DescriptionText3.y,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create instructiontext4 object */
+let InstructionText4 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "S, ↓ - Change Gravity Down",
+    x: -750,
+    y: DescriptionText4.y,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create instructiontext5 object */
+let InstructionText5 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "W, ↑, S, ↓ - Stop Player",
+    x: -750,
+    y: DescriptionText5.y,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create informationtext1 object */
+let InformationText1 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "Current Score: ",
+    x: -750,
+    y: DescriptionText1.y,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create informationtext2 object */
+let InformationText2 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "Current Coins: ",
+    x: -750,
+    y: DescriptionText2.y,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create informationtext3 object */
+let InformationText3 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "Best Score: ",
+    x: -750,
+    y: DescriptionText3.y,
     vx: DescriptionText1.vx,
     fx: 0,
     fy: 0,
@@ -426,6 +514,21 @@ let MainMenuText = {
     used: true,
 };
 
+/* Create statisticstext object */
+let StatisticsText = {
+    color: "white",
+    font: "84px Orange_Kid",
+    value: "Statistics",
+    x: -444,
+    y: AboutText.y,
+    fx: 0,
+    fy: NormalModeText.fy,
+    vx: NormalModeText.vx,
+    w: 284,
+    h: NormalModeText.h,
+    used: true,
+};
+
 /* Create pausetext object */
 let PauseText = {
     color: "white",
@@ -445,7 +548,7 @@ let PauseText = {
 let ScoreText = {
     color: "white",
     font: "92px Orange_Kid",
-    value: "Score: 0",
+    value: "Score: ",
     x: 128,
     y: PauseText.y,
     fx: 0,
@@ -457,7 +560,7 @@ let ScoreText = {
 let CoinsText = {
     color: "white",
     font: "92px Orange_Kid",
-    value: "Coins: 0",
+    value: "Coins: ",
     x: Board.w - 256,
     y: PauseText.y,
     fx: 0,
@@ -485,7 +588,7 @@ let Player = {
     w: 128,
     h: 128,
     x: Board.w / 2 - 64,
-    y: Board.h - 128 - 128,
+    y: Board.h - 128 - 48,
     fx: 0,
     fy: 0,
     vx: 0,
@@ -534,16 +637,61 @@ let Player = {
     imgright2: new Image(),
     imgright3: new Image(),
     imgright4: new Image(),
-    initvy: -24,
-    gravity: 1,
+    imgrotafk1: new Image(),
+    imgrotafk2: new Image(),
+    imgrotafk3: new Image(),
+    imgrotafk4: new Image(),
+    imgrotdead1: new Image(),
+    imgrotdead2: new Image(),
+    imgrotdead3: new Image(),
+    imgrotdead4: new Image(),
+    imgrotfall1: new Image(),
+    imgrotfall2: new Image(),
+    imgrotfall3: new Image(),
+    imgrotfall4: new Image(),
+    imgrotfallleft1: new Image(),
+    imgrotfallleft2: new Image(),
+    imgrotfallleft3: new Image(),
+    imgrotfallleft4: new Image(),
+    imgrotfallright1: new Image(),
+    imgrotfallright2: new Image(),
+    imgrotfallright3: new Image(),
+    imgrotfallright4: new Image(),
+    imgrotjump1: new Image(),
+    imgrotjump2: new Image(),
+    imgrotjump3: new Image(),
+    imgrotjump4: new Image(),
+    imgrotjumpleft1: new Image(),
+    imgrotjumpleft2: new Image(),
+    imgrotjumpleft3: new Image(),
+    imgrotjumpleft4: new Image(),
+    imgrotjumpright1: new Image(),
+    imgrotjumpright2: new Image(),
+    imgrotjumpright3: new Image(),
+    imgrotjumpright4: new Image(),
+    imgrotleft1: new Image(),
+    imgrotleft2: new Image(),
+    imgrotleft3: new Image(),
+    imgrotleft4: new Image(),
+    imgrotpause1: new Image(),
+    imgrotpause2: new Image(),
+    imgrotpause3: new Image(),
+    imgrotpause4: new Image(),
+    imgrotright1: new Image(),
+    imgrotright2: new Image(),
+    imgrotright3: new Image(),
+    imgrotright4: new Image(),
+    gravity: 0.75,
     side: 0,
     touched: false,
-    isgrounded: false,
+    grounded: false,
     isdead: false,
     timer: 0,
     checked: false,
     checktimer: false,
-    jumped: false,
+    rotated: false,
+    fallen: false,
+    fallentimer: 0,
 };
 
 /* Create groundchecktop object */
@@ -554,7 +702,6 @@ let GroundCheckTop = {
     y: Player.y + Player.vy,
     fx: 0,
     fy: 0,
-    color: "rgba(0, 0, 0, 0)",
 };
 
 /* Create groundcheckbottom object */
@@ -565,7 +712,6 @@ let GroundCheckBottom = {
     y: Player.y + 112 + Player.vy,
     fx: 0,
     fy: 0,
-    color: "rgba(0, 0, 0, 0)",
 };
 
 /* Create groundcheckleft object */
@@ -576,7 +722,6 @@ let GroundCheckLeft = {
     y: Player.y + Player.vy,
     fx: 0,
     fy: 0,
-    color: "rgba(0, 0, 0, 0)",
 };
 
 /* Create groundcheckright object */
@@ -587,70 +732,126 @@ let GroundCheckRight = {
     y: Player.y + Player.vy,
     fx: 0,
     fy: 0,
-    color: "rgba(0, 0, 0, 0)",
 };
+
+/* Create collisionchecktop object */
+let CollisionCheckTop = {
+    w: 96,
+    h: 16,
+    x: Player.x + 16 + Player.vx,
+    y: Player.y - 8 + Player.vy,
+    fx: 0,
+    fy: 0,
+}
+
+/* Create collisioncheckbottom object */
+let CollisionCheckBottom = {
+    w: 96,
+    h: 16,
+    x: Player.x + 16 + Player.vx,
+    y: Player.y - 8 + Player.h + Player.vy,
+    fx: 0,
+    fy: 0,
+}
 
 /* Create platform object */
 let Platform = {
     array: [],
     w: 256,
-    h: 32,
+    h: 48,
     x: 0,
     y: 0,
     fx: 0,
     fy: 0,
-    color: "blue",
+    img: new Image(),
     lenght: -1,
     currentlenght: 0,
-    load: 0,
+    load: 24,
     currentload: 0,
-    count: 0,
-    randomx1: 0,
-    randomx2: 0,
+    disabled: false,
     level: 0,
     lastlevel: 0,
-    disabled: false,
+    highestposition: 0,
+    count: 0,
+    loop: 0,
+    currentcount: 0,
+    randomcount: 0,
+    randomplatform: 0,
+    available: 0,
+    main: false,
+    left: false,
+    right: false,
+    first: true,
+    second: true,
+    third: true,
+    fourth: true,
+    firsttimer: 0,
+    secondtimer: 0,
+    thirdtimer: 0,
+    fourthtimer: 0,
+    firstchanged: false,
+    secondchanged: false,
+    thirdchanged: false,
+    fourthchanged: false,
 };
 
-/* Create main platform object */
-let MainPlatform = {
-    w: Board.w,
-    h: 128,
+/* Create corner object */
+let Corner = {
+    array: [],
+    w: 24,
+    h: 48,
     x: 0,
-    y: Board.h - 128,
+    y: 0,
     fx: 0,
     fy: 0,
-    color: "brown",
+    lenght: -1,
+    currentlenght: 0,
+    imgleft: new Image(),
+    imgright: new Image(),
+    left: false,
+    disabled: false,
 };
 
 /* Create spike object */
 let Spike = {
     array: [],
     w: 64,
-    h: 64,
+    h: 72,
     x: 0,
     y: 0,
     fx: 0,
     fy: 0,
-    img: new Image(),
+    img1: new Image(),
+    img2: new Image(),
+    img3: new Image(),
+    img4: new Image(),
+    img5: new Image(),
+    img6: new Image(),
     lenght: -1,
     currentlenght: 0,
+    disabled: false,
 };
 
 /* Create coin object */
 let Coin = {
     array: [],
     w: 64,
-    h: 64,
+    h: 72,
     x: 0,
     y: 0,
     fx: 0,
     fy: 0,
-    img: new Image(),
-    used: false,
+    img1: new Image(),
+    img2: new Image(),
+    img3: new Image(),
+    img4: new Image(),
+    img5: new Image(),
+    img6: new Image(),
+    disabled: false,
     lenght: -1,
     currentlenght: 0,
-    calc: 0,
+    calc1: 0,
+    calc2: 0,
 };
 
 /* Textures */
@@ -672,64 +873,136 @@ UP.img9.src = "Sprites/UP/9.png";
 UP.img10.src = "Sprites/UP/10.png";
 
 /* Set source of player image */
-Player.imgafk1.src = "Sprites/Player/Afk1.png";
-Player.imgafk2.src = "Sprites/Player/Afk2.png";
-Player.imgafk3.src = "Sprites/Player/Afk3.png";
-Player.imgafk4.src = "Sprites/Player/Afk4.png";
+Player.imgafk1.src = "Sprites/Player/Normal/Afk1.png";
+Player.imgafk2.src = "Sprites/Player/Normal/Afk2.png";
+Player.imgafk3.src = "Sprites/Player/Normal/Afk3.png";
+Player.imgafk4.src = "Sprites/Player/Normal/Afk4.png";
 
-Player.imgdead1.src = "Sprites/Player/Dead1.png";
-Player.imgdead2.src = "Sprites/Player/Dead2.png";
-Player.imgdead3.src = "Sprites/Player/Dead3.png";
-Player.imgdead4.src = "Sprites/Player/Dead4.png";
+Player.imgdead1.src = "Sprites/Player/Normal/Dead1.png";
+Player.imgdead2.src = "Sprites/Player/Normal/Dead2.png";
+Player.imgdead3.src = "Sprites/Player/Normal/Dead3.png";
+Player.imgdead4.src = "Sprites/Player/Normal/Dead4.png";
 
-Player.imgfall1.src = "Sprites/Player/Fall1.png";
-Player.imgfall2.src = "Sprites/Player/Fall2.png";
-Player.imgfall3.src = "Sprites/Player/Fall3.png";
-Player.imgfall4.src = "Sprites/Player/Fall4.png";
+Player.imgfall1.src = "Sprites/Player/Normal/Fall1.png";
+Player.imgfall2.src = "Sprites/Player/Normal/Fall2.png";
+Player.imgfall3.src = "Sprites/Player/Normal/Fall3.png";
+Player.imgfall4.src = "Sprites/Player/Normal/Fall4.png";
 
-Player.imgfallleft1.src = "Sprites/Player/FallLeft1.png";
-Player.imgfallleft2.src = "Sprites/Player/FallLeft2.png";
-Player.imgfallleft3.src = "Sprites/Player/FallLeft3.png";
-Player.imgfallleft4.src = "Sprites/Player/FallLeft4.png";
+Player.imgfallleft1.src = "Sprites/Player/Normal/FallLeft1.png";
+Player.imgfallleft2.src = "Sprites/Player/Normal/FallLeft2.png";
+Player.imgfallleft3.src = "Sprites/Player/Normal/FallLeft3.png";
+Player.imgfallleft4.src = "Sprites/Player/Normal/FallLeft4.png";
 
-Player.imgfallright1.src = "Sprites/Player/FallRight1.png";
-Player.imgfallright2.src = "Sprites/Player/FallRight2.png";
-Player.imgfallright3.src = "Sprites/Player/FallRight3.png";
-Player.imgfallright4.src = "Sprites/Player/FallRight4.png";
+Player.imgfallright1.src = "Sprites/Player/Normal/FallRight1.png";
+Player.imgfallright2.src = "Sprites/Player/Normal/FallRight2.png";
+Player.imgfallright3.src = "Sprites/Player/Normal/FallRight3.png";
+Player.imgfallright4.src = "Sprites/Player/Normal/FallRight4.png";
 
-Player.imgjump1.src = "Sprites/Player/Jump1.png";
-Player.imgjump2.src = "Sprites/Player/Jump2.png";
-Player.imgjump3.src = "Sprites/Player/Jump3.png";
-Player.imgjump4.src = "Sprites/Player/Jump4.png";
+Player.imgjump1.src = "Sprites/Player/Normal/Jump1.png";
+Player.imgjump2.src = "Sprites/Player/Normal/Jump2.png";
+Player.imgjump3.src = "Sprites/Player/Normal/Jump3.png";
+Player.imgjump4.src = "Sprites/Player/Normal/Jump4.png";
 
-Player.imgjumpleft1.src = "Sprites/Player/JumpLeft1.png";
-Player.imgjumpleft2.src = "Sprites/Player/JumpLeft2.png";
-Player.imgjumpleft3.src = "Sprites/Player/JumpLeft3.png";
-Player.imgjumpleft4.src = "Sprites/Player/JumpLeft4.png";
+Player.imgjumpleft1.src = "Sprites/Player/Normal/JumpLeft1.png";
+Player.imgjumpleft2.src = "Sprites/Player/Normal/JumpLeft2.png";
+Player.imgjumpleft3.src = "Sprites/Player/Normal/JumpLeft3.png";
+Player.imgjumpleft4.src = "Sprites/Player/Normal/JumpLeft4.png";
 
-Player.imgjumpright1.src = "Sprites/Player/JumpRight1.png";
-Player.imgjumpright2.src = "Sprites/Player/JumpRight2.png";
-Player.imgjumpright3.src = "Sprites/Player/JumpRight3.png";
-Player.imgjumpright4.src = "Sprites/Player/JumpRight4.png";
+Player.imgjumpright1.src = "Sprites/Player/Normal/JumpRight1.png";
+Player.imgjumpright2.src = "Sprites/Player/Normal/JumpRight2.png";
+Player.imgjumpright3.src = "Sprites/Player/Normal/JumpRight3.png";
+Player.imgjumpright4.src = "Sprites/Player/Normal/JumpRight4.png";
 
-Player.imgleft1.src = "Sprites/Player/Left1.png";
-Player.imgleft2.src = "Sprites/Player/Left2.png";
-Player.imgleft3.src = "Sprites/Player/Left3.png";
-Player.imgleft4.src = "Sprites/Player/Left4.png";
+Player.imgleft1.src = "Sprites/Player/Normal/Left1.png";
+Player.imgleft2.src = "Sprites/Player/Normal/Left2.png";
+Player.imgleft3.src = "Sprites/Player/Normal/Left3.png";
+Player.imgleft4.src = "Sprites/Player/Normal/Left4.png";
 
-Player.imgpause1.src = "Sprites/Player/Pause1.png";
-Player.imgpause2.src = "Sprites/Player/Pause2.png";
-Player.imgpause3.src = "Sprites/Player/Pause3.png";
-Player.imgpause4.src = "Sprites/Player/Pause4.png";
+Player.imgpause1.src = "Sprites/Player/Normal/Pause1.png";
+Player.imgpause2.src = "Sprites/Player/Normal/Pause2.png";
+Player.imgpause3.src = "Sprites/Player/Normal/Pause3.png";
+Player.imgpause4.src = "Sprites/Player/Normal/Pause4.png";
 
-Player.imgright1.src = "Sprites/Player/Right1.png";
-Player.imgright2.src = "Sprites/Player/Right2.png";
-Player.imgright3.src = "Sprites/Player/Right3.png";
-Player.imgright4.src = "Sprites/Player/Right4.png";
+Player.imgright1.src = "Sprites/Player/Normal/Right1.png";
+Player.imgright2.src = "Sprites/Player/Normal/Right2.png";
+Player.imgright3.src = "Sprites/Player/Normal/Right3.png";
+Player.imgright4.src = "Sprites/Player/Normal/Right4.png";
+
+Player.imgrotafk1.src = "Sprites/Player/Rotated/Afk1.png";
+Player.imgrotafk2.src = "Sprites/Player/Rotated/Afk2.png";
+Player.imgrotafk3.src = "Sprites/Player/Rotated/Afk3.png";
+Player.imgrotafk4.src = "Sprites/Player/Rotated/Afk4.png";
+
+Player.imgrotdead1.src = "Sprites/Player/Rotated/Dead1.png";
+Player.imgrotdead2.src = "Sprites/Player/Rotated/Dead2.png";
+Player.imgrotdead3.src = "Sprites/Player/Rotated/Dead3.png";
+Player.imgrotdead4.src = "Sprites/Player/Rotated/Dead4.png";
+
+Player.imgrotfall1.src = "Sprites/Player/Rotated/Fall1.png";
+Player.imgrotfall2.src = "Sprites/Player/Rotated/Fall2.png";
+Player.imgrotfall3.src = "Sprites/Player/Rotated/Fall3.png";
+Player.imgrotfall4.src = "Sprites/Player/Rotated/Fall4.png";
+
+Player.imgrotfallleft1.src = "Sprites/Player/Rotated/FallLeft1.png";
+Player.imgrotfallleft2.src = "Sprites/Player/Rotated/FallLeft2.png";
+Player.imgrotfallleft3.src = "Sprites/Player/Rotated/FallLeft3.png";
+Player.imgrotfallleft4.src = "Sprites/Player/Rotated/FallLeft4.png";
+
+Player.imgrotfallright1.src = "Sprites/Player/Rotated/FallRight1.png";
+Player.imgrotfallright2.src = "Sprites/Player/Rotated/FallRight2.png";
+Player.imgrotfallright3.src = "Sprites/Player/Rotated/FallRight3.png";
+Player.imgrotfallright4.src = "Sprites/Player/Rotated/FallRight4.png";
+
+Player.imgrotjump1.src = "Sprites/Player/Rotated/Jump1.png";
+Player.imgrotjump2.src = "Sprites/Player/Rotated/Jump2.png";
+Player.imgrotjump3.src = "Sprites/Player/Rotated/Jump3.png";
+Player.imgrotjump4.src = "Sprites/Player/Rotated/Jump4.png";
+
+Player.imgrotjumpleft1.src = "Sprites/Player/Rotated/JumpLeft1.png";
+Player.imgrotjumpleft2.src = "Sprites/Player/Rotated/JumpLeft2.png";
+Player.imgrotjumpleft3.src = "Sprites/Player/Rotated/JumpLeft3.png";
+Player.imgrotjumpleft4.src = "Sprites/Player/Rotated/JumpLeft4.png";
+
+Player.imgrotjumpright1.src = "Sprites/Player/Rotated/JumpRight1.png";
+Player.imgrotjumpright2.src = "Sprites/Player/Rotated/JumpRight2.png";
+Player.imgrotjumpright3.src = "Sprites/Player/Rotated/JumpRight3.png";
+Player.imgrotjumpright4.src = "Sprites/Player/Rotated/JumpRight4.png";
+
+Player.imgrotleft1.src = "Sprites/Player/Rotated/Left1.png";
+Player.imgrotleft2.src = "Sprites/Player/Rotated/Left2.png";
+Player.imgrotleft3.src = "Sprites/Player/Rotated/Left3.png";
+Player.imgrotleft4.src = "Sprites/Player/Rotated/Left4.png";
+
+Player.imgrotpause1.src = "Sprites/Player/Rotated/Pause1.png";
+Player.imgrotpause2.src = "Sprites/Player/Rotated/Pause2.png";
+Player.imgrotpause3.src = "Sprites/Player/Rotated/Pause3.png";
+Player.imgrotpause4.src = "Sprites/Player/Rotated/Pause4.png";
+
+Player.imgrotright1.src = "Sprites/Player/Rotated/Right1.png";
+Player.imgrotright2.src = "Sprites/Player/Rotated/Right2.png";
+Player.imgrotright3.src = "Sprites/Player/Rotated/Right3.png";
+Player.imgrotright4.src = "Sprites/Player/Rotated/Right4.png";
+
+/* Set source of platform image */
+Platform.img.src = "Sprites/Platform/Normal.png"
+
+/* Set source of corner image */
+Corner.imgleft.src = "Sprites/Platform/Left.png";
+Corner.imgright.src = "Sprites/Platform/Right.png";
 
 /* Set source of coin image */
-Coin.img.src = "Sprites/Coin.png";
+Coin.img1.src = "Sprites/Coin/Normal/Coin1.png";
+Coin.img2.src = "Sprites/Coin/Normal/Coin2.png";
+Coin.img3.src = "Sprites/Coin/Normal/Coin3.png";
+Coin.img4.src = "Sprites/Coin/Rotated/Coin1.png";
+Coin.img5.src = "Sprites/Coin/Rotated/Coin2.png";
+Coin.img6.src = "Sprites/Coin/Rotated/Coin3.png";
 
 /* Set source of spike image */
-Spike.img.src = "Sprites/Spike.png";
+Spike.img1.src = "Sprites/Spike/Normal/Spike1.png";
+Spike.img2.src = "Sprites/Spike/Normal/Spike2.png";
+Spike.img3.src = "Sprites/Spike/Normal/Spike3.png";
+Spike.img4.src = "Sprites/Spike/Rotated/Spike1.png";
+Spike.img5.src = "Sprites/Spike/Rotated/Spike2.png";
+Spike.img6.src = "Sprites/Spike/Rotated/Spike3.png";
 

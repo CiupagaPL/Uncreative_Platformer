@@ -9,12 +9,12 @@ window.onload = function() {
     Context = Board.base.getContext("2d");
 
     /* Turn on warning mode if resolution is too low */
-    if(Board.w < 1000 || Board.h < 800) {
+    if(Board.w < 1280 || Board.h < 800) {
         Scene = 0;
     }
 
     /* Turn on warning mode if resolution is too high */
-    if(Board.w > 3840 || Board.h > 2168) {
+    if(Board.w > 3840 || Board.h > 2160) {
         Scene = 0;
     }
 
@@ -48,7 +48,7 @@ window.onupdate = function() {
     /* Limit fps */
     setTimeout(() => {
         requestAnimationFrame(window.onupdate);
-    }, 1000 / 120);
+    }, 1000 / FPS);
 
     /* Clear screen */
     Context.clearRect(0, 0, Board.w, Board.h);
@@ -166,10 +166,30 @@ window.onupdate = function() {
         Context.font = DescriptionText5.font;
         Context.fillText(DescriptionText5.value, DescriptionText5.x, DescriptionText5.y);
 
-        /* Draw descriptiontext6 object */
-        Context.fillStyle = DescriptionText6.color;
-        Context.font = DescriptionText6.font;
-        Context.fillText(DescriptionText6.value, DescriptionText6.x, DescriptionText6.y);
+        /* Draw instructiontext1 object */
+        Context.fillStyle = InstructionText1.color;
+        Context.font = InstructionText1.font;
+        Context.fillText(InstructionText1.value, InstructionText1.x, InstructionText1.y);
+
+        /* Draw instructiontext2 object */
+        Context.fillStyle = InstructionText2.color;
+        Context.font = InstructionText2.font;
+        Context.fillText(InstructionText2.value, InstructionText2.x, InstructionText2.y);
+
+        /* Draw instructiontext3 object */
+        Context.fillStyle = InstructionText3.color;
+        Context.font = InstructionText3.font;
+        Context.fillText(InstructionText3.value, InstructionText3.x, InstructionText3.y);
+
+        /* Draw instructiontext4 object */
+        Context.fillStyle = InstructionText4.color;
+        Context.font = InstructionText4.font;
+        Context.fillText(InstructionText4.value, InstructionText4.x, InstructionText4.y);
+
+        /* Draw instructiontext5 object */
+        Context.fillStyle = InstructionText5.color;
+        Context.font = InstructionText5.font;
+        Context.fillText(InstructionText5.value, InstructionText5.x, InstructionText5.y);
 
         /* Draw returntext object */
         Context.fillStyle = ReturnText.color;
@@ -309,11 +329,11 @@ window.onupdate = function() {
                 MenuTransparent.type = 25;
                 window.animatehud();
             }
-            if(AboutTransition != 0) {
+            if(StatisticsTransition != 0) {
                 MenuTransparent.type = 26;
                 window.animatehud();
             }
-            else if(SettingsTransition == 0 && AboutTransition == 0) {
+            else if(SettingsTransition == 0 && StatisticsTransition == 0) {
                 MenuTransparent.type = 16;
                 window.animatehud();
             }
@@ -326,8 +346,11 @@ window.onupdate = function() {
         }
 
         /* Draw background object */
-        Context.fillStyle = Background.color;
+        Context.fillStyle = Background.randomcolor;
         Context.fillRect(Background.x, Background.y, Background.w, Background.h);
+
+        /* Animate player */
+        window.animateplayer();
 
         /* Refresh groundchecktop position */
         GroundCheckTop.x = Player.x + 16 + Player.vx;
@@ -345,14 +368,31 @@ window.onupdate = function() {
         GroundCheckRight.x = Player.x + 112 + Player.vx;
         GroundCheckRight.y = Player.y + Player.vy;
 
+        /* Refresh collisionchecktop position */
+        CollisionCheckTop.x = Player.x + 16 + Player.vx;
+        CollisionCheckTop.y = Player.y - 8 + Player.vy;
+
+        /* Refresh collisioncheckbottom position */
+        CollisionCheckBottom.x = Player.x + 16 + Player.vx;
+        CollisionCheckBottom.y = Player.y - 8 + Player.h + Player.vy;
+
         /* Update generate level function */
         window.generatelevel();
         Platform.currentlenght = 0;
         Spike.currentlenght = 0;
         Coin.currentlenght = 0;
+        Corner.currentlenght = 0;
 
         /* Update texts value */
         window.updatetext();
+
+        /* Generate globalmovement number */
+        if(PauseTransition == 0 && !Player.isdead && SceneStart && Player.y <= Board.w * 1.25 / 8) {
+            GlobalMovement = 12;
+        }
+        else if(PauseTransition != 0 || !Player.isdead || SceneStart) {
+            GlobalMovement = 0;
+        }
 
         /* Start player timer */
         if(PauseTransition == 0 && !Player.isdead) {
@@ -383,88 +423,75 @@ window.onupdate = function() {
             Player.vx = -8;
         }
 
-        /* Animate player */
-        window.animateplayer();
-
-        /* Draw mainplatform object */
-        Context.fillStyle = MainPlatform.color;
-        Context.fillRect(MainPlatform.x, MainPlatform.y, MainPlatform.w, MainPlatform.h);
-
-        /* Draw groundchecktop object */
-        Context.fillStyle = GroundCheckTop.color;
-        Context.fillRect(GroundCheckTop.x, GroundCheckTop.y, GroundCheckTop.w, GroundCheckTop.h);
-
-        /* Draw groundcheckbottom object */
-        Context.fillStyle = GroundCheckBottom.color;
-        Context.fillRect(GroundCheckBottom.x, GroundCheckBottom.y, GroundCheckBottom.w, GroundCheckBottom.h);
-
-        /* Draw groundcheckleft object */
-        Context.fillStyle = GroundCheckLeft.color;
-        Context.fillRect(GroundCheckLeft.x, GroundCheckLeft.y, GroundCheckLeft.w, GroundCheckLeft.h);
-
-        /* Draw groundcheckright object */
-        Context.fillStyle = GroundCheckRight.color;
-        Context.fillRect(GroundCheckRight.x, GroundCheckRight.y, GroundCheckRight.w, GroundCheckRight.h);
-
         /* Generate platforms */
         while(Platform.lenght >= Platform.currentlenght) {
             /* Draw current array platform */
             CurrentPlatform = Platform.array[Platform.currentlenght];
-            Context.fillStyle = CurrentPlatform.color;
-            Context.fillRect(CurrentPlatform.x, CurrentPlatform.y, CurrentPlatform.w, CurrentPlatform.h);
+            if(!CurrentPlatform.disabled) {
+                Context.drawImage(CurrentPlatform.img, CurrentPlatform.x, CurrentPlatform.y, CurrentPlatform.w, CurrentPlatform.h);
+            }
 
             /* Update platforms */
             window.updateplatforms();
 
-            /* Detect collisions between groundchecktop and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheckTop) && !Player.touched) {
-                /* Change y velocity of Player object */
-                Player.vy = 8;
-
-                /* Fix some update problems */
-                Player.touched = true;
-            }
-
-            /* Detect collisions between groundcheckbottom and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheckBottom) && !Player.touched) {
-                /* Change y velocity of Player object */
-                Player.vy = 0;
-
-                /* Fix some update problems */
-                Player.touched = true;
-
-                /* Change score value */
+            /* Update score and change background color */
+            if(Player.y <= CurrentPlatform.y) {
                 if(CurrentPlatform.level + 1 > Score) {
+                    window.randomizecolor();
                     Score += 1;
                 }
             }
 
-            /* Detect collisions between groundcheckleft and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheckLeft) && !Player.touched) {
-                /* Change x velocity of Player object */
-                Player.side = 1;
-
-                /* Fix some update problems */
-                Player.touched = true;
+            /* Update best score */
+            if(Score > BestScore) {
+                BestScore = Score;
             }
 
-            /* Detect collisions between groundcheckright and platform object */
-            if(window.detectcollision(CurrentPlatform, GroundCheckRight) && !Player.touched) {
-                /* Change x velocity of Player object */
-                Player.side = 2;
+            /* Detect collisions between groundchecktop and current platform object */
+            if(window.detectcollision(CurrentPlatform, GroundCheckTop) && !Player.touched) {
+                /* Check if player is rotated */
+                if(!Player.rotated) {
+                    /* Change y velocity of Player object */
+                    Player.vy = GlobalMovement + 8;
 
-                /* Fix some update problems */
-                Player.touched = true;
+                    /* Fix some update problems */
+                    Player.touched = true;
+                }
+                else if(Player.rotated) {
+                     /* Change y velocity of Player object */
+                    Player.vy = GlobalMovement;
+
+                    /* Fix some update problems */
+                    Player.touched = true;
+                }
             }
 
-            /* Detect collisions between groundcheckbottom and mainplatform object */
-            if(window.detectcollision(MainPlatform, GroundCheckBottom) && !Player.touched) {
-                /* Change y velocity of Player object */
-                Player.vy = 0;
+            /* Detect collisions between groundcheckbottom and current platform object */
+            if(window.detectcollision(CurrentPlatform, GroundCheckBottom) && !Player.touched) {
+                /* Check if player is rotated */
+                if(!Player.rotated) {
+                    /* Change y velocity of player object */
+                    Player.vy = GlobalMovement;
 
-                /* Fix some update problems */
-                Player.touched = true;
+                    /* Fix some update problems */
+                    Player.touched = true;
+
+                    /* Change score value */
+                    if(CurrentPlatform.level + 1 > Score) {
+                        Score += 1;
+                    }
+                }
+                else if(Player.rotated) {
+                    /* Change y velocity of player object */
+                    Player.vy = GlobalMovement - 8;
+
+                    /* Fix some update problems */
+                    Player.touched = true;
+                }
             }
+
+            /* Move current platform object */
+            CurrentPlatform.y += GlobalMovement;
 
             /* Change loop value */
             Platform.currentlenght += 1;
@@ -472,32 +499,96 @@ window.onupdate = function() {
 
             /* Check if player object is grounded */
             if(Player.checktimer >= 4) {
-                if(window.detectcollision(MainPlatform, GroundCheckBottom) || window.detectcollision(CurrentPlatform, GroundCheckBottom)) {
-                    /* Make player object grounded */
-                    Player.isgrounded = true;
-                    Player.checked = true;
-                    Player.jumped = false;
-                    Player.checktimer = 0;
-                }
-                else if(!window.detectcollision(MainPlatform, GroundCheckBottom) && !window.detectcollision(CurrentPlatform, GroundCheckBottom)) {
-                    if(!Player.checked && Platform.lenght == Platform.currentlenght) {
-                        /* Make player object ungrounded */
-                        Player.isgrounded = false;
-                        Player.checked = false;
+                /* Check if player is rotated */
+                if(!Player.rotated) {
+                    if(window.detectcollision(CurrentPlatform, CollisionCheckBottom)) {
+                        /* Make player object grounded */
+                        Player.grounded = true;
+                        Player.checked = true;
+
+                        /* Change loop value */
                         Player.checktimer = 0;
+                    }
+                    else if(!window.detectcollision(CurrentPlatform, CollisionCheckBottom)) {
+                        if(!Player.checked && Platform.lenght == Platform.currentlenght) {
+                            /* Make player object ungrounded */
+                            Player.grounded = false;
+                            Player.checked = false;
+
+                            /* Change loop value */
+                            Player.checktimer = 0;
+                        }
+                    }
+                }
+                else if(Player.rotated) {
+                    if(window.detectcollision(CurrentPlatform, CollisionCheckTop)) {
+                        /* Make player object grounded */
+                        Player.grounded = true;
+                        Player.checked = true;
+
+                        /* Change loop value */
+                        Player.checktimer = 0;
+                    }
+                    else if(!window.detectcollision(CurrentPlatform, CollisionCheckTop)) {
+                        if(!Player.checked && Platform.lenght == Platform.currentlenght) {
+                            /* Make player object ungrounded */
+                            Player.grounded = false;
+                            Player.checked = false;
+
+                            /* Change loop value */
+                            Player.checktimer = 0;
+                        }
                     }
                 }
             }
         }
 
+        /* Generate corners */
+        while(Corner.lenght >= Corner.currentlenght) {
+            /* Draw current corner object */
+            CurrentCorner = Corner.array[Corner.currentlenght];
+            if(!CurrentCorner.disabled) {
+                Context.drawImage(CurrentCorner.img, CurrentCorner.x, CurrentCorner.y, CurrentCorner.w, CurrentCorner.h);
+            }
+
+            /* Update corners */
+            window.updatecorners();
+
+            /* Detect collisions between groundcheckleft and current corner */
+            if(window.detectcollision(CurrentCorner, GroundCheckLeft) && !CurrentCorner.left) {
+                /* Change x velocity of Player object */
+                Player.side = 1;
+
+                /* Fix some update problems */
+                Player.touched = true;
+            }
+
+            /* Detect collisions between groundcheckright and current corner */
+            if(window.detectcollision(CurrentCorner, GroundCheckRight) && CurrentCorner.left) {
+                /* Change x velocity of Player object */
+                Player.side = 2;
+
+                /* Fix some update problems */
+                Player.touched = true;
+            }
+
+            /* Move current corner object */
+            CurrentCorner.y += GlobalMovement;
+
+            /* Change loop value */
+            Corner.currentlenght += 1;
+        }
+
         /* Generate spikes */
         while(Spike.lenght >= Spike.currentlenght) {
-            /* Draw current array spike */
+            /* Draw current array spike object */
             CurrentSpike = Spike.array[Spike.currentlenght];
-            Context.drawImage(CurrentSpike.img, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
+            if(!CurrentSpike.disabled) {
+                Context.drawImage(CurrentSpike.img, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
+            }
 
             /* Update spikes */
-            // window.updatespikes();
+            window.updatespikes();
 
             /* Detect collisions between player and currentspike object */
             if(window.detectcollision(Player, CurrentSpike)) {
@@ -512,24 +603,27 @@ window.onupdate = function() {
                 SceneRestart = true;
             }
 
+            /* Move current spike object */
+            CurrentSpike.y += GlobalMovement;
+
             /* Change loop value */
             Spike.currentlenght += 1;
         }
 
         /* Generate coins */
         while(Coin.lenght >= Coin.currentlenght) {
-            /* Draw current array spike */
+            /* Draw current array coin object */
             CurrentCoin = Coin.array[Coin.currentlenght];
-            if(!CurrentCoin.used) {
+            if(!CurrentCoin.disabled) {
                 Context.drawImage(CurrentCoin.img, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
             }
 
             /* Update coins */
-            // window.updatecoins();
+            window.updatecoins();
 
             /* Detect collisions between player and currentcoin object */
             if(window.detectcollision(Player, CurrentCoin)) {
-                if(!CurrentCoin.used) {
+                if(!CurrentCoin.disabled) {
                     /* Add one to coins variable */
                     Coins += 1;
 
@@ -541,11 +635,30 @@ window.onupdate = function() {
                 }
 
                 /* Disable currentcoin */
-                CurrentCoin.used = true;
+                CurrentCoin.disabled = true;
             }
+
+            /* Move current coin object */
+            CurrentCoin.y += GlobalMovement;
 
             /* Change loop value */
             Coin.currentlenght += 1;
+        }
+
+        /* Make player object focussed */
+        if(!Player.fallen) {
+            /* Start timer */
+            Player.fallentimer += 1;
+            
+            /* Change player side */
+            Player.side = 0;
+
+            if(Player.fallentimer >= 8) {
+                if(Player.grounded) {
+                    /* End loop */
+                    Player.fallen = true;
+                }
+            }
         }
 
         /* Bounce player object from walls */
@@ -562,13 +675,20 @@ window.onupdate = function() {
 
         /* Move player object */
         if(PauseTransition == 0 && !Player.isdead) {
-            Player.y += Player.vy;
-            Player.x += Player.vx;
-            Player.vy += Player.gravity;
+            if(!Player.rotated) {
+                Player.y += Player.vy;
+                Player.x += Player.vx;
+                Player.vy += Player.gravity;
+            }
+            else if(Player.rotated) {
+                Player.y += Player.vy;
+                Player.x += Player.vx;
+                Player.vy -= Player.gravity;
+            }
         }
 
         /* Kill player object if it is falling */
-        if(Player.y + Player.h >= Board.h) {
+        if(Player.y + Player.h / 2 >= Board.h) {
             /* Play dead sound */
             if(!Player.isdead && Sfx) {
                 TimeSfx.hit.load();
@@ -577,35 +697,6 @@ window.onupdate = function() {
 
             Player.isdead = true;
             SceneRestart = true;
-        }
-
-        /* Detect collisions between player and spike object */
-        if(window.detectcollision(Player, Spike)) {
-            /* Play dead sound */
-            if(!Player.isdead && Sfx) {
-                TimeSfx.hit.load();
-                TimeSfx.hit.play();
-            }
-
-            /* Make player dead */
-            Player.isdead = true;
-            SceneRestart = true;
-        }
-
-        /* Detect collisions between player and coin object */
-        if(window.detectcollision(Player, Coin)) {
-            if(!Coin.used) {
-                /* Add one to coins variable */
-                Coins += 1;
-
-                /* Play coin sound */
-                if(Sfx) {
-                    TimeSfx.coin.load();
-                    TimeSfx.coin.play();
-                }
-            }
-            /* Disable coin */
-            Coin.used = true;
         }
 
         /* Draw statustransparent object */
@@ -660,10 +751,10 @@ window.onupdate = function() {
         Context.font = SettingsText.font;
         Context.fillText(SettingsText.value, SettingsText.x, SettingsText.y);
 
-        /* Draw abouttext object */
-        Context.fillStyle = AboutText.color;
-        Context.font = AboutText.font;
-        Context.fillText(AboutText.value, AboutText.x, AboutText.y);
+        /* Draw statisticstext object */
+        Context.fillStyle = StatisticsText.color;
+        Context.font = StatisticsText.font;
+        Context.fillText(StatisticsText.value, StatisticsText.x, StatisticsText.y);
 
         /* Draw sfxtext object */
         Context.fillStyle = SfxText.color;
@@ -675,35 +766,20 @@ window.onupdate = function() {
         Context.font = MusicText.font;
         Context.fillText(MusicText.value, MusicText.x, MusicText.y);
 
-        /* Draw descriptiontext1 object */
-        Context.fillStyle = DescriptionText1.color;
-        Context.font = DescriptionText1.font;
-        Context.fillText(DescriptionText1.value, DescriptionText1.x, DescriptionText1.y);
+        /* Draw informationtext1 object */
+        Context.fillStyle = InformationText1.color;
+        Context.font = InformationText1.font;
+        Context.fillText(InformationText1.value, InformationText1.x, InformationText1.y);
 
-        /* Draw descriptiontext2 object */
-        Context.fillStyle = DescriptionText2.color;
-        Context.font = DescriptionText2.font;
-        Context.fillText(DescriptionText2.value, DescriptionText2.x, DescriptionText2.y);
+        /* Draw informationtext2 object */
+        Context.fillStyle = InformationText2.color;
+        Context.font = InformationText2.font;
+        Context.fillText(InformationText2.value, InformationText2.x, InformationText2.y);
 
-        /* Draw descriptiontext3 object */
-        Context.fillStyle = DescriptionText3.color;
-        Context.font = DescriptionText3.font;
-        Context.fillText(DescriptionText3.value, DescriptionText3.x, DescriptionText3.y);
-
-        /* Draw descriptiontext4 object */
-        Context.fillStyle = DescriptionText4.color;
-        Context.font = DescriptionText4.font;
-        Context.fillText(DescriptionText4.value, DescriptionText4.x, DescriptionText4.y);
-
-        /* Draw descriptiontext5 object */
-        Context.fillStyle = DescriptionText5.color;
-        Context.font = DescriptionText5.font;
-        Context.fillText(DescriptionText5.value, DescriptionText5.x, DescriptionText5.y);
-
-        /* Draw descriptiontext6 object */
-        Context.fillStyle = DescriptionText6.color;
-        Context.font = DescriptionText6.font;
-        Context.fillText(DescriptionText6.value, DescriptionText6.x, DescriptionText6.y);
+        /* Draw informationtext3 object */
+        Context.fillStyle = InformationText3.color;
+        Context.font = InformationText3.font;
+        Context.fillText(InformationText3.value, InformationText3.x, InformationText3.y);
 
         /* Draw returntext object */
         Context.fillStyle = ReturnText.color;
@@ -762,23 +838,23 @@ window.onupdate = function() {
             window.animatehud();
         }
 
-        /* About section animation function */
-        if(AboutTransition == 1) {
+        /* Statistics section animation function */
+        if(StatisticsTransition == 1) {
             /* Change loop value and start animating function */
             MenuTransparent.type = 21;
             window.animatehud();
         }
-        if(AboutTransition == 2) {
+        if(StatisticsTransition == 2) {
             /* Change loop value and start animating function */
             MenuTransparent.type = 22;
             window.animatehud();
         }
-        if(AboutTransition == 4) {
+        if(StatisticsTransition == 4) {
             /* Change loop value and start animating function */
             MenuTransparent.type = 23;
             window.animatehud();
         }
-        if(AboutTransition == 5) {
+        if(StatisticsTransition == 5) {
             /* Change loop value and start animating function */
             MenuTransparent.type = 24;
             window.animatehud();
@@ -804,10 +880,30 @@ window.updatetext = function() {
     CoinsText.value = "Coins: " + Coins.toString();
     CoinsText.char = Coins.toString().length;
 
+    /* Update informationtext1 value */
+    InformationText1.value = "Current Score: " + Score.toString();
+
+    /* Update informationtext2 value */
+    InformationText2.value = "Current Coins: " + Coins.toString();
+
+    /* Update informationtext3 value */
+    InformationText3.value = "Best Score: " + BestScore.toString();
+
     /* Update coinstext position */
     if(CoinsText.lastchar < CoinsText.char) {
         CoinsText.x -= 34;
         CoinsText.lastchar += 1;
     }
+}
+
+/* Window randomizing color function */
+window.randomizecolor = function() {
+    /* Randomize values */
+    Background.random1 = Math.floor(Math.random() * 200) + 56;
+    Background.random2 = Math.floor(Math.random() * 200) + 56;
+    Background.random3 = Math.floor(Math.random() * 200) + 56;
+
+    /* Set proper color */
+    Background.randomcolor = "rgb(" + Background.random1.toString() + ", " + Background.random2.toString() + ", " + Background.random3.toString() + ")";
 }
 
