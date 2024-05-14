@@ -1,52 +1,90 @@
 /* Uncreative Platformer made by CiupagaPL
  * GPL 3.0 (C) 2024 CiupagaPL */
 
-/* Window generator corners update function */
+/* Window corners generator update function */
 window.updatecorners = function() {
-    /* Disable current corner object from rendering */
+    /* Disable currentcorner object from rendering */
     if(CurrentCorner.y >= Board.h) {
         CurrentCorner.disabled = true;
     }
 }
 
-/* Window generator spikes update function */
+/* Window spikes generator update function */
 window.updatespikes = function() {
-    /* Disable current spike object from rendering */
+    /* Disable currentspike object from rendering */
     if(CurrentSpike.y >= Board.h) {
         CurrentSpike.disabled = true;
     }
 }
 
-/* Window generator coins update function */
+/* Window coins generator update function */
 window.updatecoins = function() {
-    /* Disable current coin object from rendering */
+    /* Disable currentcoin object from rendering */
     if(CurrentCoin.y >= Board.h) {
         CurrentCoin.disabled = true;
     }
 }
 
-/* Window generator platforms update function */
+/* Window dispenser generator update function */
+window.updatedispensers = function() {
+    /* Generate next dispenser */
+    if(CurrentDispenser.y >= Board.h && !CurrentDispenser.disabled) {
+        /* Calculate dispenser h */
+        CurrentDispenser.y = Wall.highestposition + 234 + (CurrentDispenser.h / 2);
+
+        /* Disable dispenser */
+        CurrentDispenser.disabled = true;
+    }
+    else if(CurrentDispenser.y < Board.h) {
+        /* Enable dispenser */
+        CurrentDispenser.disabled = false;
+    }
+}
+
+/* Window dispenser generator update function */
+window.updatelasers = function() {
+    /* Disable currentlaser object from rendering */
+    if(CurrentLaser.y >= Board.h) {
+        CurrentLaser.disabled = true;
+    }
+}
+
+/* Window walls generator update function */
+window.updatewalls = function() {
+    /* Generate next wall */
+    if(CurrentWall.y >= Board.h && !CurrentWall.disabled) {
+        /* Calculate wall h */
+        CurrentWall.y = Wall.highestposition + 432;
+
+        /* Disable wall */
+        CurrentWall.disabled = true;
+    }
+    else if(CurrentWall.y < Board.h) {
+        /* Enable wall */
+        CurrentWall.disabled = false;
+    }
+}
+
+/* Window platforms generator update function */
 window.updateplatforms = function() {
-    /* Check if current platform is main one */
+    /* Check if currentplatform is main one */
     if(!CurrentPlatform.main) {
         /* Generate next platform */
-        if(CurrentPlatform.y >= Board.h) {
-            if(!CurrentPlatform.disabled) {
-                /* Calculate platform h */
-                CurrentPlatform.y = Platform.highestposition + 48;
+        if(CurrentPlatform.y >= Board.h && !CurrentPlatform.disabled) {
+            /* Calculate platform h */
+            CurrentPlatform.y = Platform.highestposition + 48;
 
-                /* Calculate platform score */
-                CurrentPlatform.level = Platform.lastlevel + 1;
+            /* Calculate platform score */
+            CurrentPlatform.level = Platform.lastlevel + 1;
 
-                /* Generate corners */
-                window.cornersgenerator();
+            /* Generate corners */
+            window.cornersgenerator();
 
-                /* Generate coins (and spikes) */
-                window.coinsgenerator();
+            /* Generate coins (and spikes) */
+            window.coinsgenerator();
 
-                /* Disable platform */
-                CurrentPlatform.disabled = true;
-            }
+            /* Disable platform */
+            CurrentPlatform.disabled = true;
         }
 
         /* Actions for rest of the platforms */
@@ -81,7 +119,7 @@ window.generatelevel = function() {
         /* Generate main platform */
         window.mainplatformgenerator();
 
-        /* Generate platforms generator function */
+        /* Generate rest platforms */
         window.platformsgenerator();
 
         /* Change loop value */
@@ -93,6 +131,9 @@ window.generatelevel = function() {
 window.resetlevel = function() {
     /* Reset platform array */
     Platform.array = [];
+
+    /* Reset wall array */
+    Wall.array = [];
 
     /* Reset corner array */
     Corner.array = [];
@@ -106,6 +147,10 @@ window.resetlevel = function() {
     /* Reset platform values */
     Platform.lenght = -1;
     Platform.currentload = 0;
+
+    /* Reset wall values */
+    Wall.lenght = -1;
+    Wall.currentload = 0;
 
     /* Reset corner values */
     Corner.lenght = -1;
@@ -135,32 +180,14 @@ window.mainplatformgenerator = function() {
         main: true,
     };
 
-    /* Push current platform into array */
+    /* Push currentplatform into array */
     Platform.array.push(CurrentPlatform);
+
+    /* Generate walls */
+    window.wallsgenerator();
 
     /* Change loop value */
     Platform.lenght += 1;
-}
-
-/* Window spikes generator function */
-window.spikesgenerator = function() {
-    /* Create current spike object */
-    CurrentSpike = {
-        x: CurrentPlatform.x,
-        y: CurrentPlatform.y - Spike.h,
-        fx: 0,
-        fy: 0,
-        w: Spike.w,
-        h: Spike.h,
-        img: Spike.img1,
-        disabled: false,
-    };
-
-    /* Push current spike into array */
-    Spike.array.push(CurrentSpike);
-
-    /* Change value of loop */
-    Spike.lenght += 1;
 }
 
 /* Window corners generating function */
@@ -179,11 +206,14 @@ window.cornersgenerator = function() {
             disabled: false,
         };
 
-        /* Push current corner into array */
+        /* Push currentcorner into array */
         Corner.array.push(CurrentCorner);
 
         /* Change lenght */
         Corner.lenght += 1;
+
+        /* Generate lasers */
+        // window.lasersgenerator();
     }
 
     /* Create right corner object */
@@ -200,12 +230,36 @@ window.cornersgenerator = function() {
             disabled: false,
         };
 
-        /* Push current corner into array */
+        /* Push currentcorner into array */
         Corner.array.push(CurrentCorner);
 
         /* Change lenght */
         Corner.lenght += 1;
+
+        /* Generate lasers */
+        // window.lasersgenerator();
     }
+}
+
+/* Window spikes generator function */
+window.spikesgenerator = function() {
+    /* Create currentspike object */
+    CurrentSpike = {
+        x: CurrentPlatform.x,
+        y: CurrentPlatform.y - Spike.h,
+        fx: 0,
+        fy: 0,
+        w: Spike.w,
+        h: Spike.h,
+        img: Spike.img1,
+        disabled: false,
+    };
+
+    /* Push currentspike into array */
+    Spike.array.push(CurrentSpike);
+
+    /* Change value of loop */
+    Spike.lenght += 1;
 }
 
 /* Window coins generator function */
@@ -216,7 +270,7 @@ window.coinsgenerator = function() {
 
     /* Create coin rendering loop */
     while(Coin.calc1 >= 0) {
-        /* Create current coin object */
+        /* Create currentcoin object */
         CurrentCoin = {
             x: CurrentPlatform.x + (376 * Coin.calc1),
             y: CurrentPlatform.y - Coin.h - 32,
@@ -228,32 +282,181 @@ window.coinsgenerator = function() {
             disabled: false,
         };
 
-        /* Push current coin into array */
+        /* Push currentcoin into array */
         Coin.array.push(CurrentCoin);
 
         /* Change loop value */
         Coin.calc1 -= 1;
         Coin.lenght += 1;
     }
-    // while(Coin.calc2 >= 0 && CurrentPlatform.level != 0) {
-    //     /* Create current coin object */
-    //     CurrentCoin = {
-    //         x: CurrentPlatform.x + (376 * Coin.calc2),
-    //         y: CurrentPlatform.y + Coin.h + 32,
-    //         fx: 0,
-    //         fy: 0,
-    //         w: Coin.w,
-    //         h: Coin.h,
-    //         img: Coin.img1,
-    //     };
+    while(Coin.calc2 >= 0 && CurrentPlatform.level != 0) {
+        /* Create currentcoin object */
+        CurrentCoin = {
+            x: CurrentPlatform.x + (376 * Coin.calc2),
+            y: CurrentPlatform.y + Coin.h + 32,
+            fx: 0,
+            fy: 0,
+            w: Coin.w,
+            h: Coin.h,
+            img: Coin.img1,
+        };
 
-    //     /* Push current coin into array */
-    //     Coin.array.push(CurrentCoin);
+        /* Push currentcoin into array */
+        Coin.array.push(CurrentCoin);
 
-    //     /* Change loop value */
-    //     Coin.calc2 -= 1;
-    //     Coin.lenght += 1;
-    // }
+        /* Change loop value */
+        Coin.calc2 -= 1;
+        Coin.lenght += 1;
+    }
+}
+
+/* Window dispensers generating function */
+window.dispensersgenerator = function() {
+    /* Randomize dispencer change */
+    Dispenser.change = Math.floor(Math.random() * 4);
+
+    /* Check chance rate */
+    if(Dispenser.change == 1 || Dispenser.change == 2 || Dispenser.change == 3 || !NormalMode) {
+        /* Randomize dispenser site */
+        Dispenser.side = Math.floor(Math.random() * 2);
+
+        /* Check side */
+        if(Dispenser.side == 0) {
+            /* Create left dispenser object */
+            CurrentDispenser = {
+                x: Wall.w,
+                y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+                fx: 0,
+                fy: 0,
+                w: Dispenser.w,
+                h: Dispenser.h,
+                img: Dispenser.imgleft1,
+                left: true,
+            };
+
+            /* Push currentdispenser into array */
+            Dispenser.array.push(CurrentDispenser);
+
+            /* Change loop value */
+            Dispenser.lenght += 1;
+        }
+        else if(Dispenser.side == 1) {
+            /* Create right dispenser object */
+            CurrentDispenser = {
+                x: Board.w - Dispenser.w - Wall.w,
+                y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+                fx: 0,
+                fy: 0,
+                w: Dispenser.w,
+                h: Dispenser.h,
+                img: Dispenser.imgright1,
+                left: false,
+            };
+
+            /* Push currentdispenser into array */
+            Dispenser.array.push(CurrentDispenser);
+
+            /* Change loop value */
+            Dispenser.lenght += 1;
+        }
+
+        /* Check current dispenser y */
+        if(CurrentDispenser.y <= Dispenser.highestposition) {
+            Dispenser.highestposition = CurrentDispenser.y;
+        }
+    }
+}
+
+/* Window lasers generator function */
+window.lasersgenerator = function() {
+    /* Check if corner exists */
+    if(CurrentCorner.left) {
+        /* Create currentlaser object */
+        CurrentLaser = {
+            x: CurrentCorner.x + CurrentCorner.w,
+            y: CurrentPlatform.y,
+            fx: 0,
+            fy: 0,
+            w: Laser.w,
+            h: Laser.h,
+            img: Laser.imgleft1,
+            disabled: false,
+            left: true,
+        };
+
+        /* Push currentlaser into array */
+        Laser.array.push(CurrentLaser);
+
+        /* Change loop value */
+        Laser.lenght += 1;
+    }
+    if(CurrentCorner.right) {
+        /* Create currentlaser object */
+        CurrentLaser = {
+            x: CurrentCorner.x - Laser.w,
+            y: CurrentPlatform.y,
+            fx: 0,
+            fy: 0,
+            w: Laser.w,
+            h: Laser.h,
+            img: Laser.imgright1,
+            disabled: false,
+            left: false,
+        };
+
+        /* Push currentlaser into array */
+        Laser.array.push(CurrentLaser);
+
+        /* Change loop value */
+        Laser.lenght += 1;
+    }
+}
+
+/* Window walls generator function */
+window.wallsgenerator = function() {
+    /* Create left wall object */
+    CurrentWall = {
+        x: 0,
+        y: CurrentPlatform.y - 384,
+        fx: 0,
+        fy: 0,
+        w: Wall.w,
+        h: Wall.h,
+        img: Wall.img,
+    };
+
+    /* Push currentwall into array */
+    Wall.array.push(CurrentWall);
+
+    /* Change loop value */
+    Wall.lenght += 1;
+
+    /* Check current wall y */
+    if(CurrentWall.y <= Wall.highestposition) {
+        Wall.highestposition = CurrentWall.y;
+    }
+
+    /* Create right wall object */
+    CurrentWall = {
+        x: Board.w - Wall.w,
+        y: CurrentPlatform.y - 384,
+        fx: 0,
+        fy: 0,
+        w: Wall.w,
+        h: Wall.h,
+        img: Wall.img,
+    };
+
+    /* Push currentwall into array */
+    Wall.array.push(CurrentWall);
+
+    /* Change loop value */
+    Wall.lenght += 1;
+
+    /* Check current wall y */
+    if(CurrentWall.y <= Wall.highestposition) {
+        Wall.highestposition = CurrentWall.y;
+    }
 }
 
 /* Window platforms generator function */
@@ -379,32 +582,36 @@ window.platformsgenerator = function() {
         Platform.randomcount -= 1;
     }
 
-    /* Change timer value */
+    /* Check platform statement */
     if(!Platform.first || Platform.firstchanged) {
+        /* Change timer and loop value */
         Platform.firsttimer += 1;
         Platform.firstchanged = false;
     }
     if(!Platform.second || Platform.secondchanged) {
+        /* Change timer and loop value */
         Platform.secondtimer += 1;
         Platform.secondchanged = false;
     }
     if(!Platform.third || Platform.thirdchanged) {
+        /* Change timer and loop value */
         Platform.thirdtimer += 1;
         Platform.thirdchanged = false;
     }
     if(!Platform.fourth || Platform.fourthchanged) {
+        /* Change timer and loop value */
         Platform.fourthtimer += 1;
         Platform.fourthchanged = false;
     }
 
     while(Platform.loop <= Platform.count) {
-        /* Check current platform count */
+        /* Check currentplatform count */
         if(Platform.currentcount == 0) {
             if(!Platform.first) {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 288,
-                    y: Board.h - 384 * Platform.currentload - 432,
+                    y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) - Platform.w,
@@ -421,7 +628,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 288,
-                    y: Board.h - 384 * Platform.currentload - 432,
+                    y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) + 16,
@@ -440,7 +647,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 288,
-                    y: Board.h - 384 * Platform.currentload - 432,
+                    y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) - Platform.w,
@@ -457,7 +664,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 288,
-                    y: Board.h - 384 * Platform.currentload - 432,
+                    y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) + 16,
@@ -480,7 +687,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 288,
-                    y: Board.h - 384 * Platform.currentload - 432,
+                    y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) - Platform.w,
@@ -497,7 +704,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 288,
-                    y: Board.h - 384 * Platform.currentload - 432,
+                    y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) + 16,
@@ -520,7 +727,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 288,
-                    y: Board.h - 384 * Platform.currentload - 432,
+                    y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) - Platform.w,
@@ -537,7 +744,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 288,
-                    y: Board.h - 384 * Platform.currentload - 432,
+                    y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) + 16,
@@ -559,7 +766,7 @@ window.platformsgenerator = function() {
             /* Create next platform */
             CurrentPlatform = {
                 x: ((Board.w / Platform.count) * Platform.loop) - 288,
-                y: Board.h - 384 * Platform.currentload - 432,
+                y: Board.h - 432 * Platform.currentload - 480,
                 fx: 0,
                 fy: 0,
                 w: (Board.w / Platform.count) - Platform.w,
@@ -582,19 +789,25 @@ window.platformsgenerator = function() {
             Platform.highestposition = CurrentPlatform.y;
         }
 
-        /* Push current platform into array */
+        /* Push currentplatform into array */
         Platform.array.push(CurrentPlatform);
 
         /* Generate corners */
         window.cornersgenerator();
 
         /* Generate coins (and spikes) */
-        // window.coinsgenerator();
+        window.coinsgenerator();
 
         /* Change loop value */
         Platform.loop += 1;
         Platform.currentcount += 1;
         Platform.lenght += 1;
     }
+
+    /* Generate walls */
+    window.wallsgenerator();
+
+    /* Generate dispensers */
+    window.dispensersgenerator();
 }
 

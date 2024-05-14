@@ -7,19 +7,16 @@
 let Scene = 1, SceneStart = false, SceneChange = false, SceneRestart = false;
 let Sfx = true, Music = false, NormalMode = false, Generated = false;
 let AboutTransition = 0, SettingsTransition = 0, KeybindsTransition = 0, StatisticsTransition = 0, PauseTransition = 0;
-let FPS = 120, Score = 0, BestScore = 0, Coins = 0, GlobalMovement = 0;
+let FPS = 120, Score = 0, BestScore = 0, Coins = 0, Deaths = 0, GlobalMovement = 0;
 
 /* Objects */
 
 /* Create global objects */
 let Context;
-let CurrentPlatform, CurrentCoin, CurrentSpike, CurrentCorner;
-
-/* Create screen object */
-let Screen = {
-    w: window.innerWidth,
-    h: window.innerHeight,
-};
+let CurrentPlatform, CurrentWall;
+let CurrentCoin, CurrentSpike, CurrentCorner;
+let CurrentDispenser, CurrentDispenserSpike, CurrentDispenserCoin;
+let CurrentLaser, CurrentLaserSpike, CurrentLaserCoin;
 
 /* Create mouse object */
 let Mouse = {
@@ -34,8 +31,8 @@ let Mouse = {
 /* Create board object */
 let Board = {
     base: document.getElementById("Board"),
-    w: Screen.w,
-    h: Screen.h,
+    w: window.innerWidth,
+    h: window.innerHeight,
 };
 
 /* Create timemusic object */
@@ -83,7 +80,7 @@ let Transition = {
     y: 0,
     fx: 0,
     fy: 0,
-    vx: 40,
+    vy: 40,
     color: "black",
     type: 0,
     started: false,
@@ -154,7 +151,7 @@ let UP = {
 
 /* Create uptext object */
 let UPText = {
-    color: "rgba(255, 255, 255, 0)",
+    color: "rgb(255, 255, 255)",
     font: "96px Orange_Kid",
     value: "Main Menu",
     x: 42,
@@ -167,12 +164,12 @@ let UPText = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public PreBuild 7",
+    value: "Public PrePreBuild 7",
     x: -192,
     y: Board.h - 12,
     fx: 4,
     fy: -24,
-    w: 172,
+    w: 208,
     h: 24,
     vx: 10.0,
     used: true,
@@ -387,6 +384,8 @@ let InstructionText3 = {
     color: "white",
     font: "48px Orange_Kid",
     value: "W, ↑ - Change Gravity Up",
+    fx: 0,
+    fy: 0,
     x: -750,
     y: DescriptionText3.y,
     vx: DescriptionText1.vx,
@@ -449,6 +448,18 @@ let InformationText3 = {
     value: "Best Score: ",
     x: -750,
     y: DescriptionText3.y,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
+/* Create informationtext4 object */
+let InformationText4 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "Deaths: ",
+    x: -750,
+    y: DescriptionText4.y,
     vx: DescriptionText1.vx,
     fx: 0,
     fy: 0,
@@ -795,6 +806,22 @@ let Platform = {
     fourthchanged: false,
 };
 
+/* Create wall object */
+let Wall = {
+    array: [],
+    w: 48,
+    h: 384,
+    x: 0,
+    y: 0,
+    fx: 0,
+    fy: 0,
+    img: new Image(),
+    lenght: -1,
+    currentlenght: 0,
+    disabled: false,
+    highestposition: 0,
+};
+
 /* Create corner object */
 let Corner = {
     array: [],
@@ -852,6 +879,119 @@ let Coin = {
     currentlenght: 0,
     calc1: 0,
     calc2: 0,
+};
+
+/* Create dispenser object */
+let Dispenser = {
+    array: [],
+    w: 20,
+    h: 80,
+    x: 0,
+    y: 0,
+    fx: 0,
+    fy: 0,
+    imgleft1: new Image(),
+    imgleft2: new Image(),
+    imgright1: new Image(),
+    imgright2: new Image(),
+    disabled: false,
+    lenght: -1,
+    currentlenght: 0,
+    left: false,
+    timer: 0,
+    chance: 0,
+    side: 0,
+    highestposition: 0,
+};
+
+/* Create dispenserspike object */
+let DispenserSpike = {
+    array: [],
+    w: 64,
+    h: 72,
+    x: 0,
+    y: 0,
+    fx: 0,
+    fy: 0,
+    imgleft1: new Image(),
+    imgleft2: new Image(),
+    imgleft3: new Image(),
+    imgright1: new Image(),
+    imgright2: new Image(),
+    imgright3: new Image(),
+    disabled: false,
+    lenght: -1,
+    currentlenght: 0,
+};
+
+/* Create dispensercoin */
+let DispenserCoin = {
+    array: [],
+    w: 64,
+    h: 72,
+    x: 0,
+    y: 0,
+    fx: 0,
+    fy: 0,
+    imgleft1: new Image(),
+    imgleft2: new Image(),
+    imgleft3: new Image(),
+    imgright1: new Image(),
+    imgright2: new Image(),
+    imgright3: new Image(),
+    disabled: false,
+    lenght: -1,
+    currentlenght: 0,
+};
+
+/* Create laser object */
+let Laser = {
+    array: [],
+    w: 24,
+    h: 48,
+    x: 0,
+    y: 0,
+    fx: 0,
+    fy: 0,
+    imgleft1: new Image(),
+    imgleft2: new Image(),
+    imgright1: new Image(),
+    imgright2: new Image(),
+    disabled: false,
+    lenght: -1,
+    currentlenght: 0,
+    left: false,
+    timer: 0,
+};
+
+/* Create laserspike object */
+let LaserSpike = {
+    array: [],
+    w: 256,
+    h: 42,
+    x: 0,
+    y: 0,
+    fx: 0,
+    fy: 0,
+    img: new Image(),
+    disabled: false,
+    lenght: -1,
+    currentlenght: 0,
+};
+
+/* Create lasercoin object */
+let LaserCoin = {
+    array: [],
+    w: 256,
+    h: 42,
+    x: 0,
+    y: 0,
+    fx: 0,
+    fy: 0,
+    img: new Image(),
+    disabled: false,
+    lenght: -1,
+    currentlenght: 0,
 };
 
 /* Textures */
@@ -984,7 +1124,10 @@ Player.imgrotright3.src = "Sprites/Player/Rotated/Right3.png";
 Player.imgrotright4.src = "Sprites/Player/Rotated/Right4.png";
 
 /* Set source of platform image */
-Platform.img.src = "Sprites/Platform/Normal.png"
+Platform.img.src = "Sprites/Platform/Normal.png";
+
+/* Set source of wall image */
+Wall.img.src = "Sprites/Platform/Wall.png";
 
 /* Set source of corner image */
 Corner.imgleft.src = "Sprites/Platform/Left.png";
@@ -1005,4 +1148,38 @@ Spike.img3.src = "Sprites/Spike/Normal/Spike3.png";
 Spike.img4.src = "Sprites/Spike/Rotated/Spike1.png";
 Spike.img5.src = "Sprites/Spike/Rotated/Spike2.png";
 Spike.img6.src = "Sprites/Spike/Rotated/Spike3.png";
+
+/* Set source of dispenser image */
+Dispenser.imgleft1.src = "Sprites/Dispenser/Left/1.png";
+Dispenser.imgleft2.src = "Sprites/Dispenser/Left/2.png";
+Dispenser.imgright1.src = "Sprites/Dispenser/Right/1.png";
+Dispenser.imgright2.src = "Sprites/Dispenser/Right/2.png";
+
+/* Set source of dispenserspike image */
+DispenserSpike.imgleft1.src = "Sprites/Dispenser/Spike/Left/1.png";
+DispenserSpike.imgleft2.src = "Sprites/Dispenser/Spike/Left/2.png";
+DispenserSpike.imgleft3.src = "Sprites/Dispenser/Spike/Left/3.png";
+DispenserSpike.imgright1.src = "Sprites/Dispenser/Spike/Right/1.png";
+DispenserSpike.imgright2.src = "Sprites/Dispenser/Spike/Right/2.png";
+DispenserSpike.imgright3.src = "Sprites/Dispenser/Spike/Right/3.png";
+
+/* Set source of dispensercoin image */
+DispenserCoin.imgleft1.src = "Sprites/Dispenser/Coin/Left/1.png";
+DispenserCoin.imgleft2.src = "Sprites/Dispenser/Coin/Left/2.png";
+DispenserCoin.imgleft3.src = "Sprites/Dispenser/Coin/Left/3.png";
+DispenserCoin.imgright1.src = "Sprites/Dispenser/Coin/Right/1.png";
+DispenserCoin.imgright2.src = "Sprites/Dispenser/Coin/Right/2.png";
+DispenserCoin.imgright3.src = "Sprites/Dispenser/Coin/Right/3.png";
+
+/* Set source of laser image */
+Laser.imgleft1.src = "Sprites/Laser/Left/1.png";
+Laser.imgleft2.src = "Sprites/Laser/Left/2.png";
+Laser.imgright1.src = "Sprites/Laser/Right/1.png";
+Laser.imgright2.src = "Sprites/Laser/Right/2.png";
+
+/* Set source of laserspike image */
+LaserSpike.img.src = "Sprites/Laser/Spike.png";
+
+/* Set source of lasercoin image */
+LaserCoin.img.src = "Sprites/Laser/Coin.png";
 

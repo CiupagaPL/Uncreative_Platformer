@@ -27,13 +27,9 @@ window.onload = function() {
 
 /* Window resize function */
 window.onresize = function() {
-    /* Refresh screen resolution */
-    Screen.w = window.innerWidth;
-    Screen.h = window.innerHeight;
-
     /* Refresh board resolution */
-    Board.w = Screen.w;
-    Board.h = Screen.h;
+    Board.w = window.innerWidth;
+    Board.h = window.innerHeight;
 
     /* Change board resolution */
     Board.base.width = Board.w;
@@ -70,7 +66,7 @@ window.onupdate = function() {
     }
     
     /* Menu scene */
-    if(Scene == 1){
+    if(Scene == 1) {
         /* Things todo on scene start */
         if(!SceneStart) {
             /* Turn on transition animation */
@@ -203,14 +199,17 @@ window.onupdate = function() {
         /* Animate up object */
         window.animateup();
 
-        /* Play music */
+        /* Playing music function */
         if(Music) {
+            /* Start music timer */
             TimeMusic.timer += 1;
             if(TimeMusic.timer == 10) {
+                /* Start playing */
                 TimeMusic.menu.volume = 0.35;
                 TimeMusic.menu.play();
             }
             if(TimeMusic.timer >= 1650) {
+                /* Reload music */
                 TimeMusic.menu.load();
                 TimeMusic.timer = 0;
             }
@@ -379,16 +378,19 @@ window.onupdate = function() {
         /* Update generate level function */
         window.generatelevel();
         Platform.currentlenght = 0;
+        Wall.currentlenght = 0;
         Spike.currentlenght = 0;
         Coin.currentlenght = 0;
         Corner.currentlenght = 0;
+        Dispenser.currentlenght = 0;
+        Laser.currentlenght = 0;
 
         /* Update texts value */
         window.updatetext();
 
         /* Generate globalmovement number */
-        if(PauseTransition == 0 && !Player.isdead && SceneStart && Player.y <= Board.w * 1.25 / 8) {
-            GlobalMovement = 12;
+        if(PauseTransition == 0 && !Player.isdead && SceneStart && Player.y <= Board.w * 1.35 / 8 && Player.grounded) {
+            GlobalMovement = 16;
         }
         else if(PauseTransition != 0 || !Player.isdead || SceneStart) {
             GlobalMovement = 0;
@@ -490,7 +492,7 @@ window.onupdate = function() {
                 }
             }
 
-            /* Move current platform object */
+            /* Move currentplatform object */
             CurrentPlatform.y += GlobalMovement;
 
             /* Change loop value */
@@ -543,6 +545,34 @@ window.onupdate = function() {
             }
         }
 
+        /* Generate walls */
+        while(Wall.lenght >= Wall.currentlenght) {
+            /* Draw current walls object */
+            CurrentWall = Wall.array[Wall.currentlenght];
+            if(!CurrentWall.disabled) {
+                Context.drawImage(CurrentWall.img, CurrentWall.x, CurrentWall.y, CurrentWall.w, CurrentWall.h);
+            }
+
+            /* Update walls */
+            window.updatewalls();
+
+            /* Bounce player object from walls */
+            if(Player.x <= Wall.w) {
+                /* Change player side */
+                Player.side = 1;
+            }
+            if(Player.x >= Board.w - Wall.w - Player.w) {
+                /* Change player side */
+                Player.side = 2;
+            }
+
+            /* Move currentwall object */
+            CurrentWall.y += GlobalMovement;
+
+            /* Change loop value */
+            Wall.currentlenght += 1;
+        }
+
         /* Generate corners */
         while(Corner.lenght >= Corner.currentlenght) {
             /* Draw current corner object */
@@ -572,7 +602,7 @@ window.onupdate = function() {
                 Player.touched = true;
             }
 
-            /* Move current corner object */
+            /* Move currentcorner object */
             CurrentCorner.y += GlobalMovement;
 
             /* Change loop value */
@@ -599,11 +629,14 @@ window.onupdate = function() {
                 }
 
                 /* Make player dead */
+                if(!Player.isdead) {
+                    Deaths += 1;
+                }
                 Player.isdead = true;
                 SceneRestart = true;
             }
 
-            /* Move current spike object */
+            /* Move currentspike object */
             CurrentSpike.y += GlobalMovement;
 
             /* Change loop value */
@@ -638,11 +671,50 @@ window.onupdate = function() {
                 CurrentCoin.disabled = true;
             }
 
-            /* Move current coin object */
+            /* Move currentcoin object */
             CurrentCoin.y += GlobalMovement;
 
             /* Change loop value */
             Coin.currentlenght += 1;
+        }
+
+        /* Start dispenser timer */
+        Dispenser.timer += 1;
+
+        /* Generate dispensers */
+        while(Dispenser.lenght >= Dispenser.currentlenght) {
+            /* Draw current array dispenser object */
+            CurrentDispenser = Dispenser.array[Dispenser.currentlenght];
+            if(!CurrentDispenser.disabled) {
+                Context.drawImage(CurrentDispenser.img, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+            }
+
+            /* Update dispensers */
+            window.updatedispensers();
+
+            /* Move currentdispenser object */
+            CurrentDispenser.y += GlobalMovement;
+
+            /* Change loop value */
+            Dispenser.currentlenght += 1;
+        }
+
+        /* Generate lasers */
+        while(Laser.lenght >= Laser.currentlenght) {
+            /* Draw current array dispenser object */
+            CurrentLaser = Laser.array[Laser.currentlenght];
+            if(!CurrentLaser.disabled) {
+                Context.drawImage(CurrentLaser.img, CurrentLaser.x, CurrentLaser.y, CurrentLaser.w, CurrentLaser.h);
+            }
+
+            /* Update lasers */
+            window.updatelasers();
+
+            /* Move currentlaser object */
+            CurrentLaser.y += GlobalMovement;
+
+            /* Change loop value */
+            Laser.currentlenght += 1;
         }
 
         /* Make player object focussed */
@@ -659,18 +731,6 @@ window.onupdate = function() {
                     Player.fallen = true;
                 }
             }
-        }
-
-        /* Bounce player object from walls */
-        if(Player.x <= 0) {
-            /* Change player side */
-            Player.vx = 8;
-            Player.side = 1;
-        }
-        if(Player.x >= Board.w - Player.w) {
-            /* Change player side */
-            Player.vx = -8;
-            Player.side = 2;
         }
 
         /* Move player object */
@@ -695,6 +755,10 @@ window.onupdate = function() {
                 TimeSfx.hit.play();
             }
 
+            /* Make player dead */
+            if(!Player.isdead) {
+                Deaths += 1;
+            }
             Player.isdead = true;
             SceneRestart = true;
         }
@@ -781,6 +845,11 @@ window.onupdate = function() {
         Context.font = InformationText3.font;
         Context.fillText(InformationText3.value, InformationText3.x, InformationText3.y);
 
+        /* Draw informationtext4 object */
+        Context.fillStyle = InformationText4.color;
+        Context.font = InformationText4.font;
+        Context.fillText(InformationText4.value, InformationText4.x, InformationText4.y);
+
         /* Draw returntext object */
         Context.fillStyle = ReturnText.color;
         Context.font = ReturnText.font;
@@ -798,14 +867,17 @@ window.onupdate = function() {
         /* Animate up object */
         window.animateup();
 
-        /* Play music */
+        /* Playing music function */
         if(Music) {
+            /* Start music timer */
             TimeMusic.timer += 1;
             if(TimeMusic.timer == 10) {
+                /* Start playing */
                 TimeMusic.game.volume = 0.35;
                 TimeMusic.game.play();
             }
             if(TimeMusic.timer >= 3700) {
+                /* Reload music */
                 TimeMusic.game.load();
                 TimeMusic.timer = 0;
             }
@@ -889,6 +961,9 @@ window.updatetext = function() {
     /* Update informationtext3 value */
     InformationText3.value = "Best Score: " + BestScore.toString();
 
+    /* Update informationtext4 value */
+    InformationText4.value = "Deaths: " + Deaths.toString();
+
     /* Update coinstext position */
     if(CoinsText.lastchar < CoinsText.char) {
         CoinsText.x -= 34;
@@ -899,9 +974,9 @@ window.updatetext = function() {
 /* Window randomizing color function */
 window.randomizecolor = function() {
     /* Randomize values */
-    Background.random1 = Math.floor(Math.random() * 200) + 56;
-    Background.random2 = Math.floor(Math.random() * 200) + 56;
-    Background.random3 = Math.floor(Math.random() * 200) + 56;
+    Background.random1 = Math.floor(Math.random() * 200) + 55;
+    Background.random2 = Math.floor(Math.random() * 200) + 55;
+    Background.random3 = Math.floor(Math.random() * 200) + 55;
 
     /* Set proper color */
     Background.randomcolor = "rgb(" + Background.random1.toString() + ", " + Background.random2.toString() + ", " + Background.random3.toString() + ")";

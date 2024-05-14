@@ -22,7 +22,7 @@ window.animatetransition = function() {
         if(Transition.started) {
             /* Move transition object */
             if(Transition.y > -Board.h) {
-                Transition.y -= Transition.vx;
+                Transition.y -= Transition.vy;
             }
             
             /* End transition animation */
@@ -51,7 +51,7 @@ window.animatetransition = function() {
         if(MenuTransparent.type == 0) {
             /* Start transition animation */
             if(Transition.y < 0) {
-                Transition.y += Transition.vx;
+                Transition.y += Transition.vy;
             }
             /* End transition object animation */
             else if(Transition.y >= 0) {
@@ -108,7 +108,7 @@ window.animatetransition = function() {
         if(Transition.started) {
             /* Move transition object */
             if(Transition.y < Board.h) {
-                Transition.y += Transition.vx;
+                Transition.y += Transition.vy;
             }
             /* End animation */
             else if(Transition.y >= Board.h) {
@@ -118,7 +118,6 @@ window.animatetransition = function() {
 
                 /* End ingame hud animation */
                 if(StatusTransparent.type == 0) {
-
                     /* End scene start */
                     Transition.started = false;
                     Transition.type = 0;
@@ -137,7 +136,7 @@ window.animatetransition = function() {
         if(MenuTransparent.type == 0) {
             /* Move transition object */
             if(Transition.y > 0) {
-                Transition.y -= Transition.vx;
+                Transition.y -= Transition.vy;
             }
             /* End animation */
             else if(Transition.y <= 0) {
@@ -166,7 +165,7 @@ window.animatetransition = function() {
         if(StatusTransparent.type == 0 && MenuTransparent.type == 0) {
             /* Move transition object */
             if(Transition.y > 0) {
-                Transition.y -= Transition.vx;
+                Transition.y -= Transition.vy;
             }
             /* End animation */
             else if(Transition.y <= 0) {
@@ -1006,6 +1005,7 @@ window.animatehud = function() {
             InformationText1.x += InformationText1.vx;
             InformationText2.x += InformationText2.vx;
             InformationText3.x += InformationText3.vx;
+            InformationText4.x += InformationText4.vx;
             VersionText.x += VersionText.vx;
             AuthorText.x += AuthorText.vx;
             ReturnText.x += ReturnText.vx;
@@ -1034,6 +1034,7 @@ window.animatehud = function() {
             InformationText1.x -= InformationText1.vx;
             InformationText2.x -= InformationText2.vx;
             InformationText3.x -= InformationText3.vx;
+            InformationText4.x -= InformationText4.vx;
             VersionText.x -= VersionText.vx;
             AuthorText.x -= AuthorText.vx;
             ReturnText.x -= ReturnText.vx;
@@ -1130,6 +1131,7 @@ window.animatehud = function() {
             InformationText1.x -= InformationText1.vx;
             InformationText2.x -= InformationText2.vx;
             InformationText3.x -= InformationText3.vx;
+            InformationText4.x -= InformationText4.vx;
             VersionText.x -= VersionText.vx;
             AuthorText.x -= AuthorText.vx;
             ReturnText.x -= ReturnText.vx;
