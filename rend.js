@@ -322,7 +322,7 @@ window.spikesgenerator = function() {
     if(Coin.count1 >= 1) {
         /* Create currentspike object */
         CurrentSpike = {
-            x: CurrentPlatform.x + (432 * Coin.count1) + 96,
+            x: CurrentPlatform.x + (384 * Coin.count1),
             y: CurrentPlatform.y - Spike.h - 32,
             fx: 0,
             fy: 0,
@@ -333,17 +333,60 @@ window.spikesgenerator = function() {
             rotated: false,
         };
 
-        /* Push currentspike into array */
-        Spike.array.push(CurrentSpike);
+        /* Create loop checking spike position */
+        if(Spike.positionlenght >= Spike.positioncurrentlenght) {
+            /* Change loop value */
+            if(CurrentSpike.x != Spike.positionarray[Spike.positioncurrentlenght]) {
+                Spike.positioncurrentlenght += 1;
+            }
+            else if(CurrentSpike.x == Spike.positionarray[Spike.positioncurrentlenght]) {
+                Spike.spawn = false;
+            }
+        }
 
-        /* Change value of loop */
-        Spike.lenght += 1;
-        Coin.count1 -= 1;
+        /* Check if spike should spawn */
+        if(Spike.spawn) {
+            /* Push currentspike into array */
+            Spike.array.push(CurrentSpike);
+
+            /* Push currentspike x into array */
+            Spike.positionarray.push(CurrentSpike.x);
+
+            /* Change value of loop */
+            Spike.lenght += 1;
+            Coin.count1 -= 1;
+            Spike.spawn = true;
+            Spike.positionlenght += 1;
+            Spike.positioncurrentlenght = 0;
+        }
+        else if(!Spike.spawn) {
+            /* Create currentcoin object */
+            CurrentCoin = {
+                x: CurrentSpike.x,
+                y: CurrentSpike.y,
+                fx: 0,
+                fy: 0,
+                w: Coin.w,
+                h: Coin.h,
+                img: Coin.img1,
+                disabled: false,
+                rotated: false,
+            };
+
+            /* Push currentspike into array */
+            Coin.array.push(CurrentCoin);
+
+            /* Change value of loop */
+            Coin.count1 -= 1;
+            Coin.length += 1;
+            Spike.spawn = true;
+            Spike.positioncurrentlenght = 0;
+        }
     }
     else if(Coin.count2 >= 1 && CurrentPlatform.level != 1) {
         /* Create currentspike object */
         CurrentSpike = {
-            x: CurrentPlatform.x + (432 * Coin.count2) + 96,
+            x: CurrentPlatform.x + (384 * Coin.count2),
             y: CurrentPlatform.y + Spike.h + 32,
             fx: 0,
             fy: 0,
@@ -354,22 +397,65 @@ window.spikesgenerator = function() {
             rotated: true,
         };
 
-        /* Push currentspike into array */
-        Spike.array.push(CurrentSpike);
+        /* Create loop checking spike position */
+        if(Spike.positionlenght >= Spike.positioncurrentlenght) {
+            /* Change loop value */
+            if(CurrentSpike.x != Spike.positionarray[Spike.positioncurrentlenght]) {
+                Spike.positioncurrentlenght += 1;
+            }
+            else if(CurrentSpike.x == Spike.positionarray[Spike.positioncurrentlenght]) {
+                Spike.spawn = false;
+            }
+        }
 
-        /* Change value of loop */
-        Spike.lenght += 1;
-        Coin.count2 -= 1;
+        /* Check if spike should spawn */
+        if(Spike.spawn) {
+            /* Push currentspike into array */
+            Spike.array.push(CurrentSpike);
+
+            /* Push currentspike x into array */
+            Spike.positionarray.push(CurrentSpike.x);
+
+            /* Change value of loop */
+            Spike.lenght += 1;
+            Coin.count2 -= 1;
+            Spike.spawn = true;
+            Spike.positionlenght += 1;
+            Spike.positioncurrentlenght = 0;
+        }
+        else if(!Spike.spawn) {
+            /* Create currentcoin object */
+            CurrentCoin = {
+                x: CurrentSpike.x,
+                y: CurrentSpike.y,
+                fx: 0,
+                fy: 0,
+                w: Coin.w,
+                h: Coin.h,
+                img: Coin.img4,
+                disabled: false,
+                rotated: true,
+            };
+
+            /* Push currentspike into array */
+            Coin.array.push(CurrentCoin);
+
+            /* Change value of loop */
+            Coin.count2 -= 1;
+            Coin.length += 1;
+            Spike.spawn = true;
+            Spike.positioncurrentlenght = 0;
+        }
     }
 }
 
 /* Window coins generator function */
 window.coinsgenerator = function() {
     /* Calculate coins */
-    Coin.calc = Math.floor(CurrentPlatform.w - 256);
+    Coin.calc = Math.floor(CurrentPlatform.w - 64);
 
     /* Set coins count */
-    Coin.count1 = Math.floor(Coin.calc / 432);
+    Coin.count1 = Math.floor(Coin.calc / 384);
     Coin.count2 = Coin.count1;
 
     /* Create coin rendering loop */
@@ -386,7 +472,7 @@ window.coinsgenerator = function() {
         if(Coin.chance == 0) {
             /* Create currentcoin object */
             CurrentCoin = {
-                x: CurrentPlatform.x + (432 * Coin.count1) + 96,
+                x: CurrentPlatform.x + (384 * Coin.count1),
                 y: CurrentPlatform.y - Coin.h - 32,
                 fx: 0,
                 fy: 0,
@@ -417,7 +503,7 @@ window.coinsgenerator = function() {
         if(Coin.chance == 0) {
             /* Create currentcoin object */
             CurrentCoin = {
-                x: CurrentPlatform.x + (432 * Coin.count2) + 96,
+                x: CurrentPlatform.x + (384 * Coin.count2),
                 y: CurrentPlatform.y + Coin.h + 32,
                 fx: 0,
                 fy: 0,
@@ -826,7 +912,7 @@ window.platformsgenerator = function() {
             if(!Platform.first) {
                 /* Create next platform */
                 CurrentPlatform = {
-                    x: ((Board.w / Platform.count) * Platform.loop) - 288,
+                    x: ((Board.w / Platform.count) * Platform.loop) - 220,
                     y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
@@ -843,7 +929,7 @@ window.platformsgenerator = function() {
             else if(Platform.first) {
                 /* Create next platform */
                 CurrentPlatform = {
-                    x: ((Board.w / Platform.count) * Platform.loop) - 288,
+                    x: ((Board.w / Platform.count) * Platform.loop) - 220,
                     y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
@@ -862,7 +948,7 @@ window.platformsgenerator = function() {
             if(!Platform.second) {
                 /* Create next platform */
                 CurrentPlatform = {
-                    x: ((Board.w / Platform.count) * Platform.loop) - 288,
+                    x: ((Board.w / Platform.count) * Platform.loop) - 220,
                     y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
@@ -879,7 +965,7 @@ window.platformsgenerator = function() {
             else if(Platform.second) {
                 /* Create next platform */
                 CurrentPlatform = {
-                    x: ((Board.w / Platform.count) * Platform.loop) - 288,
+                    x: ((Board.w / Platform.count) * Platform.loop) - 220,
                     y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
@@ -902,7 +988,7 @@ window.platformsgenerator = function() {
             if(!Platform.third) {
                 /* Create next platform */
                 CurrentPlatform = {
-                    x: ((Board.w / Platform.count) * Platform.loop) - 288,
+                    x: ((Board.w / Platform.count) * Platform.loop) - 220,
                     y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
@@ -919,7 +1005,7 @@ window.platformsgenerator = function() {
             else if(Platform.third) {
                 /* Create next platform */
                 CurrentPlatform = {
-                    x: ((Board.w / Platform.count) * Platform.loop) - 288,
+                    x: ((Board.w / Platform.count) * Platform.loop) - 220,
                     y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
@@ -942,7 +1028,7 @@ window.platformsgenerator = function() {
             if(!Platform.fourth) {
                 /* Create next platform */
                 CurrentPlatform = {
-                    x: ((Board.w / Platform.count) * Platform.loop) - 288,
+                    x: ((Board.w / Platform.count) * Platform.loop) - 220,
                     y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
@@ -959,7 +1045,7 @@ window.platformsgenerator = function() {
             else if(Platform.fourth) {
                 /* Create next platform */
                 CurrentPlatform = {
-                    x: ((Board.w / Platform.count) * Platform.loop) - 288,
+                    x: ((Board.w / Platform.count) * Platform.loop) - 220,
                     y: Board.h - 432 * Platform.currentload - 480,
                     fx: 0,
                     fy: 0,
@@ -981,7 +1067,7 @@ window.platformsgenerator = function() {
         if(Platform.currentcount == 4) {
             /* Create next platform */
             CurrentPlatform = {
-                x: ((Board.w / Platform.count) * Platform.loop) - 288,
+                x: ((Board.w / Platform.count) * Platform.loop) - 220,
                 y: Board.h - 432 * Platform.currentload - 480,
                 fx: 0,
                 fy: 0,
@@ -1025,5 +1111,8 @@ window.platformsgenerator = function() {
 
     /* Generate dispensers */
     window.dispensersgenerator();
+
+    /* Reset spikeposition array */
+    Spike.positionarray = [];
 }
 

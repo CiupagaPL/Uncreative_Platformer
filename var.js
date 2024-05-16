@@ -165,14 +165,14 @@ let UPText = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public Presentation Type A",
-    x: -192,
+    value: "Public Presentation Type B",
+    x: -272,
     y: Board.h - 12,
     fx: 4,
     fy: -24,
     w: 272,
     h: 24,
-    vx: 10.0,
+    vx: 13.8,
     used: true,
 };
 
@@ -773,7 +773,7 @@ let CollisionCheckBottom = {
 /* Create platform object */
 let Platform = {
     array: [],
-    w: 256,
+    w: 324,
     h: 48,
     x: 0,
     y: 0,
@@ -848,6 +848,7 @@ let Corner = {
 /* Create spike object */
 let Spike = {
     array: [],
+    positionarray: [],
     w: 64,
     h: 72,
     x: 0,
@@ -865,6 +866,9 @@ let Spike = {
     timer: 0,
     rotated: false,
     disabled: false,
+    positionlenght: -1,
+    positioncurrentlenght: 0,
+    spawn: false,
 };
 
 /* Create coin object */
@@ -889,6 +893,7 @@ let Coin = {
     calc: 0,
     count1: 0,
     count2: 0,
+    countgeneral: 0,
     chance: 0,
     rotated: false,
 };
