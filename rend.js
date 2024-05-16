@@ -30,7 +30,7 @@ window.updatedispensers = function() {
     /* Generate next dispenser */
     if(CurrentDispenser.y >= Board.h && !CurrentDispenser.disabled) {
         /* Calculate dispenser h */
-        CurrentDispenser.y = Wall.highestposition + 234 + (CurrentDispenser.h / 2);
+        CurrentDispenser.y = Wall.highestposition + 384;
 
         /* Disable dispenser */
         CurrentDispenser.disabled = true;
@@ -41,11 +41,43 @@ window.updatedispensers = function() {
     }
 }
 
-/* Window dispenser generator update function */
+/* Window dispenserspike generator update function */
+window.updatedispensersspikes = function() {
+    /* Disable currentdispenserspike object from rendering */
+    if(CurrentDispenserSpike.y >= Board.h) {
+        CurrentDispenserSpike.disabled = true;
+    }
+}
+
+/* Window dispensercoins generator update function */
+window.updatedispensercoins = function() {
+    /* Disable currentdispensercoin object from rendering */
+    if(CurrentDispenserCoin.y >= Board.h) {
+        CurrentDispenserCoin.disabled = true;
+    }
+}
+
+/* Window lasers generator update function */
 window.updatelasers = function() {
     /* Disable currentlaser object from rendering */
     if(CurrentLaser.y >= Board.h) {
         CurrentLaser.disabled = true;
+    }
+}
+
+/* Window laserspikes generator update function */
+window.updatelaserspikes = function() {
+    /* Disable currentlaser object from rendering */
+    if(CurrentLaserSpike.y >= Board.h) {
+        CurrentLaserSpike.disabled = true;
+    }
+}
+
+/* Window lasercoins generator update function */
+window.updatelasercoins = function() {
+    /* Disable currentlaser object from rendering */
+    if(CurrentLaserCoin.y >= Board.h) {
+        CurrentLaserCoin.disabled = true;
     }
 }
 
@@ -54,7 +86,7 @@ window.updatewalls = function() {
     /* Generate next wall */
     if(CurrentWall.y >= Board.h && !CurrentWall.disabled) {
         /* Calculate wall h */
-        CurrentWall.y = Wall.highestposition + 432;
+        CurrentWall.y = Wall.highestposition + 384;
 
         /* Disable wall */
         CurrentWall.disabled = true;
@@ -72,7 +104,7 @@ window.updateplatforms = function() {
         /* Generate next platform */
         if(CurrentPlatform.y >= Board.h && !CurrentPlatform.disabled) {
             /* Calculate platform h */
-            CurrentPlatform.y = Platform.highestposition + 48;
+            CurrentPlatform.y = Platform.highestposition;
 
             /* Calculate platform score */
             CurrentPlatform.level = Platform.lastlevel + 1;
@@ -144,6 +176,24 @@ window.resetlevel = function() {
     /* Reset coin array */
     Coin.array = [];
 
+    /* Reset dispenser array */
+    Dispenser.array = [];
+
+    /* Reset dispenserspike array */
+    DispenserSpike.array = [];
+
+    /* Reset dispensercoin array */
+    DispenserCoin.array = [];
+
+    /* Reset laser array */
+    Laser.array = [];
+
+    /* Reset laserspike array */
+    LaserSpike.array = [];
+
+    /* Reset lasercoin array */
+    LaserCoin.array = [];
+
     /* Reset platform values */
     Platform.lenght = -1;
     Platform.currentload = 0;
@@ -163,6 +213,30 @@ window.resetlevel = function() {
     /* Reset coin values */
     Coin.lenght = -1;
     Coin.currentload = 0;
+
+    /* Reset dispenser values */
+    Dispenser.lenght = -1;
+    Dispenser.currentload = 0;
+
+    /* Reset dispenserspike values */
+    DispenserSpike.lenght = -1;
+    DispenserSpike.currentload = 0;
+
+    /* Reset dispensercoin values */
+    DispenserCoin.lenght = -1;
+    DispenserCoin.currentload = 0;
+
+    /* Reset laser values */
+    Laser.lenght = -1;
+    Laser.currentload = 0;
+
+    /* Reset laserspike values */
+    LaserSpike.lenght = -1;
+    LaserSpike.currentload = 0;
+
+    /* Reset lasercoin values */
+    LaserCoin.lenght = -1;
+    LaserCoin.currentload = 0;
 }
 
 /* Generate main platform */
@@ -178,6 +252,7 @@ window.mainplatformgenerator = function() {
         img: Platform.img,
         disabled: false,
         main: true,
+        level: 0,
     };
 
     /* Push currentplatform into array */
@@ -243,70 +318,127 @@ window.cornersgenerator = function() {
 
 /* Window spikes generator function */
 window.spikesgenerator = function() {
-    /* Create currentspike object */
-    CurrentSpike = {
-        x: CurrentPlatform.x,
-        y: CurrentPlatform.y - Spike.h,
-        fx: 0,
-        fy: 0,
-        w: Spike.w,
-        h: Spike.h,
-        img: Spike.img1,
-        disabled: false,
-    };
+    /* Check coin count */
+    if(Coin.count1 >= 1) {
+        /* Create currentspike object */
+        CurrentSpike = {
+            x: CurrentPlatform.x + (432 * Coin.count1) + 96,
+            y: CurrentPlatform.y - Spike.h - 32,
+            fx: 0,
+            fy: 0,
+            w: Spike.w,
+            h: Spike.h,
+            img: Spike.img1,
+            disabled: false,
+            rotated: false,
+        };
 
-    /* Push currentspike into array */
-    Spike.array.push(CurrentSpike);
+        /* Push currentspike into array */
+        Spike.array.push(CurrentSpike);
 
-    /* Change value of loop */
-    Spike.lenght += 1;
+        /* Change value of loop */
+        Spike.lenght += 1;
+        Coin.count1 -= 1;
+    }
+    else if(Coin.count2 >= 1 && CurrentPlatform.level != 1) {
+        /* Create currentspike object */
+        CurrentSpike = {
+            x: CurrentPlatform.x + (432 * Coin.count2) + 96,
+            y: CurrentPlatform.y + Spike.h + 32,
+            fx: 0,
+            fy: 0,
+            w: Spike.w,
+            h: Spike.h,
+            img: Spike.img4,
+            disabled: false,
+            rotated: true,
+        };
+
+        /* Push currentspike into array */
+        Spike.array.push(CurrentSpike);
+
+        /* Change value of loop */
+        Spike.lenght += 1;
+        Coin.count2 -= 1;
+    }
 }
 
 /* Window coins generator function */
 window.coinsgenerator = function() {
-    /* Calculate coins count */
-    Coin.calc1 = (Math.floor(CurrentPlatform.w) / 376);
-    Coin.calc2 = Coin.calc1;
+    /* Calculate coins */
+    Coin.calc = Math.floor(CurrentPlatform.w - 256);
+
+    /* Set coins count */
+    Coin.count1 = Math.floor(Coin.calc / 432);
+    Coin.count2 = Coin.count1;
 
     /* Create coin rendering loop */
-    while(Coin.calc1 >= 0) {
-        /* Create currentcoin object */
-        CurrentCoin = {
-            x: CurrentPlatform.x + (376 * Coin.calc1),
-            y: CurrentPlatform.y - Coin.h - 32,
-            fx: 0,
-            fy: 0,
-            w: Coin.w,
-            h: Coin.h,
-            img: Coin.img1,
-            disabled: false,
-        };
+    while(Coin.count1 >= 0) {
+        /* Randomize coin chance */
+        if(NormalMode) {
+            Coin.chance = Math.floor(Math.random() * 3);
+        }
+        else if(!NormalMode) {
+            Coin.chance = Math.floor(Math.random() * 2);
+        }
 
-        /* Push currentcoin into array */
-        Coin.array.push(CurrentCoin);
+        /* Check coin chance */
+        if(Coin.chance == 0) {
+            /* Create currentcoin object */
+            CurrentCoin = {
+                x: CurrentPlatform.x + (432 * Coin.count1) + 96,
+                y: CurrentPlatform.y - Coin.h - 32,
+                fx: 0,
+                fy: 0,
+                w: Coin.w,
+                h: Coin.h,
+                img: Coin.img1,
+                disabled: false,
+                rotated: false,
+            };
 
-        /* Change loop value */
-        Coin.calc1 -= 1;
-        Coin.lenght += 1;
+            /* Push currentcoin into array */
+            Coin.array.push(CurrentCoin);
+
+            /* Change loop value */
+            Coin.count1 -= 1;
+            Coin.lenght += 1;
+        }
+        else if(Coin.chance == 1) {
+            /* Geenerate spike */
+            window.spikesgenerator();
+        }
     }
-    while(Coin.calc2 >= 0 && CurrentPlatform.level != 0) {
-        /* Create currentcoin object */
-        CurrentCoin = {
-            x: CurrentPlatform.x + (376 * Coin.calc2),
-            y: CurrentPlatform.y + Coin.h + 32,
-            fx: 0,
-            fy: 0,
-            w: Coin.w,
-            h: Coin.h,
-            img: Coin.img1,
-        };
+    while(Coin.count2 >= 0 && CurrentPlatform.level != 1) {
+        /* Randomize coin chance */
+        Coin.chance = Math.floor(Math.random() * 2);
 
-        /* Push currentcoin into array */
-        Coin.array.push(CurrentCoin);
+        /* Check coin chance */
+        if(Coin.chance == 0) {
+            /* Create currentcoin object */
+            CurrentCoin = {
+                x: CurrentPlatform.x + (432 * Coin.count2) + 96,
+                y: CurrentPlatform.y + Coin.h + 32,
+                fx: 0,
+                fy: 0,
+                w: Coin.w,
+                h: Coin.h,
+                img: Coin.img4,
+                disabled: false,
+                rotated: true,
+            };
 
-        /* Change loop value */
-        Coin.calc2 -= 1;
-        Coin.lenght += 1;
+            /* Push currentcoin into array */
+            Coin.array.push(CurrentCoin);
+
+            /* Change loop value */
+            Coin.count2 -= 1;
+            Coin.lenght += 1;
+        }
+        else if(Coin.chance == 1) {
+            /* Geenerate spike */
+            window.spikesgenerator();
+        }
     }
 }
 
@@ -332,6 +464,7 @@ window.dispensersgenerator = function() {
                 h: Dispenser.h,
                 img: Dispenser.imgleft1,
                 left: true,
+                disabled: false,
             };
 
             /* Push currentdispenser into array */
@@ -341,7 +474,7 @@ window.dispensersgenerator = function() {
             Dispenser.lenght += 1;
         }
         else if(Dispenser.side == 1) {
-            /* Create right dispenser object */
+            /* Create left dispenser object */
             CurrentDispenser = {
                 x: Board.w - Dispenser.w - Wall.w,
                 y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
@@ -351,6 +484,7 @@ window.dispensersgenerator = function() {
                 h: Dispenser.h,
                 img: Dispenser.imgright1,
                 left: false,
+                disabled: false,
             };
 
             /* Push currentdispenser into array */
@@ -359,12 +493,49 @@ window.dispensersgenerator = function() {
             /* Change loop value */
             Dispenser.lenght += 1;
         }
-
-        /* Check current dispenser y */
-        if(CurrentDispenser.y <= Dispenser.highestposition) {
-            Dispenser.highestposition = CurrentDispenser.y;
-        }
     }
+}
+
+/* Window dispenserspikes generator function */
+window.dispenserspikesgenerator = function() {
+    /* Create currentdispenserspike object */
+    CurrentDispenserSpike = {
+        x: CurrentDispenser.x + CurrentDispenser.w,
+        y: CurrentDispenser.h,
+        fx: 0,
+        fy: 0,
+        w: DispenserSpike.w,
+        h: DispenserSpike.h,
+        img: DispenserSpike.imgleft1,
+        disabled: false,
+    };
+
+    /* Push currentdispenserspike into array */
+    DispenserSpike.array.push(CurrentDispenserSpike);
+
+    /* Change loop value */
+    DispenserSpike.lenght += 1;
+}
+
+/* Window dispensercoins generator function */
+window.dispensercoinsgenerator = function() {
+    /* Create currentdispensercoin object */
+    CurrentDispenserCoin = {
+        x: CurrentDispenser.x + CurrentDispenser.w,
+        y: CurrentDispenser.h,
+        fx: 0,
+        fy: 0,
+        w: DispenserCoin.w,
+        h: DispenserCoin.h,
+        img: DispenserCoin.imgleft1,
+        disabled: false,
+    };
+
+    /* Push currentdispensercoin into array */
+    DispenserCoin.array.push(CurrentDispenserCoin);
+
+    /* Change loop value */
+    DispenserCoin.lenght += 1;
 }
 
 /* Window lasers generator function */
@@ -410,6 +581,48 @@ window.lasersgenerator = function() {
         /* Change loop value */
         Laser.lenght += 1;
     }
+}
+
+/* Window laserpsikes generator function */
+window.laserspikesgenerator = function() {
+    /* Create currentlaserspike object */
+    CurrentLaserSpike = {
+        x: CurrentLaser.x + CurrentLaser.w,
+        y: CurrentLaser.h,
+        fx: 0,
+        fy: 0,
+        w: LaserSpike.w,
+        h: LaserSpike.h,
+        img: LaserSpike.imgleft1,
+        disabled: false,
+    };
+
+    /* Push currentlaserspike into array */
+    LaserSpike.array.push(CurrentLaserSpike);
+
+    /* Change loop value */
+    LaserCoin.lenght += 1;
+}
+
+/* Window lasercoins generator function */
+window.lasercoinsgenerator = function() {
+    /* Create currentlasercoin object */
+    CurrentLaserCoin = {
+        x: CurrentLaser.x + CurrentLaser.w,
+        y: CurrentLaser.h,
+        fx: 0,
+        fy: 0,
+        w: LaserCoin.w,
+        h: LaserCoin.h,
+        img: LaserCoin.imgleft1,
+        disabled: false,
+    };
+
+    /* Push currentlasercoin into array */
+    LaserCoin.array.push(CurrentLaserCoin);
+
+    /* Change loop value */
+    LaserCoin.lenght += 1;
 }
 
 /* Window walls generator function */
@@ -524,7 +737,10 @@ window.platformsgenerator = function() {
     }
 
     /* Randomize platform count */
-    Platform.randomcount = Math.floor(Math.random() * (Platform.available));
+    Platform.randomcount = Math.floor(Math.random() * Platform.available);
+
+    /* Randomize platform chance */
+    Platform.change = Math.floor(Math.random() * 4);
 
     while(Platform.randomcount >= 0) {
         /* Randomize platform number */
@@ -539,7 +755,7 @@ window.platformsgenerator = function() {
         }
 
         /* Check if platform can be changed */
-        if(Platform.randomplatform == 0 && Platform.firsttimer != 1) {
+        if(Platform.randomplatform == 0 && Platform.firsttimer != 1 || Platform.randomplatform == 0 && Player.chance == 0) {
             /* Change platform statement */
             Platform.first = false;
         }
@@ -549,7 +765,7 @@ window.platformsgenerator = function() {
         }
 
         /* Check if platform can be changed */
-        if(Platform.randomplatform == 1 && Platform.secondtimer != 1) {
+        if(Platform.randomplatform == 1 && Platform.secondtimer != 1 || Platform.randomplatform == 1 && Player.chance == 0) {
             /* Change platform statement */
             Platform.second = false;
         }
@@ -559,7 +775,7 @@ window.platformsgenerator = function() {
         }
 
         /* Check if platform can be changed */
-        if(Platform.randomplatform == 2 && Platform.thirdtimer != 1) {
+        if(Platform.randomplatform == 2 && Platform.thirdtimer != 1 || Platform.randomplatform == 2 && Player.chance == 0) {
             /* Change platform statement */
             Platform.third = false;
         }
@@ -569,7 +785,7 @@ window.platformsgenerator = function() {
         }
 
         /* Check if platform can be changed */
-        if(Platform.randomplatform == 3 && Platform.fourthtimer != 1) {
+        if(Platform.randomplatform == 3 && Platform.fourthtimer != 1 || Platform.randomplatform == 3 && Player.chance == 0) {
             /* Change platform statement */
             Platform.fourth = false;
         }
@@ -617,7 +833,7 @@ window.platformsgenerator = function() {
                     w: (Board.w / Platform.count) - Platform.w,
                     h: Platform.h,
                     img: Platform.img,
-                    level: Platform.currentload,
+                    level: Platform.currentload + 1,
                     disabled: false,
                     main: false,
                     left: false,
@@ -634,7 +850,7 @@ window.platformsgenerator = function() {
                     w: (Board.w / Platform.count) + 16,
                     h: Platform.h,
                     img: Platform.img,
-                    level: Platform.currentload,
+                    level: Platform.currentload + 1,
                     disabled: false,
                     main: false,
                     left: false,
@@ -653,7 +869,7 @@ window.platformsgenerator = function() {
                     w: (Board.w / Platform.count) - Platform.w,
                     h: Platform.h,
                     img: Platform.img,
-                    level: Platform.currentload,
+                    level: Platform.currentload + 1,
                     disabled: false,
                     main: false,
                     left: true,
@@ -670,7 +886,7 @@ window.platformsgenerator = function() {
                     w: (Board.w / Platform.count) + 16,
                     h: Platform.h,
                     img: Platform.img,
-                    level: Platform.currentload,
+                    level: Platform.currentload + 1,
                     disabled: false,
                     main: false,
                     left: true,
@@ -693,7 +909,7 @@ window.platformsgenerator = function() {
                     w: (Board.w / Platform.count) - Platform.w,
                     h: Platform.h,
                     img: Platform.img,
-                    level: Platform.currentload,
+                    level: Platform.currentload + 1,
                     disabled: false,
                     main: false,
                     left: true,
@@ -710,7 +926,7 @@ window.platformsgenerator = function() {
                     w: (Board.w / Platform.count) + 16,
                     h: Platform.h,
                     img: Platform.img,
-                    level: Platform.currentload,
+                    level: Platform.currentload + 1,
                     disabled: false,
                     main: false,
                     left: true,
@@ -733,7 +949,7 @@ window.platformsgenerator = function() {
                     w: (Board.w / Platform.count) - Platform.w,
                     h: Platform.h,
                     img: Platform.img,
-                    level: Platform.currentload,
+                    level: Platform.currentload + 1,
                     disabled: false,
                     main: false,
                     left: true,
@@ -750,7 +966,7 @@ window.platformsgenerator = function() {
                     w: (Board.w / Platform.count) + 16,
                     h: Platform.h,
                     img: Platform.img,
-                    level: Platform.currentload,
+                    level: Platform.currentload + 1,
                     disabled: false,
                     main: false,
                     left: true,
@@ -772,7 +988,7 @@ window.platformsgenerator = function() {
                 w: (Board.w / Platform.count) - Platform.w,
                 h: Platform.h,
                 img: Platform.img,
-                level: Platform.currentload,
+                level: Platform.currentload + 1,
                 disabled: false,
                 main: false,
                 left: true,

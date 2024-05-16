@@ -20,12 +20,13 @@ let CurrentLaser, CurrentLaserSpike, CurrentLaserCoin;
 
 /* Create mouse object */
 let Mouse = {
-    w: 12,
-    h: 12,
-    x: 0,
-    y: 0,
+    w: 32,
+    h: 32,
+    x: Event.clientX,
+    y: Event.clientY,
     fx: 0,
     fy: 0,
+    img: new Image(),
 };
 
 /* Create board object */
@@ -164,12 +165,12 @@ let UPText = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public PrePreBuild 7",
+    value: "Public Presentation Type A",
     x: -192,
     y: Board.h - 12,
     fx: 4,
     fy: -24,
-    w: 208,
+    w: 272,
     h: 24,
     vx: 10.0,
     used: true,
@@ -703,6 +704,10 @@ let Player = {
     rotated: false,
     fallen: false,
     fallentimer: 0,
+    warning: true,
+    level: 0,
+    slowfalling: false,
+    slowtimer: 0,
 };
 
 /* Create groundchecktop object */
@@ -800,6 +805,7 @@ let Platform = {
     secondtimer: 0,
     thirdtimer: 0,
     fourthtimer: 0,
+    chance: 0,
     firstchanged: false,
     secondchanged: false,
     thirdchanged: false,
@@ -856,6 +862,8 @@ let Spike = {
     img6: new Image(),
     lenght: -1,
     currentlenght: 0,
+    timer: 0,
+    rotated: false,
     disabled: false,
 };
 
@@ -875,10 +883,14 @@ let Coin = {
     img5: new Image(),
     img6: new Image(),
     disabled: false,
+    timer: 0,
     lenght: -1,
     currentlenght: 0,
-    calc1: 0,
-    calc2: 0,
+    calc: 0,
+    count1: 0,
+    count2: 0,
+    chance: 0,
+    rotated: false,
 };
 
 /* Create dispenser object */
@@ -901,7 +913,6 @@ let Dispenser = {
     timer: 0,
     chance: 0,
     side: 0,
-    highestposition: 0,
 };
 
 /* Create dispenserspike object */
@@ -995,6 +1006,9 @@ let LaserCoin = {
 };
 
 /* Textures */
+
+/* Set source of mouse image */
+Mouse.img.src = "Sprites/Mouse.png";
 
 /* Set source of title image */
 Title.img.src = "Sprites/Title.png";

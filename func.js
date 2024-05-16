@@ -8,6 +8,9 @@ window.onload = function() {
     Board.base.height = Board.h;
     Context = Board.base.getContext("2d");
 
+    /* Disable cursor */
+    document.documentElement.style.cursor = "none";
+
     /* Turn on warning mode if resolution is too low */
     if(Board.w < 1280 || Board.h < 800) {
         Scene = 0;
@@ -438,11 +441,36 @@ window.onupdate = function() {
 
             /* Update score and change background color */
             if(Player.y <= CurrentPlatform.y) {
-                if(CurrentPlatform.level + 1 > Score) {
+                /* Update player */
+                if(Player.level < CurrentPlatform.level) {
+                    Player.slowfalling = true;
+                    Player.level += 1;
+                }
+
+                /* Change score */
+                if(CurrentPlatform.level > Score) {
                     window.randomizecolor();
                     Score += 1;
                 }
             }
+
+            // /* Check if player is slowfalling */
+            // if(Player.slowfalling) {
+            //     /* Start timer */
+            //     Player.slowtimer += 1;
+
+            //     if(Player.slowtimer >= 10) {
+            //         /* Change player falling speed */
+            //         Player.rotated = false;
+            //         Player.vy += 5;
+            //         Player.side = Math.floor(Math.random() * 2) + 1;
+            //     }
+            //     if(Player.slowtimer > 60) {
+            //         /* Change loop value */
+            //         Player.slowfalling = false;
+            //         Player.slowtimer = 0;
+            //     }
+            // }
 
             /* Update best score */
             if(Score > BestScore) {
@@ -460,10 +488,20 @@ window.onupdate = function() {
                     Player.touched = true;
                 }
                 else if(Player.rotated) {
-                     /* Change y velocity of Player object */
-                    Player.vy = GlobalMovement;
+                    /* Fix player from bugging */
+                    if(Player.y < CurrentPlatform.y + CurrentPlatform.h + GlobalMovement) {
+                        Player.y = CurrentPlatform.y + CurrentPlatform.h + GlobalMovement;
+                        Player.vy = 0;
+                        Player.warning = true;
+                    }
+
+                    /* Change y velocity of Player object */
+                    if(!Player.warning) {
+                        Player.vy = GlobalMovement;
+                    }
 
                     /* Fix some update problems */
+                    Player.level = CurrentPlatform.level;
                     Player.touched = true;
                 }
             }
@@ -472,22 +510,18 @@ window.onupdate = function() {
             if(window.detectcollision(CurrentPlatform, GroundCheckBottom) && !Player.touched) {
                 /* Check if player is rotated */
                 if(!Player.rotated) {
-                    /* Change y velocity of player object */
+                    /* Change y velocity of Player object */
                     Player.vy = GlobalMovement;
 
                     /* Fix some update problems */
                     Player.touched = true;
-
-                    /* Change score value */
-                    if(CurrentPlatform.level + 1 > Score) {
-                        Score += 1;
-                    }
                 }
                 else if(Player.rotated) {
                     /* Change y velocity of player object */
                     Player.vy = GlobalMovement - 8;
 
                     /* Fix some update problems */
+                    Player.level = CurrentPlatform.level;
                     Player.touched = true;
                 }
             }
@@ -516,6 +550,7 @@ window.onupdate = function() {
                             /* Make player object ungrounded */
                             Player.grounded = false;
                             Player.checked = false;
+                            Player.warning = false;
 
                             /* Change loop value */
                             Player.checktimer = 0;
@@ -536,6 +571,7 @@ window.onupdate = function() {
                             /* Make player object ungrounded */
                             Player.grounded = false;
                             Player.checked = false;
+                            Player.warning = false;
 
                             /* Change loop value */
                             Player.checktimer = 0;
@@ -609,12 +645,21 @@ window.onupdate = function() {
             Corner.currentlenght += 1;
         }
 
+        /* Start spike timer */
+        if(PauseTransition == 0 && !Player.dead && SceneStart) {
+            Spike.timer += 1;
+        }
+        /* Reset timer */
+        if(Spike.timer >= 50) {
+            Spike.timer = 0;
+        }
+
         /* Generate spikes */
         while(Spike.lenght >= Spike.currentlenght) {
             /* Draw current array spike object */
             CurrentSpike = Spike.array[Spike.currentlenght];
             if(!CurrentSpike.disabled) {
-                Context.drawImage(CurrentSpike.img, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
+                window.animatespike();
             }
 
             /* Update spikes */
@@ -643,12 +688,21 @@ window.onupdate = function() {
             Spike.currentlenght += 1;
         }
 
+        /* Start coin timer */
+        if(PauseTransition == 0 && !Player.dead && SceneStart) {
+            Coin.timer += 1;
+        }
+        /* Reset timer */
+        if(Coin.timer >= 50) {
+            Coin.timer = 0;
+        }
+
         /* Generate coins */
         while(Coin.lenght >= Coin.currentlenght) {
             /* Draw current array coin object */
             CurrentCoin = Coin.array[Coin.currentlenght];
             if(!CurrentCoin.disabled) {
-                Context.drawImage(CurrentCoin.img, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
+                window.animatecoin();
             }
 
             /* Update coins */
@@ -679,14 +733,20 @@ window.onupdate = function() {
         }
 
         /* Start dispenser timer */
-        Dispenser.timer += 1;
+        if(PauseTransition == 0 && !Player.dead && SceneStart) {
+            Dispenser.timer += 1;
+        }
+        /* Reset timer */
+        if(Dispenser.timer >= 360) {
+            Dispenser.timer = 0;
+        }
 
         /* Generate dispensers */
         while(Dispenser.lenght >= Dispenser.currentlenght) {
             /* Draw current array dispenser object */
             CurrentDispenser = Dispenser.array[Dispenser.currentlenght];
             if(!CurrentDispenser.disabled) {
-                Context.drawImage(CurrentDispenser.img, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+                window.animatedispenser();
             }
 
             /* Update dispensers */
@@ -932,6 +992,9 @@ window.onupdate = function() {
             window.animatehud();
         }
     }
+
+    /* Draw mouse object */
+    Context.drawImage(Mouse.img, Mouse.x, Mouse.y, Mouse.w, Mouse.h);
 }
 
 /* Window collision function */
