@@ -2073,38 +2073,32 @@ window.animatespike = function() {
     /* Check if object is rotated */
     if(!CurrentSpike.rotated) {
         /* Check object timer */
-        if(Spike.timer < 10) {
+        if(Spike.timer < 20) {
             Context.drawImage(Spike.img1, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
-        }
-        if(Spike.timer >= 10 && Spike.timer < 20) {
-            Context.drawImage(Spike.img2, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
         }
         if(Spike.timer >= 20 && Spike.timer < 30) {
-            Context.drawImage(Spike.img3, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
-        }
-        if(Spike.timer >= 30 && Spike.timer < 40) {
             Context.drawImage(Spike.img2, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
         }
-        if(Spike.timer >= 40 && Spike.timer < 50) {
-            Context.drawImage(Spike.img1, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
+        if(Spike.timer >= 30 && Spike.timer < 50) {
+            Context.drawImage(Spike.img3, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
+        }
+        if(Spike.timer >= 50 && Spike.timer < 60) {
+            Context.drawImage(Spike.img2, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
         }
     }
     else if(CurrentSpike.rotated) {
         /* Check object timer */
-        if(Spike.timer < 10) {
+        if(Spike.timer < 20) {
             Context.drawImage(Spike.img4, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
-        }
-        if(Spike.timer >= 10 && Spike.timer < 20) {
-            Context.drawImage(Spike.img5, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
         }
         if(Spike.timer >= 20 && Spike.timer < 30) {
-            Context.drawImage(Spike.img6, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
-        }
-        if(Spike.timer >= 30 && Spike.timer < 40) {
             Context.drawImage(Spike.img5, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
         }
-        if(Spike.timer >= 40 && Spike.timer < 50) {
-            Context.drawImage(Spike.img4, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
+        if(Spike.timer >= 30 && Spike.timer < 50) {
+            Context.drawImage(Spike.img6, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
+        }
+        if(Spike.timer >= 50 && Spike.timer < 60) {
+            Context.drawImage(Spike.img5, CurrentSpike.x, CurrentSpike.y, CurrentSpike.w, CurrentSpike.h);
         }
     }
 }
@@ -2114,38 +2108,32 @@ window.animatecoin = function() {
     /* Check if object is rotated */
     if(!CurrentCoin.rotated) {
         /* Check object timer */
-        if(Coin.timer < 10) {
+        if(Coin.timer < 20) {
             Context.drawImage(Coin.img1, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
-        }
-        if(Coin.timer >= 10 && Coin.timer < 20) {
-            Context.drawImage(Coin.img2, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
         }
         if(Coin.timer >= 20 && Coin.timer < 30) {
-            Context.drawImage(Coin.img3, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
-        }
-        if(Coin.timer >= 30 && Coin.timer < 40) {
             Context.drawImage(Coin.img2, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
         }
-        if(Coin.timer >= 40 && Coin.timer < 50) {
-            Context.drawImage(Coin.img1, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
+        if(Coin.timer >= 30 && Coin.timer < 50) {
+            Context.drawImage(Coin.img3, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
+        }
+        if(Coin.timer >= 50 && Coin.timer < 60) {
+            Context.drawImage(Coin.img2, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
         }
     }
     else if(CurrentCoin.rotated) {
         /* Check object timer */
-        if(Coin.timer < 10) {
+        if(Coin.timer < 20) {
             Context.drawImage(Coin.img4, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
-        }
-        if(Coin.timer >= 10 && Coin.timer < 20) {
-            Context.drawImage(Coin.img5, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
         }
         if(Coin.timer >= 20 && Coin.timer < 30) {
-            Context.drawImage(Coin.img6, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
-        }
-        if(Coin.timer >= 30 && Coin.timer < 40) {
             Context.drawImage(Coin.img5, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
         }
-        if(Coin.timer >= 40 && Coin.timer < 50) {
-            Context.drawImage(Coin.img4, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
+        if(Coin.timer >= 30 && Coin.timer < 50) {
+            Context.drawImage(Coin.img6, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
+        }
+        if(Coin.timer >= 50 && Coin.timer < 60) {
+            Context.drawImage(Coin.img5, CurrentCoin.x, CurrentCoin.y, CurrentCoin.w, CurrentCoin.h);
         }
     }
 }
@@ -2169,6 +2157,72 @@ window.animatedispenser = function() {
         }
         else if(Dispenser.timer >= 320) {
             Context.drawImage(Dispenser.imgright2, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+        }
+    }
+}
+
+/* Window dispenserspike animating function */
+window.animatedispenserspike = function() {
+    /* Check currentdispenserspike side */
+    if(CurrentDispenserSpike.left) {
+        if(DispenserSpike.timer < 20) {
+            Context.drawImage(DispenserSpike.imgleft1, CurrentDispenserSpike.x, CurrentDispenserSpike.y, CurrentDispenserSpike.w, CurrentDispenserSpike.h);
+        }
+        if(DispenserSpike.timer >= 20 && DispenserSpike.timer < 30) {
+            Context.drawImage(DispenserSpike.imgleft2, CurrentDispenserSpike.x, CurrentDispenserSpike.y, CurrentDispenserSpike.w, CurrentDispenserSpike.h);
+        }
+        if(DispenserSpike.timer >= 30 && DispenserSpike.timer < 50) {
+            Context.drawImage(DispenserSpike.imgleft1, CurrentDispenserSpike.x, CurrentDispenserSpike.y, CurrentDispenserSpike.w, CurrentDispenserSpike.h);
+        }
+        if(DispenserSpike.timer >= 50 && DispenserSpike.timer < 60) {
+            Context.drawImage(DispenserSpike.imgleft3, CurrentDispenserSpike.x, CurrentDispenserSpike.y, CurrentDispenserSpike.w, CurrentDispenserSpike.h);
+        }
+    }
+    else if(!CurrentDispenserSpike.left) {
+        if(DispenserSpike.timer < 20) {
+            Context.drawImage(DispenserSpike.imgright1, CurrentDispenserSpike.x, CurrentDispenserSpike.y, CurrentDispenserSpike.w, CurrentDispenserSpike.h);
+        }
+        if(DispenserSpike.timer >= 20 && DispenserSpike.timer < 30) {
+            Context.drawImage(DispenserSpike.imgright2, CurrentDispenserSpike.x, CurrentDispenserSpike.y, CurrentDispenserSpike.w, CurrentDispenserSpike.h);
+        }
+        if(DispenserSpike.timer >= 30 && DispenserSpike.timer < 50) {
+            Context.drawImage(DispenserSpike.imgright1, CurrentDispenserSpike.x, CurrentDispenserSpike.y, CurrentDispenserSpike.w, CurrentDispenserSpike.h);
+        }
+        if(DispenserSpike.timer >= 50 && DispenserSpike.timer < 60) {
+            Context.drawImage(DispenserSpike.imgright3, CurrentDispenserSpike.x, CurrentDispenserSpike.y, CurrentDispenserSpike.w, CurrentDispenserSpike.h);
+        }
+    }
+}
+
+/* Window dispensercoin animating function */
+window.animatedispensercoin = function() {
+    /* Check currentdispensercoin side */
+    if(CurrentDispenserCoin.left) {
+        if(DispenserCoin.timer < 20) {
+            Context.drawImage(DispenserCoin.imgleft1, CurrentDispenserCoin.x, CurrentDispenserCoin.y, CurrentDispenserCoin.w, CurrentDispenserCoin.h);
+        }
+        if(DispenserCoin.timer >= 20 && DispenserCoin.timer < 30) {
+            Context.drawImage(DispenserCoin.imgleft2, CurrentDispenserCoin.x, CurrentDispenserCoin.y, CurrentDispenserCoin.w, CurrentDispenserCoin.h);
+        }
+        if(DispenserCoin.timer >= 30 && DispenserCoin.timer < 50) {
+            Context.drawImage(DispenserCoin.imgleft1, CurrentDispenserCoin.x, CurrentDispenserCoin.y, CurrentDispenserCoin.w, CurrentDispenserCoin.h);
+        }
+        if(DispenserCoin.timer >= 50 && DispenserCoin.timer < 60) {
+            Context.drawImage(DispenserCoin.imgleft3, CurrentDispenserCoin.x, CurrentDispenserCoin.y, CurrentDispenserCoin.w, CurrentDispenserCoin.h);
+        }
+    }
+    else if(!CurrentDispenserCoin.left) {
+        if(DispenserCoin.timer < 20) {
+            Context.drawImage(DispenserCoin.imgright1, CurrentDispenserCoin.x, CurrentDispenserCoin.y, CurrentDispenserCoin.w, CurrentDispenserCoin.h);
+        }
+        if(DispenserCoin.timer >= 20 && DispenserCoin.timer < 30) {
+            Context.drawImage(DispenserCoin.imgright2, CurrentDispenserCoin.x, CurrentDispenserCoin.y, CurrentDispenserCoin.w, CurrentDispenserCoin.h);
+        }
+        if(DispenserCoin.timer >= 30 && DispenserCoin.timer < 50) {
+            Context.drawImage(DispenserCoin.imgright1, CurrentDispenserCoin.x, CurrentDispenserCoin.y, CurrentDispenserCoin.w, CurrentDispenserCoin.h);
+        }
+        if(DispenserCoin.timer >= 50 && DispenserCoin.timer < 60) {
+            Context.drawImage(DispenserCoin.imgright3, CurrentDispenserCoin.x, CurrentDispenserCoin.y, CurrentDispenserCoin.w, CurrentDispenserCoin.h);
         }
     }
 }

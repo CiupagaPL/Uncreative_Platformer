@@ -165,7 +165,7 @@ let UPText = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public Presentation Type B",
+    value: "Public Presentation Type C",
     x: -272,
     y: Board.h - 12,
     fx: 4,
@@ -916,7 +916,6 @@ let Dispenser = {
     currentlenght: 0,
     left: false,
     timer: 0,
-    chance: 0,
     side: 0,
 };
 
@@ -938,6 +937,9 @@ let DispenserSpike = {
     disabled: false,
     lenght: -1,
     currentlenght: 0,
+    timer: 0,
+    left: false,
+    disabled: false,
 };
 
 /* Create dispensercoin */
@@ -958,6 +960,9 @@ let DispenserCoin = {
     disabled: false,
     lenght: -1,
     currentlenght: 0,
+    timer: 0,
+    left: false,
+    disabled: false,
 };
 
 /* Create laser object */

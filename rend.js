@@ -42,9 +42,9 @@ window.updatedispensers = function() {
 }
 
 /* Window dispenserspike generator update function */
-window.updatedispensersspikes = function() {
+window.updatedispenserspikes = function() {
     /* Disable currentdispenserspike object from rendering */
-    if(CurrentDispenserSpike.y >= Board.h) {
+    if(CurrentDispenserSpike.x >= Board.w || CurrentDispenserSpike.x + CurrentDispenserSpike.w <= 0) {
         CurrentDispenserSpike.disabled = true;
     }
 }
@@ -52,7 +52,7 @@ window.updatedispensersspikes = function() {
 /* Window dispensercoins generator update function */
 window.updatedispensercoins = function() {
     /* Disable currentdispensercoin object from rendering */
-    if(CurrentDispenserCoin.y >= Board.h) {
+    if(CurrentDispenserCoin.x >= Board.w || CurrentDispenserCoin.x + CurrentDispenserCoin.w <= 0) {
         CurrentDispenserCoin.disabled = true;
     }
 }
@@ -387,7 +387,7 @@ window.spikesgenerator = function() {
         /* Create currentspike object */
         CurrentSpike = {
             x: CurrentPlatform.x + (384 * Coin.count2),
-            y: CurrentPlatform.y + Spike.h + 32,
+            y: CurrentPlatform.y + Spike.h + 40,
             fx: 0,
             fy: 0,
             w: Spike.w,
@@ -504,7 +504,7 @@ window.coinsgenerator = function() {
             /* Create currentcoin object */
             CurrentCoin = {
                 x: CurrentPlatform.x + (384 * Coin.count2),
-                y: CurrentPlatform.y + Coin.h + 32,
+                y: CurrentPlatform.y + Coin.h + 40,
                 fx: 0,
                 fy: 0,
                 w: Coin.w,
@@ -530,98 +530,140 @@ window.coinsgenerator = function() {
 
 /* Window dispensers generating function */
 window.dispensersgenerator = function() {
-    /* Randomize dispencer change */
-    Dispenser.change = Math.floor(Math.random() * 4);
+    /* Randomize dispenser site */
+    Dispenser.side = Math.floor(Math.random() * 2);
 
-    /* Check chance rate */
-    if(Dispenser.change == 1 || Dispenser.change == 2 || Dispenser.change == 3 || !NormalMode) {
-        /* Randomize dispenser site */
-        Dispenser.side = Math.floor(Math.random() * 2);
+    /* Check side */
+    if(Dispenser.side == 0) {
+        /* Create left dispenser object */
+        CurrentDispenser = {
+            x: Wall.w,
+            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            fx: 0,
+            fy: 0,
+            w: Dispenser.w,
+            h: Dispenser.h,
+            img: Dispenser.imgleft1,
+            left: true,
+            disabled: false,
+        };
 
-        /* Check side */
-        if(Dispenser.side == 0) {
-            /* Create left dispenser object */
-            CurrentDispenser = {
-                x: Wall.w,
-                y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
-                fx: 0,
-                fy: 0,
-                w: Dispenser.w,
-                h: Dispenser.h,
-                img: Dispenser.imgleft1,
-                left: true,
-                disabled: false,
-            };
+        /* Push currentdispenser into array */
+        Dispenser.array.push(CurrentDispenser);
 
-            /* Push currentdispenser into array */
-            Dispenser.array.push(CurrentDispenser);
+        /* Change loop value */
+        Dispenser.lenght += 1;
+    }
+    else if(Dispenser.side == 1) {
+        /* Create left dispenser object */
+        CurrentDispenser = {
+            x: Board.w - Dispenser.w - Wall.w,
+            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            fx: 0,
+            fy: 0,
+            w: Dispenser.w,
+            h: Dispenser.h,
+            img: Dispenser.imgright1,
+            left: false,
+            disabled: false,
+        };
 
-            /* Change loop value */
-            Dispenser.lenght += 1;
-        }
-        else if(Dispenser.side == 1) {
-            /* Create left dispenser object */
-            CurrentDispenser = {
-                x: Board.w - Dispenser.w - Wall.w,
-                y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
-                fx: 0,
-                fy: 0,
-                w: Dispenser.w,
-                h: Dispenser.h,
-                img: Dispenser.imgright1,
-                left: false,
-                disabled: false,
-            };
+        /* Push currentdispenser into array */
+        Dispenser.array.push(CurrentDispenser);
 
-            /* Push currentdispenser into array */
-            Dispenser.array.push(CurrentDispenser);
-
-            /* Change loop value */
-            Dispenser.lenght += 1;
-        }
+        /* Change loop value */
+        Dispenser.lenght += 1;
     }
 }
 
 /* Window dispenserspikes generator function */
 window.dispenserspikesgenerator = function() {
-    /* Create currentdispenserspike object */
-    CurrentDispenserSpike = {
-        x: CurrentDispenser.x + CurrentDispenser.w,
-        y: CurrentDispenser.h,
-        fx: 0,
-        fy: 0,
-        w: DispenserSpike.w,
-        h: DispenserSpike.h,
-        img: DispenserSpike.imgleft1,
-        disabled: false,
-    };
+    /* Check if currentdispenser is left */
+    if(CurrentDispenser.left) {
+        /* Create currentdispenserspike object */
+        CurrentDispenserSpike = {
+            x: Wall.w + DispenserSpike.w,
+            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            fx: 0,
+            fy: 0,
+            w: DispenserSpike.w,
+            h: DispenserSpike.h,
+            img: DispenserSpike.imgleft1,
+            left: true,
+            disabled: false,
+        };
 
-    /* Push currentdispenserspike into array */
-    DispenserSpike.array.push(CurrentDispenserSpike);
+        /* Push currentdispenserspike into array */
+        DispenserSpike.array.push(CurrentDispenserSpike);
 
-    /* Change loop value */
-    DispenserSpike.lenght += 1;
+        /* Change loop value */
+        DispenserSpike.lenght += 1;
+    }
+    else if(!CurrentDispenser.left) {
+        /* Create currentdispenserspike object */
+        CurrentDispenserSpike = {
+            x: Board.w - DispenserSpike.w - Wall.w,
+            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            fx: 0,
+            fy: 0,
+            w: DispenserSpike.w,
+            h: DispenserSpike.h,
+            img: DispenserSpike.imgleft4,
+            left: false,
+            disabled: false,
+        };
+
+        /* Push currentdispenserspike into array */
+        DispenserSpike.array.push(CurrentDispenserSpike);
+
+        /* Change loop value */
+        DispenserSpike.lenght += 1;
+    }
 }
 
 /* Window dispensercoins generator function */
 window.dispensercoinsgenerator = function() {
-    /* Create currentdispensercoin object */
-    CurrentDispenserCoin = {
-        x: CurrentDispenser.x + CurrentDispenser.w,
-        y: CurrentDispenser.h,
-        fx: 0,
-        fy: 0,
-        w: DispenserCoin.w,
-        h: DispenserCoin.h,
-        img: DispenserCoin.imgleft1,
-        disabled: false,
-    };
+    /* Check if currentdispenser is left */
+    if(CurrentDispenser.left) {
+        /* Create currentdispensercoin object */
+        CurrentDispenserCoin = {
+            x: Wall.w + DispenserCoin.w,
+            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            fx: 0,
+            fy: 0,
+            w: DispenserCoin.w,
+            h: DispenserCoin.h,
+            img: DispenserCoin.imgleft1,
+            left: true,
+            disabled: false,
+        };
 
-    /* Push currentdispensercoin into array */
-    DispenserCoin.array.push(CurrentDispenserCoin);
+        /* Push currentdispensercoin into array */
+        DispenserCoin.array.push(CurrentDispenserCoin);
 
-    /* Change loop value */
-    DispenserCoin.lenght += 1;
+        /* Change loop value */
+        DispenserCoin.lenght += 1;
+    }
+    else if(!CurrentDispenser.left) {
+        /* Create currentdispensercoin object */
+        CurrentDispenserCoin = {
+            x: Board.w - DispenserCoin.w - Wall.w,
+            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            fx: 0,
+            fy: 0,
+            w: DispenserCoin.w,
+            h: DispenserCoin.h,
+            img: DispenserCoin.imgleft4,
+            left: false,
+            disabled: false,
+        };
+
+        /* Push currentdispensercoin into array */
+        DispenserCoin.array.push(CurrentDispenserCoin);
+
+        /* Change loop value */
+        DispenserCoin.lenght += 1;
+    }
 }
 
 /* Window lasers generator function */
@@ -1111,6 +1153,9 @@ window.platformsgenerator = function() {
 
     /* Generate dispensers */
     window.dispensersgenerator();
+
+    /* Generate dispenserspikes */
+    window.dispenserspikesgenerator();
 
     /* Reset spikeposition array */
     Spike.positionarray = [];
