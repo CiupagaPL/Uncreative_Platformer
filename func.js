@@ -1013,7 +1013,7 @@ window.onupdate = function() {
         if(Dispenser.timer >= 310) {
             Dispenser.timer = 0;
         }
-        if(Dispenser.timer == 270 && !Player.dead && PauseTransition == 0) {
+        if(Dispenser.timer == 270 && !Player.dead && PauseTransition == 0 && Sfx) {
             /* Play dispenser sound */
             TimeSfx.dispenser.load();
             TimeSfx.dispenser.play();
@@ -1045,7 +1045,7 @@ window.onupdate = function() {
         if(Laser.timer >= 210) {
             Laser.timer = 0;
         }
-        if(Laser.timer == 120 && !Player.dead && PauseTransition == 0) {
+        if(Laser.timer == 120 && !Player.dead && PauseTransition == 0 && Sfx) {
             /* Play laser sound */
             TimeSfx.laser.load();
             TimeSfx.laser.play();

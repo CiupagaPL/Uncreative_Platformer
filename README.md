@@ -9,7 +9,7 @@ Currently, the game mechanics are being tested, and more ideas are being added.
 **The project should be completed by mid-May**.
 
 ## Project Status
-> Newest Version: **Public Build 7**;
+> Newest Version: **Public FixBuild 7**;
 > Last Updated: **18-05-2024**;
 
 ## License
