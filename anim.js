@@ -77,10 +77,15 @@ window.animatetransition = function() {
             Player.y = Board.h - 128 - 48;
             Player.side = 0;
             Player.timer = 0;
-            Player.isdead = false;
+            Player.dead = false;
             Player.rotated = false;
             Player.vy = 0;
             Score = 0;
+            TerCoins = 0;
+            Dispenser.timer = 100;
+            DispenserSpike.timer = 0;
+            DispenserCoin.timer = 0;
+            Laser.timer = 0;
             TimeMusic.timer = 0;
             Background.randomcolor = "rgb(255, 255, 100)";
             TimeMusic.game.load();
@@ -1006,6 +1011,7 @@ window.animatehud = function() {
             InformationText2.x += InformationText2.vx;
             InformationText3.x += InformationText3.vx;
             InformationText4.x += InformationText4.vx;
+            InformationText5.x += InformationText5.vx;
             VersionText.x += VersionText.vx;
             AuthorText.x += AuthorText.vx;
             ReturnText.x += ReturnText.vx;
@@ -1035,6 +1041,7 @@ window.animatehud = function() {
             InformationText2.x -= InformationText2.vx;
             InformationText3.x -= InformationText3.vx;
             InformationText4.x -= InformationText4.vx;
+            InformationText5.x -= InformationText5.vx;
             VersionText.x -= VersionText.vx;
             AuthorText.x -= AuthorText.vx;
             ReturnText.x -= ReturnText.vx;
@@ -1132,6 +1139,7 @@ window.animatehud = function() {
             InformationText2.x -= InformationText2.vx;
             InformationText3.x -= InformationText3.vx;
             InformationText4.x -= InformationText4.vx;
+            InformationText5.x -= InformationText5.vx;
             VersionText.x -= VersionText.vx;
             AuthorText.x -= AuthorText.vx;
             ReturnText.x -= ReturnText.vx;
@@ -1150,7 +1158,7 @@ window.animatehud = function() {
 /* Window player animating function */
 window.animateplayer = function() {
     /* Animate player */
-    if(!Player.isdead && PauseTransition == 0) {
+    if(!Player.dead && PauseTransition == 0) {
         /* Afk player object animation */
         if(Player.side == 0 && Player.grounded && !Player.rotated) {
             if(Player.timer < 180) {
@@ -1762,7 +1770,7 @@ window.animateplayer = function() {
         }
     }
     /* Animate dead player */
-    else if(Player.isdead) {
+    else if(Player.dead) {
         /* Check if player is rotated */
         if(!Player.rotated) {
             if(Player.timer < 180) {
@@ -2143,19 +2151,19 @@ window.animatedispenser = function() {
     /* Check if object is left */
     if(CurrentDispenser.left) {
         /* Check object timer */
-        if(Dispenser.timer < 320) {
+        if(Dispenser.timer < 240) {
             Context.drawImage(Dispenser.imgleft1, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
         }
-        else if(Dispenser.timer >= 320) {
+        else if(Dispenser.timer >= 240) {
             Context.drawImage(Dispenser.imgleft2, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
         }
     }
     else if(!CurrentDispenser.left) {
         /* Check object timer */
-        if(Dispenser.timer < 320) {
+        if(Dispenser.timer < 240) {
             Context.drawImage(Dispenser.imgright1, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
         }
-        else if(Dispenser.timer >= 320) {
+        else if(Dispenser.timer >= 240) {
             Context.drawImage(Dispenser.imgright2, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
         }
     }
@@ -2224,6 +2232,89 @@ window.animatedispensercoin = function() {
         if(DispenserCoin.timer >= 50 && DispenserCoin.timer < 60) {
             Context.drawImage(DispenserCoin.imgright3, CurrentDispenserCoin.x, CurrentDispenserCoin.y, CurrentDispenserCoin.w, CurrentDispenserCoin.h);
         }
+    }
+}
+
+/* Widnow laser animating function */
+window.animatelaser = function() {
+    /* Check currentlaser side */
+    if(CurrentLaser.left) {
+        if(Laser.timer < 100) {
+            Context.drawImage(Laser.imgleft1, CurrentLaser.x, CurrentLaser.y, CurrentLaser.w, CurrentLaser.h);
+        }
+        else if(Laser.timer >= 100) {
+            Context.drawImage(Laser.imgleft2, CurrentLaser.x, CurrentLaser.y, CurrentLaser.w, CurrentLaser.h);
+        }
+    }
+    else if(!CurrentLaser.left) {
+        if(Laser.timer < 100) {
+            Context.drawImage(Laser.imgright1, CurrentLaser.x, CurrentLaser.y, CurrentLaser.w, CurrentLaser.h);
+        }
+        else if(Laser.timer >= 100) {
+            Context.drawImage(Laser.imgright2, CurrentLaser.x, CurrentLaser.y, CurrentLaser.w, CurrentLaser.h);
+        }
+    }
+}
+
+/* Window laserspike animating function */
+window.animatelaserspike = function() {
+    if(Laser.timer < 120) {
+        Context.drawImage(LaserSpike.img5, CurrentLaserSpike.x, CurrentLaserSpike.y, CurrentLaserSpike.w, CurrentLaserSpike.h);
+    }
+    if(Laser.timer >= 120 && Laser.timer < 125) {
+        Context.drawImage(LaserSpike.img4, CurrentLaserSpike.x, CurrentLaserSpike.y, CurrentLaserSpike.w, CurrentLaserSpike.h);
+    }
+    if(Laser.timer >= 125 && Laser.timer < 130) {
+        Context.drawImage(LaserSpike.img3, CurrentLaserSpike.x, CurrentLaserSpike.y, CurrentLaserSpike.w, CurrentLaserSpike.h);
+    }
+    if(Laser.timer >= 130 && Laser.timer < 135) {
+        Context.drawImage(LaserSpike.img2, CurrentLaserSpike.x, CurrentLaserSpike.y, CurrentLaserSpike.w, CurrentLaserSpike.h);
+    }
+    if(Laser.timer >= 135 && Laser.timer < 170) {
+        Context.drawImage(LaserSpike.img1, CurrentLaserSpike.x, CurrentLaserSpike.y, CurrentLaserSpike.w, CurrentLaserSpike.h);
+    }
+    if(Laser.timer >= 170 && Laser.timer < 175) {
+        Context.drawImage(LaserSpike.img2, CurrentLaserSpike.x, CurrentLaserSpike.y, CurrentLaserSpike.w, CurrentLaserSpike.h);
+    }
+    if(Laser.timer >= 175 && Laser.timer < 180) {
+        Context.drawImage(LaserSpike.img3, CurrentLaserSpike.x, CurrentLaserSpike.y, CurrentLaserSpike.w, CurrentLaserSpike.h);
+    }
+    if(Laser.timer >= 180 && Laser.timer < 185) {
+        Context.drawImage(LaserSpike.img4, CurrentLaserSpike.x, CurrentLaserSpike.y, CurrentLaserSpike.w, CurrentLaserSpike.h);
+    }
+    if(Laser.timer >= 185 && Laser.timer < 190) {
+        Context.drawImage(LaserSpike.img5, CurrentLaserSpike.x, CurrentLaserSpike.y, CurrentLaserSpike.w, CurrentLaserSpike.h);
+    }
+}
+
+/* Window lasercoin animating function */
+window.animatelasercoin = function() {
+    if(Laser.timer < 120) {
+        Context.drawImage(LaserCoin.img5, CurrentLaserCoin.x, CurrentLaserCoin.y, CurrentLaserCoin.w, CurrentLaserCoin.h);
+    }
+    if(Laser.timer >= 120 && Laser.timer < 125) {
+        Context.drawImage(LaserCoin.img4, CurrentLaserCoin.x, CurrentLaserCoin.y, CurrentLaserCoin.w, CurrentLaserCoin.h);
+    }
+    if(Laser.timer >= 125 && Laser.timer < 130) {
+        Context.drawImage(LaserCoin.img3, CurrentLaserCoin.x, CurrentLaserCoin.y, CurrentLaserCoin.w, CurrentLaserCoin.h);
+    }
+    if(Laser.timer >= 130 && Laser.timer < 135) {
+        Context.drawImage(LaserCoin.img2, CurrentLaserCoin.x, CurrentLaserCoin.y, CurrentLaserCoin.w, CurrentLaserCoin.h);
+    }
+    if(Laser.timer >= 135 && Laser.timer < 170) {
+        Context.drawImage(LaserCoin.img1, CurrentLaserCoin.x, CurrentLaserCoin.y, CurrentLaserCoin.w, CurrentLaserCoin.h);
+    }
+    if(Laser.timer >= 170 && Laser.timer < 175) {
+        Context.drawImage(LaserCoin.img2, CurrentLaserCoin.x, CurrentLaserCoin.y, CurrentLaserCoin.w, CurrentLaserCoin.h);
+    }
+    if(Laser.timer >= 175 && Laser.timer < 180) {
+        Context.drawImage(LaserCoin.img3, CurrentLaserCoin.x, CurrentLaserCoin.y, CurrentLaserCoin.w, CurrentLaserCoin.h);
+    }
+    if(Laser.timer >= 180 && Laser.timer < 185) {
+        Context.drawImage(LaserCoin.img4, CurrentLaserCoin.x, CurrentLaserCoin.y, CurrentLaserCoin.w, CurrentLaserCoin.h);
+    }
+    if(Laser.timer >= 185 && Laser.timer < 190) {
+        Context.drawImage(LaserCoin.img5, CurrentLaserCoin.x, CurrentLaserCoin.y, CurrentLaserCoin.w, CurrentLaserCoin.h);
     }
 }
 

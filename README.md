@@ -9,8 +9,8 @@ Currently, the game mechanics are being tested, and more ideas are being added.
 **The project should be completed by mid-May**.
 
 ## Project Status
-> Newest Version: **Public Presentation Type C**;
-> Last Updated: **16-05-2024**;
+> Newest Version: **Public Build 7**;
+> Last Updated: **18-05-2024**;
 
 ## License
 **Project licence is based on GPL 3.0**. It uses some 3rd part assets that I'll list bellow.

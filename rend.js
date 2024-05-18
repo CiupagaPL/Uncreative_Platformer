@@ -30,7 +30,7 @@ window.updatedispensers = function() {
     /* Generate next dispenser */
     if(CurrentDispenser.y >= Board.h && !CurrentDispenser.disabled) {
         /* Calculate dispenser h */
-        CurrentDispenser.y = Wall.highestposition + 384;
+        CurrentDispenser.y = Wall.highestposition + 364;
 
         /* Disable dispenser */
         CurrentDispenser.disabled = true;
@@ -45,7 +45,19 @@ window.updatedispensers = function() {
 window.updatedispenserspikes = function() {
     /* Disable currentdispenserspike object from rendering */
     if(CurrentDispenserSpike.x >= Board.w || CurrentDispenserSpike.x + CurrentDispenserSpike.w <= 0) {
+        CurrentDispenserSpike.used = true;
+    }
+    /* Generate next dispenserspike */
+    if(CurrentDispenserSpike.y >= Board.h && !CurrentDispenserSpike.disabled) {
+        /* Calculate dispenserspike h */
+        CurrentDispenserSpike.y = Wall.highestposition + 364;
+
+        /* Disable dispenserspike */
         CurrentDispenserSpike.disabled = true;
+    }
+    else if(CurrentWall.y < Board.h) {
+        /* Enable dispenserspike */
+        CurrentDispenserSpike.disabled = false;
     }
 }
 
@@ -53,31 +65,67 @@ window.updatedispenserspikes = function() {
 window.updatedispensercoins = function() {
     /* Disable currentdispensercoin object from rendering */
     if(CurrentDispenserCoin.x >= Board.w || CurrentDispenserCoin.x + CurrentDispenserCoin.w <= 0) {
+        CurrentDispenserCoin.used = true;
+    }
+    /* Generate next dispensercoin */
+    if(CurrentDispenserCoin.y >= Board.h && !CurrentDispenserCoin.disabled) {
+        /* Calculate dispensercoin h */
+        CurrentDispenserCoin.y = Wall.highestposition + 364;
+
+        /* Disable dispensercoin */
         CurrentDispenserCoin.disabled = true;
+    }
+    else if(CurrentWall.y < Board.h) {
+        /* Enable dispensercoin */
+        CurrentDispenserCoin.disabled = false;
     }
 }
 
 /* Window lasers generator update function */
 window.updatelasers = function() {
-    /* Disable currentlaser object from rendering */
-    if(CurrentLaser.y >= Board.h) {
+    /* Generate next laser */
+    if(CurrentLaser.y >= Board.h && !CurrentLaser.disabled) {
+        /* Calculate laser h */
+        CurrentLaser.y = Platform.highestposition;
+
+        /* Disable laser */
         CurrentLaser.disabled = true;
+    }
+    else if(CurrentLaser.y < Board.h) {
+        /* Enable laser */
+        CurrentLaser.disabled = false;
     }
 }
 
 /* Window laserspikes generator update function */
 window.updatelaserspikes = function() {
-    /* Disable currentlaser object from rendering */
-    if(CurrentLaserSpike.y >= Board.h) {
+    /* Generate next laserspike */
+    if(CurrentLaserSpike.y >= Board.h && !CurrentLaserSpike.disabled) {
+        /* Calculate laserspike h */
+        CurrentLaserSpike.y = Platform.highestposition;
+
+        /* Disable laser */
         CurrentLaserSpike.disabled = true;
+    }
+    else if(CurrentLaserSpike.y < Board.h) {
+        /* Enable laserspike */
+        CurrentLaserSpike.disabled = false;
     }
 }
 
 /* Window lasercoins generator update function */
 window.updatelasercoins = function() {
-    /* Disable currentlaser object from rendering */
-    if(CurrentLaserCoin.y >= Board.h) {
-        CurrentLaserCoin.disabled = true;
+    /* Generate next lasercoin */
+    if(CurrentLaserCoin.y >= Board.h && !CurrentLaserCoin.disabled) {
+        /* Calculate lasercoin h */
+        CurrentLaserCoin.y = Platform.highestposition;
+
+        /* Disable laser */
+        CurrentLaser.disabled = true;
+    }
+    else if(CurrentLaserCoin.y < Board.h) {
+        /* Enable lasercoin */
+        CurrentLaserCoin.disabled = false;
     }
 }
 
@@ -86,7 +134,7 @@ window.updatewalls = function() {
     /* Generate next wall */
     if(CurrentWall.y >= Board.h && !CurrentWall.disabled) {
         /* Calculate wall h */
-        CurrentWall.y = Wall.highestposition + 384;
+        CurrentWall.y = Wall.highestposition + 364;
 
         /* Disable wall */
         CurrentWall.disabled = true;
@@ -287,8 +335,17 @@ window.cornersgenerator = function() {
         /* Change lenght */
         Corner.lenght += 1;
 
-        /* Generate lasers */
-        // window.lasersgenerator();
+        /* Limit spawn */
+        if(CurrentPlatform.level <= 25) {
+            /* Generate lasers */
+            window.lasersgenerator();
+
+            /* Generate laserspikes */
+            window.laserspikesgenerator();
+
+            /* Generate lasercoins */
+            window.lasercoinsgenerator();
+        }
     }
 
     /* Create right corner object */
@@ -311,8 +368,11 @@ window.cornersgenerator = function() {
         /* Change lenght */
         Corner.lenght += 1;
 
-        /* Generate lasers */
-        // window.lasersgenerator();
+        /* Limit spawn */
+        if(CurrentPlatform.level <= 25) {
+            /* Generate lasers */
+            window.lasersgenerator();
+        }
     }
 }
 
@@ -333,61 +393,18 @@ window.spikesgenerator = function() {
             rotated: false,
         };
 
-        /* Create loop checking spike position */
-        if(Spike.positionlenght >= Spike.positioncurrentlenght) {
-            /* Change loop value */
-            if(CurrentSpike.x != Spike.positionarray[Spike.positioncurrentlenght]) {
-                Spike.positioncurrentlenght += 1;
-            }
-            else if(CurrentSpike.x == Spike.positionarray[Spike.positioncurrentlenght]) {
-                Spike.spawn = false;
-            }
-        }
+        /* Push currentspike into array */
+        Spike.array.push(CurrentSpike);
 
-        /* Check if spike should spawn */
-        if(Spike.spawn) {
-            /* Push currentspike into array */
-            Spike.array.push(CurrentSpike);
-
-            /* Push currentspike x into array */
-            Spike.positionarray.push(CurrentSpike.x);
-
-            /* Change value of loop */
-            Spike.lenght += 1;
-            Coin.count1 -= 1;
-            Spike.spawn = true;
-            Spike.positionlenght += 1;
-            Spike.positioncurrentlenght = 0;
-        }
-        else if(!Spike.spawn) {
-            /* Create currentcoin object */
-            CurrentCoin = {
-                x: CurrentSpike.x,
-                y: CurrentSpike.y,
-                fx: 0,
-                fy: 0,
-                w: Coin.w,
-                h: Coin.h,
-                img: Coin.img1,
-                disabled: false,
-                rotated: false,
-            };
-
-            /* Push currentspike into array */
-            Coin.array.push(CurrentCoin);
-
-            /* Change value of loop */
-            Coin.count1 -= 1;
-            Coin.length += 1;
-            Spike.spawn = true;
-            Spike.positioncurrentlenght = 0;
-        }
+        /* Change value of loop */
+        Spike.lenght += 1;
+        Coin.count1 -= 1;
     }
     else if(Coin.count2 >= 1 && CurrentPlatform.level != 1) {
         /* Create currentspike object */
         CurrentSpike = {
             x: CurrentPlatform.x + (384 * Coin.count2),
-            y: CurrentPlatform.y + Spike.h + 40,
+            y: CurrentPlatform.y + Spike.h + 8,
             fx: 0,
             fy: 0,
             w: Spike.w,
@@ -397,55 +414,12 @@ window.spikesgenerator = function() {
             rotated: true,
         };
 
-        /* Create loop checking spike position */
-        if(Spike.positionlenght >= Spike.positioncurrentlenght) {
-            /* Change loop value */
-            if(CurrentSpike.x != Spike.positionarray[Spike.positioncurrentlenght]) {
-                Spike.positioncurrentlenght += 1;
-            }
-            else if(CurrentSpike.x == Spike.positionarray[Spike.positioncurrentlenght]) {
-                Spike.spawn = false;
-            }
-        }
+        /* Push currentspike into array */
+        Spike.array.push(CurrentSpike);
 
-        /* Check if spike should spawn */
-        if(Spike.spawn) {
-            /* Push currentspike into array */
-            Spike.array.push(CurrentSpike);
-
-            /* Push currentspike x into array */
-            Spike.positionarray.push(CurrentSpike.x);
-
-            /* Change value of loop */
-            Spike.lenght += 1;
-            Coin.count2 -= 1;
-            Spike.spawn = true;
-            Spike.positionlenght += 1;
-            Spike.positioncurrentlenght = 0;
-        }
-        else if(!Spike.spawn) {
-            /* Create currentcoin object */
-            CurrentCoin = {
-                x: CurrentSpike.x,
-                y: CurrentSpike.y,
-                fx: 0,
-                fy: 0,
-                w: Coin.w,
-                h: Coin.h,
-                img: Coin.img4,
-                disabled: false,
-                rotated: true,
-            };
-
-            /* Push currentspike into array */
-            Coin.array.push(CurrentCoin);
-
-            /* Change value of loop */
-            Coin.count2 -= 1;
-            Coin.length += 1;
-            Spike.spawn = true;
-            Spike.positioncurrentlenght = 0;
-        }
+        /* Change value of loop */
+        Spike.lenght += 1;
+        Coin.count2 -= 1;
     }
 }
 
@@ -504,7 +478,7 @@ window.coinsgenerator = function() {
             /* Create currentcoin object */
             CurrentCoin = {
                 x: CurrentPlatform.x + (384 * Coin.count2),
-                y: CurrentPlatform.y + Coin.h + 40,
+                y: CurrentPlatform.y + Coin.h + 8,
                 fx: 0,
                 fy: 0,
                 w: Coin.w,
@@ -538,7 +512,7 @@ window.dispensersgenerator = function() {
         /* Create left dispenser object */
         CurrentDispenser = {
             x: Wall.w,
-            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            y: CurrentPlatform.y - 182 - (Dispenser.h / 2),
             fx: 0,
             fy: 0,
             w: Dispenser.w,
@@ -558,7 +532,7 @@ window.dispensersgenerator = function() {
         /* Create left dispenser object */
         CurrentDispenser = {
             x: Board.w - Dispenser.w - Wall.w,
-            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            y: CurrentPlatform.y - 182 - (Dispenser.h / 2),
             fx: 0,
             fy: 0,
             w: Dispenser.w,
@@ -582,15 +556,17 @@ window.dispenserspikesgenerator = function() {
     if(CurrentDispenser.left) {
         /* Create currentdispenserspike object */
         CurrentDispenserSpike = {
-            x: Wall.w + DispenserSpike.w,
-            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            x: 0,
+            y: CurrentPlatform.y - 182 - (Dispenser.h / 2),
             fx: 0,
             fy: 0,
             w: DispenserSpike.w,
             h: DispenserSpike.h,
             img: DispenserSpike.imgleft1,
             left: true,
+            used: true,
             disabled: false,
+            chance: 0,
         };
 
         /* Push currentdispenserspike into array */
@@ -602,15 +578,17 @@ window.dispenserspikesgenerator = function() {
     else if(!CurrentDispenser.left) {
         /* Create currentdispenserspike object */
         CurrentDispenserSpike = {
-            x: Board.w - DispenserSpike.w - Wall.w,
-            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            x: Board.w - DispenserSpike.w,
+            y: CurrentPlatform.y - 182 - (Dispenser.h / 2),
             fx: 0,
             fy: 0,
             w: DispenserSpike.w,
             h: DispenserSpike.h,
             img: DispenserSpike.imgleft4,
             left: false,
+            used: true,
             disabled: false,
+            chance: 0,
         };
 
         /* Push currentdispenserspike into array */
@@ -628,13 +606,14 @@ window.dispensercoinsgenerator = function() {
         /* Create currentdispensercoin object */
         CurrentDispenserCoin = {
             x: Wall.w + DispenserCoin.w,
-            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            y: CurrentPlatform.y - 182 - (Dispenser.h / 2),
             fx: 0,
             fy: 0,
             w: DispenserCoin.w,
             h: DispenserCoin.h,
             img: DispenserCoin.imgleft1,
             left: true,
+            used: true,
             disabled: false,
         };
 
@@ -648,13 +627,14 @@ window.dispensercoinsgenerator = function() {
         /* Create currentdispensercoin object */
         CurrentDispenserCoin = {
             x: Board.w - DispenserCoin.w - Wall.w,
-            y: CurrentPlatform.y - 192 - (Dispenser.h / 2),
+            y: CurrentPlatform.y - 182 - (Dispenser.h / 2),
             fx: 0,
             fy: 0,
             w: DispenserCoin.w,
             h: DispenserCoin.h,
             img: DispenserCoin.imgleft4,
             left: false,
+            used: true,
             disabled: false,
         };
 
@@ -670,26 +650,6 @@ window.dispensercoinsgenerator = function() {
 window.lasersgenerator = function() {
     /* Check if corner exists */
     if(CurrentCorner.left) {
-        /* Create currentlaser object */
-        CurrentLaser = {
-            x: CurrentCorner.x + CurrentCorner.w,
-            y: CurrentPlatform.y,
-            fx: 0,
-            fy: 0,
-            w: Laser.w,
-            h: Laser.h,
-            img: Laser.imgleft1,
-            disabled: false,
-            left: true,
-        };
-
-        /* Push currentlaser into array */
-        Laser.array.push(CurrentLaser);
-
-        /* Change loop value */
-        Laser.lenght += 1;
-    }
-    if(CurrentCorner.right) {
         /* Create currentlaser object */
         CurrentLaser = {
             x: CurrentCorner.x - Laser.w,
@@ -709,40 +669,63 @@ window.lasersgenerator = function() {
         /* Change loop value */
         Laser.lenght += 1;
     }
+    else if(!CurrentCorner.left) {
+        /* Create currentlaser object */
+        CurrentLaser = {
+            x: CurrentCorner.x + CurrentCorner.w,
+            y: CurrentPlatform.y,
+            fx: 0,
+            fy: 0,
+            w: Laser.w,
+            h: Laser.h,
+            img: Laser.imgleft1,
+            disabled: false,
+            left: true,
+        };
+
+        /* Push currentlaser into array */
+        Laser.array.push(CurrentLaser);
+
+        /* Change loop value */
+        Laser.lenght += 1;
+    }
 }
 
 /* Window laserpsikes generator function */
 window.laserspikesgenerator = function() {
     /* Create currentlaserspike object */
     CurrentLaserSpike = {
-        x: CurrentLaser.x + CurrentLaser.w,
-        y: CurrentLaser.h,
+        x: CurrentLaser.x - Platform.w + 44,
+        y: CurrentLaser.y + 12,
         fx: 0,
         fy: 0,
         w: LaserSpike.w,
         h: LaserSpike.h,
-        img: LaserSpike.imgleft1,
+        img: LaserSpike.img1,
+        used: true,
         disabled: false,
+        chance: 0,
     };
 
     /* Push currentlaserspike into array */
     LaserSpike.array.push(CurrentLaserSpike);
 
     /* Change loop value */
-    LaserCoin.lenght += 1;
+    LaserSpike.lenght += 1;
 }
 
 /* Window lasercoins generator function */
 window.lasercoinsgenerator = function() {
     /* Create currentlasercoin object */
     CurrentLaserCoin = {
-        x: CurrentLaser.x + CurrentLaser.w,
-        y: CurrentLaser.h,
+        x: CurrentLaser.x - Platform.w + 44,
+        y: CurrentLaser.y + 12,
         fx: 0,
         fy: 0,
         w: LaserCoin.w,
         h: LaserCoin.h,
-        img: LaserCoin.imgleft1,
+        img: LaserCoin.img1,
+        used: true,
         disabled: false,
     };
 
@@ -758,7 +741,7 @@ window.wallsgenerator = function() {
     /* Create left wall object */
     CurrentWall = {
         x: 0,
-        y: CurrentPlatform.y - 384,
+        y: CurrentPlatform.y - 364,
         fx: 0,
         fy: 0,
         w: Wall.w,
@@ -780,7 +763,7 @@ window.wallsgenerator = function() {
     /* Create right wall object */
     CurrentWall = {
         x: Board.w - Wall.w,
-        y: CurrentPlatform.y - 384,
+        y: CurrentPlatform.y - 364,
         fx: 0,
         fy: 0,
         w: Wall.w,
@@ -955,7 +938,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 220,
-                    y: Board.h - 432 * Platform.currentload - 480,
+                    y: Board.h - 412 * Platform.currentload - 460,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) - Platform.w,
@@ -972,7 +955,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 220,
-                    y: Board.h - 432 * Platform.currentload - 480,
+                    y: Board.h - 412 * Platform.currentload - 460,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) + 16,
@@ -991,7 +974,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 220,
-                    y: Board.h - 432 * Platform.currentload - 480,
+                    y: Board.h - 412 * Platform.currentload - 460,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) - Platform.w,
@@ -1008,7 +991,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 220,
-                    y: Board.h - 432 * Platform.currentload - 480,
+                    y: Board.h - 412 * Platform.currentload - 460,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) + 16,
@@ -1031,7 +1014,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 220,
-                    y: Board.h - 432 * Platform.currentload - 480,
+                    y: Board.h - 412 * Platform.currentload - 460,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) - Platform.w,
@@ -1048,7 +1031,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 220,
-                    y: Board.h - 432 * Platform.currentload - 480,
+                    y: Board.h - 412 * Platform.currentload - 460,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) + 16,
@@ -1071,7 +1054,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 220,
-                    y: Board.h - 432 * Platform.currentload - 480,
+                    y: Board.h - 412 * Platform.currentload - 460,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) - Platform.w,
@@ -1088,7 +1071,7 @@ window.platformsgenerator = function() {
                 /* Create next platform */
                 CurrentPlatform = {
                     x: ((Board.w / Platform.count) * Platform.loop) - 220,
-                    y: Board.h - 432 * Platform.currentload - 480,
+                    y: Board.h - 412 * Platform.currentload - 460,
                     fx: 0,
                     fy: 0,
                     w: (Board.w / Platform.count) + 16,
@@ -1110,7 +1093,7 @@ window.platformsgenerator = function() {
             /* Create next platform */
             CurrentPlatform = {
                 x: ((Board.w / Platform.count) * Platform.loop) - 220,
-                y: Board.h - 432 * Platform.currentload - 480,
+                y: Board.h - 412 * Platform.currentload - 460,
                 fx: 0,
                 fy: 0,
                 w: (Board.w / Platform.count) - Platform.w,
@@ -1157,7 +1140,7 @@ window.platformsgenerator = function() {
     /* Generate dispenserspikes */
     window.dispenserspikesgenerator();
 
-    /* Reset spikeposition array */
-    Spike.positionarray = [];
+    /* Generate dispensercoins */
+    window.dispensercoinsgenerator();
 }
 

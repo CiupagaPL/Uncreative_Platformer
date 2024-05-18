@@ -1,15 +1,11 @@
 /* Uncreative Platformer made by CiupagaPL
  * GPL 3.0 (C) 2024 CiupagaPL */
 
-/* Variables */
-
 /* Create global variables */
 let Scene = 1, SceneStart = false, SceneChange = false, SceneRestart = false;
 let Sfx = true, Music = false, NormalMode = false, Generated = false;
 let AboutTransition = 0, SettingsTransition = 0, KeybindsTransition = 0, StatisticsTransition = 0, PauseTransition = 0;
-let FPS = 120, Score = 0, BestScore = 0, Coins = 0, Deaths = 0, GlobalMovement = 0;
-
-/* Objects */
+let FPS = 120, Score = 0, BestScore = 0, Coins = 0, TerCoins = 0, BestCoins = 0, Deaths = 0, GlobalMovement = 0;
 
 /* Create global objects */
 let Context;
@@ -49,6 +45,8 @@ let TimeSfx = {
     hit: new Audio("Sounds/Hit.wav"),
     rotate: new Audio("Sounds/Rotate.wav"),
     select: new Audio("Sounds/Select.wav"),
+    dispenser: new Audio("Sounds/Dispenser.wav"),
+    laser: new Audio("Sounds/Laser.wav"),
 };
 
 /* Create warning object */
@@ -165,12 +163,12 @@ let UPText = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public Presentation Type C",
+    value: "Public Build 7",
     x: -272,
     y: Board.h - 12,
     fx: 4,
     fy: -24,
-    w: 272,
+    w: 128,
     h: 24,
     vx: 13.8,
     used: true,
@@ -466,6 +464,18 @@ let InformationText4 = {
     fy: 0,
 };
 
+/* Create informationtext5 object */
+let InformationText5 = {
+    color: "white",
+    font: "48px Orange_Kid",
+    value: "Best Coins: ",
+    x: -750,
+    y: DescriptionText5.y,
+    vx: DescriptionText1.vx,
+    fx: 0,
+    fy: 0,
+};
+
 /* Create returntext object */
 let ReturnText = {
     color: "white",
@@ -697,7 +707,7 @@ let Player = {
     side: 0,
     touched: false,
     grounded: false,
-    isdead: false,
+    dead: false,
     timer: 0,
     checked: false,
     checktimer: false,
@@ -816,7 +826,7 @@ let Platform = {
 let Wall = {
     array: [],
     w: 48,
-    h: 384,
+    h: 364,
     x: 0,
     y: 0,
     fx: 0,
@@ -866,9 +876,6 @@ let Spike = {
     timer: 0,
     rotated: false,
     disabled: false,
-    positionlenght: -1,
-    positioncurrentlenght: 0,
-    spawn: false,
 };
 
 /* Create coin object */
@@ -915,7 +922,7 @@ let Dispenser = {
     lenght: -1,
     currentlenght: 0,
     left: false,
-    timer: 0,
+    timer: 100,
     side: 0,
 };
 
@@ -939,7 +946,9 @@ let DispenserSpike = {
     currentlenght: 0,
     timer: 0,
     left: false,
+    used: true,
     disabled: false,
+    chance: 0,
 };
 
 /* Create dispensercoin */
@@ -962,6 +971,7 @@ let DispenserCoin = {
     currentlenght: 0,
     timer: 0,
     left: false,
+    used: true,
     disabled: false,
 };
 
@@ -988,34 +998,43 @@ let Laser = {
 /* Create laserspike object */
 let LaserSpike = {
     array: [],
-    w: 256,
-    h: 42,
+    w: 284,
+    h: 24,
     x: 0,
     y: 0,
     fx: 0,
     fy: 0,
-    img: new Image(),
+    img1: new Image(),
+    img2: new Image(),
+    img3: new Image(),
+    img4: new Image(),
+    img5: new Image(),
+    used: true,
     disabled: false,
     lenght: -1,
     currentlenght: 0,
+    chance: 0,
 };
 
 /* Create lasercoin object */
 let LaserCoin = {
     array: [],
-    w: 256,
-    h: 42,
+    w: 284,
+    h: 24,
     x: 0,
     y: 0,
     fx: 0,
     fy: 0,
-    img: new Image(),
+    img1: new Image(),
+    img2: new Image(),
+    img3: new Image(),
+    img4: new Image(),
+    img5: new Image(),
+    used: true,
     disabled: false,
     lenght: -1,
     currentlenght: 0,
 };
-
-/* Textures */
 
 /* Set source of mouse image */
 Mouse.img.src = "Sprites/Mouse.png";
@@ -1202,8 +1221,16 @@ Laser.imgright1.src = "Sprites/Laser/Right/1.png";
 Laser.imgright2.src = "Sprites/Laser/Right/2.png";
 
 /* Set source of laserspike image */
-LaserSpike.img.src = "Sprites/Laser/Spike.png";
+LaserSpike.img1.src = "Sprites/Laser/Spike/1.png";
+LaserSpike.img2.src = "Sprites/Laser/Spike/2.png";
+LaserSpike.img3.src = "Sprites/Laser/Spike/3.png";
+LaserSpike.img4.src = "Sprites/Laser/Spike/4.png";
+LaserSpike.img5.src = "Sprites/Laser/Spike/5.png";
 
 /* Set source of lasercoin image */
-LaserCoin.img.src = "Sprites/Laser/Coin.png";
+LaserCoin.img1.src = "Sprites/Laser/Coin/1.png";
+LaserCoin.img2.src = "Sprites/Laser/Coin/2.png";
+LaserCoin.img3.src = "Sprites/Laser/Coin/3.png";
+LaserCoin.img4.src = "Sprites/Laser/Coin/4.png";
+LaserCoin.img5.src = "Sprites/Laser/Coin/5.png";
 

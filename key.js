@@ -61,7 +61,7 @@ document.addEventListener("keyup", function(Event) {
         switch(Event.key) {
             /* Pause and unpause game */
             case "Escape":
-                if(PauseTransition == 0 && MenuTransparent.type == 0 && SceneStart && !Player.isdead) {
+                if(PauseTransition == 0 && MenuTransparent.type == 0 && SceneStart && !Player.dead) {
                     PauseTransition = 1;
 
                     /* Play select sfx */
@@ -70,7 +70,7 @@ document.addEventListener("keyup", function(Event) {
                         TimeSfx.select.play();
                     }
                 }
-                if(PauseTransition == 2 && MenuTransparent.type == 0 && SceneStart && !Player.isdead) {
+                if(PauseTransition == 2 && MenuTransparent.type == 0 && SceneStart && !Player.dead) {
                     PauseTransition = 3;
 
                     /* Play select sfx */
@@ -84,7 +84,7 @@ document.addEventListener("keyup", function(Event) {
 
             /* Rotate player object */
             case " ":
-                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                if(Player.grounded && !Player.dead && PauseTransition == 0 && SceneStart) {
                     /* Rotate player */
                     if(!Player.rotated) {
                         Player.rotated = true;
@@ -106,7 +106,7 @@ document.addEventListener("keyup", function(Event) {
 
             /* Rotate player object and stop it from moving */
             case "w":
-                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                if(Player.grounded && !Player.dead && PauseTransition == 0 && SceneStart) {
                     /* Rotate player */
                     if(!Player.rotated) {
                         Player.rotated = true;
@@ -125,7 +125,7 @@ document.addEventListener("keyup", function(Event) {
 
                 break;
             case "ArrowUp":
-                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                if(Player.grounded && !Player.dead && PauseTransition == 0 && SceneStart) {
                     /* Rotate player */
                     if(!Player.rotated) {
                         Player.rotated = true;
@@ -144,7 +144,7 @@ document.addEventListener("keyup", function(Event) {
 
                 break;
             case "s":
-                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                if(Player.grounded && !Player.dead && PauseTransition == 0 && SceneStart) {
                     /* Rotate player */
                     if(Player.rotated) {
                         Player.rotated = false;
@@ -163,7 +163,7 @@ document.addEventListener("keyup", function(Event) {
 
                 break;
             case "ArrowDown":
-                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart) {
+                if(Player.grounded && !Player.dead && PauseTransition == 0 && SceneStart) {
                     /* Rotate player */
                     if(Player.rotated) {
                         Player.rotated = false;
@@ -185,28 +185,28 @@ document.addEventListener("keyup", function(Event) {
             /* Move player object left-right */
             case "d":
                 /* Change side to right */
-                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart && Player.fallen) {
+                if(Player.grounded && !Player.dead && PauseTransition == 0 && SceneStart && Player.fallen) {
                     Player.side = 1;
                 }
 
                 break;
             case "a":
                 /* Change side to left */
-                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart && Player.fallen) {
+                if(Player.grounded && !Player.dead && PauseTransition == 0 && SceneStart && Player.fallen) {
                     Player.side = 2;
                 }
 
                 break;
             case "ArrowRight":
                 /* Change side to right */
-                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart && Player.fallen) {
+                if(Player.grounded && !Player.dead && PauseTransition == 0 && SceneStart && Player.fallen) {
                     Player.side = 1;
                 }
 
                 break;
             case "ArrowLeft":
                 /* Change side to left */
-                if(Player.grounded && !Player.isdead && PauseTransition == 0 && SceneStart && Player.fallen) {
+                if(Player.grounded && !Player.dead && PauseTransition == 0 && SceneStart && Player.fallen) {
                     Player.side = 2;
                 }
 

@@ -396,20 +396,20 @@ window.onupdate = function() {
         window.updatetext();
 
         /* Generate globalmovement number */
-        if(PauseTransition == 0 && !Player.isdead && SceneStart && Player.y <= Board.w * 1.35 / 8 && Player.grounded) {
+        if(PauseTransition == 0 && !Player.dead && SceneStart && Player.y <= Board.w * 1 / 4 && Player.grounded) {
             GlobalMovement = 16;
         }
-        else if(PauseTransition != 0 || !Player.isdead || SceneStart) {
+        else if(PauseTransition != 0 || !Player.dead || SceneStart) {
             GlobalMovement = 0;
         }
 
         /* Start player timer */
-        if(PauseTransition == 0 && !Player.isdead) {
+        if(PauseTransition == 0 && !Player.dead && SceneStart) {
             Player.timer += 1;
         }
 
         /* Start player checktimer */
-        if(PauseTransition == 0 && !Player.isdead) {
+        if(PauseTransition == 0 && !Player.dead && SceneStart) {
             Player.checktimer += 1;
         }
 
@@ -430,6 +430,261 @@ window.onupdate = function() {
         else if(Player.side == 2) {
             /* Move player object left */
             Player.vx = -8;
+        }
+
+        /* Start dispenserspike timer */
+        if(PauseTransition == 0 && !Player.dead && SceneStart) {
+            DispenserSpike.timer += 1;
+        }
+        /* Reset timer */
+        if(DispenserSpike.timer >= 60) {
+            DispenserSpike.timer = 0;
+        }
+
+        /* Generate dispenserspikes */
+        while(DispenserSpike.lenght >= DispenserSpike.currentlenght) {
+            /* Draw current array dispenserspike object */
+            CurrentDispenserSpike = DispenserSpike.array[DispenserSpike.currentlenght];
+            if(!CurrentDispenserSpike.used && !CurrentDispenserSpike.disabled) {
+                window.animatedispenserspike();
+
+                /* Move object */
+                if(PauseTransition == 0 && !Player.dead && SceneStart) {
+                    if(CurrentDispenserSpike.left) {
+                        CurrentDispenserSpike.x += 12;
+                    }
+                    else if(!CurrentDispenserSpike.left) {
+                        CurrentDispenserSpike.x -= 12;
+                    }
+                }
+            }
+
+            /* Set default position */
+            if(CurrentDispenserSpike.used || CurrentDispenserSpike.disabled) {
+                if(CurrentDispenserSpike.left) {
+                    CurrentDispenserSpike.x = 0;
+                }
+                else if(!CurrentDispenserSpike.left) {
+                    CurrentDispenserSpike.x = Board.w - CurrentDispenserSpike.w;
+                }
+            }
+
+            /* Select random number */
+            if(Dispenser.timer == 250) {
+               CurrentDispenserSpike.chance = Math.floor(Math.random() * 16);
+                if(!NormalMode) {
+                    CurrentDispenserSpike.chance = 1;
+                }
+            }
+
+            /* Spawn dispenserspikes */
+            if(Dispenser.timer >= 270 && CurrentDispenserSpike.chance != 0) {
+                CurrentDispenserSpike.used = false;
+            }
+
+            /* Spawn dispensercoins */
+            else if(Dispenser.timer >= 270 && CurrentDispenserSpike.chance == 0) {
+                CurrentDispenserCoin = DispenserCoin.array[DispenserSpike.currentlenght];
+                CurrentDispenserCoin.used = false;
+            }
+
+            /* Update dispenserspikes */
+            window.updatedispenserspikes();
+
+            /* Detect collisions between player and dispenserspike */
+            if(window.detectcollision(Player, CurrentDispenserSpike)) {
+                /* Play dead sound */
+                if(!Player.dead && Sfx) {
+                    TimeSfx.hit.load();
+                    TimeSfx.hit.play();
+                }
+
+                /* Make player dead */
+                if(!Player.dead) {
+                    Deaths += 1;
+                }
+                Player.dead = true;
+                SceneRestart = true;
+            }
+
+            /* Move currentdispenserspike object */
+            CurrentDispenserSpike.y += GlobalMovement;
+
+            /* Change loop value */
+            DispenserSpike.currentlenght += 1;
+        }
+
+        /* Start dispensercoin timer */
+        if(PauseTransition == 0 && !Player.dead && SceneStart) {
+            DispenserCoin.timer += 1;
+        }
+        /* Reset timer */
+        if(DispenserCoin.timer >= 60) {
+            DispenserCoin.timer = 0;
+        }
+
+        /* Generate dispensercoins */
+        while(DispenserCoin.lenght >= DispenserCoin.currentlenght) {
+            /* Draw current array dispensercoin object */
+            CurrentDispenserCoin = DispenserCoin.array[DispenserCoin.currentlenght];
+            if(!CurrentDispenserCoin.used && !CurrentDispenserCoin.disabled) {
+                window.animatedispensercoin();
+
+                /* Move object */
+                if(PauseTransition == 0 && !Player.dead && SceneStart) {
+                    if(CurrentDispenserCoin.left) {
+                        CurrentDispenserCoin.x += 12;
+                    }
+                    else if(!CurrentDispenserCoin.left) {
+                        CurrentDispenserCoin.x -= 12;
+                    }
+                }
+            }
+
+            /* Set default position */
+            if(CurrentDispenserCoin.used || CurrentDispenserCoin.disabled) {
+                if(CurrentDispenserCoin.left) {
+                    CurrentDispenserCoin.x = 0;
+                }
+                else if(!CurrentDispenserCoin.left) {
+                    CurrentDispenserCoin.x = Board.w - CurrentDispenserCoin.w;
+                }
+            }
+
+            /* Update dispensercoins */
+            window.updatedispensercoins();
+
+            /* Detect collisions between player and dispensercoin */
+            if(window.detectcollision(Player, CurrentDispenserCoin)) {
+                if(!CurrentCoin.used) {
+                    /* Add one to coins variable */
+                    Coins += 1;
+                    TerCoins += 1;
+
+                    /* Update best coins */
+                    if(TerCoins > BestCoins) {
+                        BestCoins = TerCoins;
+                    }
+
+                    /* Play coin sound */
+                    if(Sfx) {
+                        TimeSfx.coin.load();
+                        TimeSfx.coin.play();
+                    }
+                }
+
+                /* Disable currentcoin */
+                CurrentDispenserCoin.used = true;
+            }
+
+            /* Move currentdispensercoin object */
+            CurrentDispenserCoin.y += GlobalMovement;
+
+            /* Change loop value */
+            DispenserCoin.currentlenght += 1;
+        }
+
+        /* Generate laserspikes */
+        while(LaserSpike.lenght >= LaserSpike.currentlenght) {
+            /* Draw current array dispenser object */
+            CurrentLaserSpike = LaserSpike.array[LaserSpike.currentlenght];
+            if(!CurrentLaserSpike.disabled && !CurrentLaserSpike.used) {
+                window.animatelaserspike();
+            }
+
+            /* Select random number */
+            if(Laser.timer == 100) {
+                CurrentLaserSpike.chance = Math.floor(Math.random() * 16);
+                if(!NormalMode) {
+                    CurrentLaserSpike.chance = 1;
+                }
+            }
+
+            /* Check if laserspike is used */
+            if(Laser.timer < 120 || Laser.timer >= 190) {
+                CurrentLaserSpike.used = true;
+                CurrentLaserCoin = LaserCoin.array[LaserSpike.currentlenght];
+                CurrentLaserCoin.used = true;
+            }
+            if(Laser.timer == 120) {
+                if(CurrentLaserSpike.chance != 0) {
+                    CurrentLaserSpike.used = false;
+                    CurrentLaserCoin = LaserCoin.array[LaserSpike.currentlenght];
+                    CurrentLaserCoin.used = true;
+                }
+                else if(CurrentLaserSpike.chance == 0) {
+                    CurrentLaserCoin = LaserCoin.array[LaserSpike.currentlenght];
+                    CurrentLaserCoin.used = false;
+                }
+            }
+
+            /* Update laserspikes */
+            window.updatelaserspikes();
+
+            /* Detect collisions between player and laserspike */
+            if(window.detectcollision(Player, CurrentLaserSpike)) {
+                if(!CurrentLaserSpike.used) {
+                    /* Play dead sound */
+                    if(!Player.dead && Sfx) {
+                        TimeSfx.hit.load();
+                        TimeSfx.hit.play();
+                    }
+
+                    /* Make player dead */
+                    if(!Player.dead) {
+                        Deaths += 1;
+                    }
+                    Player.dead = true;
+                    SceneRestart = true;
+                }
+            }
+
+            /* Move currentlaserspike object */
+            CurrentLaserSpike.y += GlobalMovement;
+
+            /* Change loop value */
+            LaserSpike.currentlenght += 1;
+        }
+
+        /* Generate lasercoins */
+        while(LaserCoin.lenght >= LaserCoin.currentlenght) {
+            /* Draw current array dispenser object */
+            CurrentLaserCoin = LaserCoin.array[LaserCoin.currentlenght];
+            if(!CurrentLaserCoin.disabled && !CurrentLaserCoin.used) {
+                window.animatelasercoin();
+            }
+
+            /* Update lasercoins */
+            window.updatelasercoins();
+
+            /* Detect collisions between player and lasercoin */
+            if(window.detectcollision(Player, CurrentLaserCoin)) {
+                if(!CurrentLaserCoin.used) {
+                    /* Add one to coins variable */
+                    Coins += 1;
+                    TerCoins += 1;
+
+                    /* Update best coins */
+                    if(TerCoins > BestCoins) {
+                        BestCoins = TerCoins;
+                    }
+
+                    /* Play coin sound */
+                    if(Sfx) {
+                        TimeSfx.coin.load();
+                        TimeSfx.coin.play();
+                    }
+                }
+
+                /* Disable currentcoin */
+                CurrentLaserCoin.used = true;
+            }
+
+            /* Move currentlasercoins object */
+            CurrentLaserCoin.y += GlobalMovement;
+
+            /* Change loop value */
+            LaserCoin.currentlenght += 1;
         }
 
         /* Generate platforms */
@@ -521,6 +776,14 @@ window.onupdate = function() {
                     Player.touched = true;
                 }
                 else if(Player.rotated) {
+                    /* Fix player from bugging */
+                    if(Player.y > CurrentPlatform.y + GlobalMovement) {
+                        console.log(Player.y, CurrentPlatform.y + GlobalMovement);
+                        Player.y = CurrentPlatform.y + GlobalMovement;
+                        Player.vy = 0;
+                        Player.warning = true;
+                    }
+
                     /* Change y velocity of player object */
                     Player.vy = GlobalMovement - 8;
 
@@ -672,16 +935,16 @@ window.onupdate = function() {
             /* Detect collisions between player and currentspike object */
             if(window.detectcollision(Player, CurrentSpike)) {
                 /* Play dead sound */
-                if(!Player.isdead && Sfx) {
+                if(!Player.dead && Sfx) {
                     TimeSfx.hit.load();
                     TimeSfx.hit.play();
                 }
 
                 /* Make player dead */
-                if(!Player.isdead) {
+                if(!Player.dead) {
                     Deaths += 1;
                 }
-                Player.isdead = true;
+                Player.dead = true;
                 SceneRestart = true;
             }
 
@@ -717,6 +980,12 @@ window.onupdate = function() {
                 if(!CurrentCoin.disabled) {
                     /* Add one to coins variable */
                     Coins += 1;
+                    TerCoins += 1;
+
+                    /* Update best coins */
+                    if(TerCoins > BestCoins) {
+                        BestCoins = TerCoins;
+                    }
 
                     /* Play coin sound */
                     if(Sfx) {
@@ -741,8 +1010,13 @@ window.onupdate = function() {
             Dispenser.timer += 1;
         }
         /* Reset timer */
-        if(Dispenser.timer >= 360) {
+        if(Dispenser.timer >= 310) {
             Dispenser.timer = 0;
+        }
+        if(Dispenser.timer == 270 && !Player.dead && PauseTransition == 0) {
+            /* Play dispenser sound */
+            TimeSfx.dispenser.load();
+            TimeSfx.dispenser.play();
         }
 
         /* Generate dispensers */
@@ -763,100 +1037,18 @@ window.onupdate = function() {
             Dispenser.currentlenght += 1;
         }
 
-        /* Start dispenserspike timer */
+        /* Start laser timer */
         if(PauseTransition == 0 && !Player.dead && SceneStart) {
-            DispenserSpike.timer += 1;
+            Laser.timer += 1;
         }
         /* Reset timer */
-        if(DispenserSpike.timer >= 60) {
-            DispenserSpike.timer = 0;
+        if(Laser.timer >= 210) {
+            Laser.timer = 0;
         }
-
-        /* Generate dispenserspikes */
-        while(DispenserSpike.lenght >= DispenserSpike.currentlenght) {
-            /* Draw current array dispenserspike object */
-            CurrentDispenserSpike = DispenserSpike.array[DispenserSpike.currentlenght];
-            if(!CurrentDispenserSpike.disabled) {
-                window.animatedispenserspike();
-
-                /* Move object */
-                if(PauseTransition == 0 && !Player.dead && SceneStart) {
-                    if(CurrentDispenserSpike.left) {
-                        CurrentDispenserSpike.x += 8;
-                    }
-                    else if(!CurrentDispenserSpike.left) {
-                        CurrentDispenserSpike.x -= 8;
-                    }
-                }
-            }
-
-            /* Update dispenserspikes */
-            window.updatedispenserspikes();
-
-            /* Detect collisions between player and dispenserspike */
-            if(window.detectcollision(Player, CurrentDispenserSpike)) {
-                /* Play dead sound */
-                if(!Player.isdead && Sfx) {
-                    TimeSfx.hit.load();
-                    TimeSfx.hit.play();
-                }
-
-                /* Make player dead */
-                if(!Player.isdead) {
-                    Deaths += 1;
-                }
-                Player.isdead = true;
-                SceneRestart = true;
-            }
-
-            /* Move currentdispenserspike object */
-            CurrentDispenserSpike.y += GlobalMovement;
-
-            /* Change loop value */
-            DispenserSpike.currentlenght += 1;
-        }
-
-        /* Start dispensercoin timer */
-        if(PauseTransition == 0 && !Player.dead && SceneStart) {
-            DispenserCoin.timer += 1;
-        }
-        /* Reset timer */
-        if(DispenserCoin.timer >= 60) {
-            DispenserCoin.timer = 0;
-        }
-
-        /* Generate dispensercoins */
-        while(DispenserCoin.lenght >= DispenserCoin.currentlenght) {
-            /* Draw current array dispensercoin object */
-            CurrentDispenserCoin = DispenserCoin.array[DispenserCoin.currentlenght];
-            if(!CurrentDispenserCoin.disabled) {
-                window.animatedispensercoin();
-            }
-
-            /* Update dispensercoins */
-            window.updatedispensercoins();
-
-            /* Detect collisions between player and dispensercoin */
-            if(window.detectcollision(Player, CurrentDispenserCoin)) {
-                if(!CurrentCoin.disabled) {
-                    /* Add one to coins variable */
-                    Coins += 1;
-
-                    /* Play coin sound */
-                    if(Sfx) {
-                        TimeSfx.coin.load();
-                        TimeSfx.coin.play();
-                    }
-                }
-
-                /* Disable currentcoin */
-                CurrentCoin.disabled = true;
-            }
-            /* Move currentdispensercoin object */
-            CurrentDispenserCoin.y += GlobalMovement;
-
-            /* Change loop value */
-            DispenserCoin.currentlenght += 1;
+        if(Laser.timer == 120 && !Player.dead && PauseTransition == 0) {
+            /* Play laser sound */
+            TimeSfx.laser.load();
+            TimeSfx.laser.play();
         }
 
         /* Generate lasers */
@@ -864,7 +1056,7 @@ window.onupdate = function() {
             /* Draw current array dispenser object */
             CurrentLaser = Laser.array[Laser.currentlenght];
             if(!CurrentLaser.disabled) {
-                Context.drawImage(CurrentLaser.img, CurrentLaser.x, CurrentLaser.y, CurrentLaser.w, CurrentLaser.h);
+                window.animatelaser();
             }
 
             /* Update lasers */
@@ -878,7 +1070,7 @@ window.onupdate = function() {
         }
 
         /* Make player object focussed */
-        if(!Player.fallen) {
+        if(!Player.fallen && PauseTransition == 0 && !Player.dead && SceneStart) {
             /* Start timer */
             Player.fallentimer += 1;
             
@@ -894,7 +1086,7 @@ window.onupdate = function() {
         }
 
         /* Move player object */
-        if(PauseTransition == 0 && !Player.isdead) {
+        if(PauseTransition == 0 && !Player.dead) {
             if(!Player.rotated) {
                 Player.y += Player.vy;
                 Player.x += Player.vx;
@@ -908,18 +1100,18 @@ window.onupdate = function() {
         }
 
         /* Kill player object if it is falling */
-        if(Player.y + Player.h / 2 >= Board.h) {
+        if(Player.y - Player.h >= Board.h) {
             /* Play dead sound */
-            if(!Player.isdead && Sfx) {
+            if(!Player.dead && Sfx) {
                 TimeSfx.hit.load();
                 TimeSfx.hit.play();
             }
 
             /* Make player dead */
-            if(!Player.isdead) {
+            if(!Player.dead) {
                 Deaths += 1;
             }
-            Player.isdead = true;
+            Player.dead = true;
             SceneRestart = true;
         }
 
@@ -1009,6 +1201,11 @@ window.onupdate = function() {
         Context.fillStyle = InformationText4.color;
         Context.font = InformationText4.font;
         Context.fillText(InformationText4.value, InformationText4.x, InformationText4.y);
+
+        /* Draw informationtext5 object */
+        Context.fillStyle = InformationText5.color;
+        Context.font = InformationText5.font;
+        Context.fillText(InformationText5.value, InformationText5.x, InformationText5.y);
 
         /* Draw returntext object */
         Context.fillStyle = ReturnText.color;
@@ -1126,6 +1323,9 @@ window.updatetext = function() {
 
     /* Update informationtext4 value */
     InformationText4.value = "Deaths: " + Deaths.toString();
+
+    /* Update informationtext5 value */
+    InformationText5.value = "Best Coins: " + BestCoins.toString();
 
     /* Update coinstext position */
     if(CoinsText.lastchar < CoinsText.char) {
