@@ -61,6 +61,16 @@ document.addEventListener("keyup", function(Event) {
         switch(Event.key) {
             /* Pause and unpause game */
             case "Escape":
+                if(Instruction) {
+                    /* Disable instruction */
+                    Instruction = false;
+
+                    /* Play select sfx */
+                    if(Sfx) {
+                        TimeSfx.select.load();
+                        TimeSfx.select.play();
+                    }
+                }
                 if(PauseTransition == 0 && MenuTransparent.type == 0 && SceneStart && !Player.dead) {
                     PauseTransition = 1;
 
@@ -353,6 +363,16 @@ window.addEventListener("mousemove", function(Event) {
         StatisticsText.color = "white";
     }
 
+    /* Check collision between cursor and universaltext object */
+    if(window.detectcollision(UniversalText, Mouse)) {
+        /* Change object color */
+        UniversalText.color = "blue";
+    }
+    else if(!window.detectcollision(UniversalText, Mouse)) {
+        /* Change object color */
+        UniversalText.color = "white";
+    }
+
     /* Check collision between cursor and returntext object */
     if(window.detectcollision(ReturnText, Mouse)) {
         /* Change object color */
@@ -498,6 +518,16 @@ window.addEventListener("click", function(Event) {
             TimeSfx.select.load();
             TimeSfx.select.play();
         }
+    }    /* Statisticstext object function */
+    if(window.detectcollision(StatisticsText, Mouse) && !StatisticsText.used) {
+        /* Turn on statistics section */
+        StatisticsTransition = 1;
+
+        /* Play select sfx */
+        if(Sfx) {
+            TimeSfx.select.load();
+            TimeSfx.select.play();
+        }
     }
 
     /* Resumetext object function */
@@ -540,6 +570,18 @@ window.addEventListener("click", function(Event) {
     if(window.detectcollision(StatisticsText, Mouse) && !StatisticsText.used) {
         /* Turn on statistics section */
         StatisticsTransition = 1;
+
+        /* Play select sfx */
+        if(Sfx) {
+            TimeSfx.select.load();
+            TimeSfx.select.play();
+        }
+    }
+
+    /* Universaltext object function */
+    if(window.detectcollision(UniversalText, Mouse)) {
+        /* Turn off instruction */
+        Instruction = false;
 
         /* Play select sfx */
         if(Sfx) {

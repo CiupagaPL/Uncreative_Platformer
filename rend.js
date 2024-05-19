@@ -3,9 +3,17 @@
 
 /* Window corners generator update function */
 window.updatecorners = function() {
-    /* Disable currentcorner object from rendering */
-    if(CurrentCorner.y >= Board.h) {
+    /* Generate next corner */
+    if(CurrentCorner.y >= Board.h && !CurrentCorner.disabled) {
+        /* Calculate corner h */
+        CurrentCorner.y = Platform.highestposition;
+
+        /* Disable corner */
         CurrentCorner.disabled = true;
+    }
+    else if(CurrentCorner.y < Board.h) {
+        /* Enable corner */
+        CurrentCorner.disabled = false;
     }
 }
 
@@ -156,9 +164,6 @@ window.updateplatforms = function() {
 
             /* Calculate platform score */
             CurrentPlatform.level = Platform.lastlevel + 1;
-
-            /* Generate corners */
-            window.cornersgenerator();
 
             /* Generate coins (and spikes) */
             window.coinsgenerator();
@@ -378,75 +383,71 @@ window.cornersgenerator = function() {
 
 /* Window spikes generator function */
 window.spikesgenerator = function() {
-    /* Check coin count */
-    if(Coin.count1 >= 1) {
-        /* Create currentspike object */
-        CurrentSpike = {
-            x: CurrentPlatform.x + (384 * Coin.count1),
-            y: CurrentPlatform.y - Spike.h - 32,
-            fx: 0,
-            fy: 0,
-            w: Spike.w,
-            h: Spike.h,
-            img: Spike.img1,
-            disabled: false,
-            rotated: false,
-        };
+    /* Create currentspike object */
+    CurrentSpike = {
+        x: 384 * Coin.count1 + 64,
+        y: CurrentPlatform.y - Spike.h - 32,
+        fx: 0,
+        fy: 0,
+        w: Spike.w,
+        h: Spike.h,
+        img: Spike.img1,
+        disabled: false,
+        used: false,
+        rotated: false,
+    };
 
-        /* Push currentspike into array */
-        Spike.array.push(CurrentSpike);
+    /* Push currentspike into array */
+    Spike.array.push(CurrentSpike);
 
-        /* Change value of loop */
-        Spike.lenght += 1;
-        Coin.count1 -= 1;
+    /* Change value of loop */
+    Spike.lenght += 1;
+    Coin.positionlenght += 1;
+    Coin.count1 -= 1;
+
+    /* Disable currentspike with bad x */
+    if(!CurrentPlatform.first && CurrentSpike.x + CurrentSpike.w > Coin.firstcalc - 256 && CurrentSpike.x + CurrentSpike.w < Coin.firstcalc) {
+        CurrentSpike.used = true;
     }
-    else if(Coin.count2 >= 1 && CurrentPlatform.level != 1) {
-        /* Create currentspike object */
-        CurrentSpike = {
-            x: CurrentPlatform.x + (384 * Coin.count2),
-            y: CurrentPlatform.y + Spike.h + 8,
-            fx: 0,
-            fy: 0,
-            w: Spike.w,
-            h: Spike.h,
-            img: Spike.img4,
-            disabled: false,
-            rotated: true,
-        };
-
-        /* Push currentspike into array */
-        Spike.array.push(CurrentSpike);
-
-        /* Change value of loop */
-        Spike.lenght += 1;
-        Coin.count2 -= 1;
+    if(!CurrentPlatform.second && CurrentSpike.x + CurrentSpike.w > Coin.secondcalc - 256 && CurrentSpike.x + CurrentSpike.w < Coin.secondcalc) {
+        CurrentSpike.used = true;
+    }
+    if(!CurrentPlatform.third && CurrentSpike.x + CurrentSpike.w > Coin.thirdcalc - 256 && CurrentSpike.x + CurrentSpike.w < Coin.thirdcalc) {
+        CurrentSpike.used = true;
+    }
+    if(!CurrentPlatform.fourth && CurrentSpike.x + CurrentSpike.w > Coin.fourthcalc - 256 && CurrentSpike.x + CurrentSpike.w < Coin.fourthcalc) {
+        CurrentSpike.used = true;
     }
 }
 
 /* Window coins generator function */
 window.coinsgenerator = function() {
-    /* Calculate coins */
-    Coin.calc = Math.floor(CurrentPlatform.w - 64);
-
-    /* Set coins count */
-    Coin.count1 = Math.floor(Coin.calc / 384);
+    /* Randomize coins count */
+    Coin.count1 = Math.floor((Board.w - 128) / 384);
     Coin.count2 = Coin.count1;
 
-    /* Create coin rendering loop */
-    while(Coin.count1 >= 0) {
-        /* Randomize coin chance */
-        if(NormalMode) {
-            Coin.chance = Math.floor(Math.random() * 3);
-        }
-        else if(!NormalMode) {
-            Coin.chance = Math.floor(Math.random() * 2);
+    /* Calculate platform positions for coin */
+    Coin.firstcalc = (Board.w / Platform.count) - 220;
+    Coin.secondcalc = ((Board.w / Platform.count) * 2) - 220;
+    Coin.thirdcalc = ((Board.w / Platform.count) * 3) - 220;
+    Coin.fourthcalc = ((Board.w / Platform.count) * 4) - 220;
+
+    /* Check coin count */
+    while(Coin.count1 >= 0 && Coin.count2 >= 0) {
+        /* Select random number */
+        Coin.random = Math.floor(Math.random() * 2);
+        if(Coin.break != 0) {
+            Coin.random = 1;
+            Coin.break += 1;
+            if(Coin.break == 2) {
+                Coin.break = 0;
+            }
         }
 
-        /* Check coin chance */
-        if(Coin.chance == 0) {
+        if(Coin.random != 0) {
             /* Create currentcoin object */
             CurrentCoin = {
-                x: CurrentPlatform.x + (384 * Coin.count1),
+                x: 384 * Coin.count1 + 64,
                 y: CurrentPlatform.y - Coin.h - 32,
                 fx: 0,
                 fy: 0,
@@ -454,52 +455,75 @@ window.coinsgenerator = function() {
                 h: Coin.h,
                 img: Coin.img1,
                 disabled: false,
+                used: false,
                 rotated: false,
             };
 
             /* Push currentcoin into array */
             Coin.array.push(CurrentCoin);
 
-            /* Change loop value */
-            Coin.count1 -= 1;
+            /* Change value of loop */
             Coin.lenght += 1;
+            Coin.count1 -= 1;
+
+            /* Disable currentcoin with bad x */
+            if(!CurrentPlatform.first && CurrentCoin.x + CurrentCoin.w > Coin.firstcalc - 256 && CurrentCoin.x + CurrentCoin.w < Coin.firstcalc) {
+                CurrentCoin.used = true;
+            }
+            if(!CurrentPlatform.second && CurrentCoin.x + CurrentCoin.w > Coin.secondcalc - 256 && CurrentCoin.x + CurrentCoin.w < Coin.secondcalc) {
+                CurrentCoin.used = true;
+            }
+            if(!CurrentPlatform.third && CurrentCoin.x + CurrentCoin.w > Coin.thirdcalc - 256 && CurrentCoin.x + CurrentCoin.w < Coin.thirdcalc) {
+                CurrentCoin.used = true;
+            }
+            if(!CurrentPlatform.fourth && CurrentCoin.x + CurrentCoin.w > Coin.fourthcalc - 256 && CurrentCoin.x + CurrentCoin.w < Coin.fourthcalc) {
+                CurrentCoin.used = true;
+            }
         }
-        else if(Coin.chance == 1) {
-            /* Geenerate spike */
+        else if(Coin.random == 0) {
             window.spikesgenerator();
         }
-    }
-    while(Coin.count2 >= 0 && CurrentPlatform.level != 1) {
-        /* Randomize coin chance */
-        Coin.chance = Math.floor(Math.random() * 2);
 
-        /* Check coin chance */
-        if(Coin.chance == 0) {
+        if(Coin.loop) {
             /* Create currentcoin object */
             CurrentCoin = {
-                x: CurrentPlatform.x + (384 * Coin.count2),
-                y: CurrentPlatform.y + Coin.h + 8,
+                x: 384 * Coin.count2 + 64,
+                y: CurrentPlatform.y - Coin.h + 32 + 124,
                 fx: 0,
                 fy: 0,
                 w: Coin.w,
                 h: Coin.h,
                 img: Coin.img4,
                 disabled: false,
+                used: false,
                 rotated: true,
             };
 
             /* Push currentcoin into array */
             Coin.array.push(CurrentCoin);
 
-            /* Change loop value */
-            Coin.count2 -= 1;
+            /* Change value of loop */
             Coin.lenght += 1;
-        }
-        else if(Coin.chance == 1) {
-            /* Geenerate spike */
-            window.spikesgenerator();
+            Coin.count2 -= 1;
+
+            /* Disable currentcoin with bad x */
+            if(!CurrentPlatform.first && CurrentCoin.x + CurrentCoin.w > Coin.firstcalc - 256 && CurrentCoin.x + CurrentCoin.w < Coin.firstcalc) {
+                CurrentCoin.used = true;
+            }
+            if(!CurrentPlatform.second && CurrentCoin.x + CurrentCoin.w > Coin.secondcalc - 256 && CurrentCoin.x + CurrentCoin.w < Coin.secondcalc) {
+                CurrentCoin.used = true;
+            }
+            if(!CurrentPlatform.third && CurrentCoin.x + CurrentCoin.w > Coin.thirdcalc - 256 && CurrentCoin.x + CurrentCoin.w < Coin.thirdcalc) {
+                CurrentCoin.used = true;
+            }
+            if(!CurrentPlatform.fourth && CurrentCoin.x + CurrentCoin.w > Coin.fourthcalc - 256 && CurrentCoin.x + CurrentCoin.w < Coin.fourthcalc) {
+                CurrentCoin.used = true;
+            }
         }
     }
+
+    /* Change loop value */
+    Coin.loop = true;
 }
 
 /* Window dispensers generating function */
@@ -849,6 +873,9 @@ window.platformsgenerator = function() {
 
     /* Randomize platform count */
     Platform.randomcount = Math.floor(Math.random() * Platform.available);
+    if(Platform.randomcount == Platform.count - 1) {
+        Platform.randomcount -= 1;
+    }
 
     /* Randomize platform chance */
     Platform.change = Math.floor(Math.random() * 4);
@@ -949,6 +976,10 @@ window.platformsgenerator = function() {
                     main: false,
                     left: false,
                     right: true,
+                    first: false,
+                    second: false,
+                    third: false,
+                    fourth: false,
                 };
             }
             else if(Platform.first) {
@@ -966,6 +997,10 @@ window.platformsgenerator = function() {
                     main: false,
                     left: false,
                     right: false,
+                    first: true,
+                    second: false,
+                    third: false,
+                    fourth: false,
                 };
             }
         }
@@ -985,6 +1020,10 @@ window.platformsgenerator = function() {
                     main: false,
                     left: true,
                     right: true,
+                    first: false,
+                    second: false,
+                    third: false,
+                    fourth: false,
                 };
             }
             else if(Platform.second) {
@@ -1002,11 +1041,16 @@ window.platformsgenerator = function() {
                     main: false,
                     left: true,
                     right: false,
+                    first: false,
+                    second: true,
+                    third: false,
+                    fourth: false,
                 };
             }
             if(Platform.first) {
                 /* Disable left corner */
                 CurrentPlatform.left = false;
+                CurrentPlatform.first = true;
             }
         }
         if(Platform.currentcount == 2) {
@@ -1025,6 +1069,10 @@ window.platformsgenerator = function() {
                     main: false,
                     left: true,
                     right: true,
+                    first: false,
+                    second: false,
+                    third: false,
+                    fourth: false,
                 };
             }
             else if(Platform.third) {
@@ -1042,11 +1090,19 @@ window.platformsgenerator = function() {
                     main: false,
                     left: true,
                     right: false,
+                    first: false,
+                    second: false,
+                    third: true,
+                    fourth: false,
                 };
             }
             if(Platform.second) {
                 /* Disable left corner */
                 CurrentPlatform.left = false;
+                CurrentPlatform.second = true;
+            }
+            if(Platform.first) {
+                CurrentPlatform.first = true;
             }
         }
         if(Platform.currentcount == 3) {
@@ -1065,6 +1121,10 @@ window.platformsgenerator = function() {
                     main: false,
                     left: true,
                     right: true,
+                    first: false,
+                    second: false,
+                    third: false,
+                    fourth: false,
                 };
             }
             else if(Platform.fourth) {
@@ -1082,11 +1142,22 @@ window.platformsgenerator = function() {
                     main: false,
                     left: true,
                     right: false,
+                    first: false,
+                    second: false,
+                    third: false,
+                    fourth: true,
                 };
             }
             if(Platform.third) {
                 /* Disable left corner */
                 CurrentPlatform.left = false;
+                CurrentPlatform.third = true;
+            }
+            if(Platform.second) {
+                CurrentPlatform.second = true;
+            }
+            if(Platform.first) {
+                CurrentPlatform.first = true;
             }
         }
         if(Platform.currentcount == 4) {
@@ -1104,10 +1175,24 @@ window.platformsgenerator = function() {
                 main: false,
                 left: true,
                 right: false,
+                first: false,
+                second: false,
+                third: false,
+                fourth: false,
             };
             if(Platform.fourth) {
                 /* Disable left corner */
                 CurrentPlatform.left = false;
+                CurrentPlatform.fourth = true;
+            }
+            if(Platform.third) {
+                CurrentPlatform.third = true;
+            }
+            if(Platform.second) {
+                CurrentPlatform.second = true;
+            }
+            if(Platform.first) {
+                CurrentPlatform.first = true;
             }
         }
 
@@ -1122,9 +1207,6 @@ window.platformsgenerator = function() {
         /* Generate corners */
         window.cornersgenerator();
 
-        /* Generate coins (and spikes) */
-        window.coinsgenerator();
-
         /* Change loop value */
         Platform.loop += 1;
         Platform.currentcount += 1;
@@ -1133,6 +1215,9 @@ window.platformsgenerator = function() {
 
     /* Generate walls */
     window.wallsgenerator();
+
+    /* Generate coins (and spikes) */
+    window.coinsgenerator();
 
     /* Generate dispensers */
     window.dispensersgenerator();

@@ -450,11 +450,21 @@ window.onupdate = function() {
 
                 /* Move object */
                 if(PauseTransition == 0 && !Player.dead && SceneStart) {
-                    if(CurrentDispenserSpike.left) {
-                        CurrentDispenserSpike.x += 12;
+                    if(NormalMode) {
+                        if(CurrentDispenserSpike.left) {
+                            CurrentDispenserSpike.x += 12;
+                        }
+                        else if(!CurrentDispenserSpike.left) {
+                            CurrentDispenserSpike.x -= 12;
+                        }
                     }
-                    else if(!CurrentDispenserSpike.left) {
-                        CurrentDispenserSpike.x -= 12;
+                    else if(!NormalMode) {
+                        if(CurrentDispenserSpike.left) {
+                            CurrentDispenserSpike.x += 18;
+                        }
+                        else if(!CurrentDispenserSpike.left) {
+                            CurrentDispenserSpike.x -= 18;
+                        }
                     }
                 }
             }
@@ -469,23 +479,45 @@ window.onupdate = function() {
                 }
             }
 
-            /* Select random number */
-            if(Dispenser.timer == 250) {
-               CurrentDispenserSpike.chance = Math.floor(Math.random() * 16);
-                if(!NormalMode) {
-                    CurrentDispenserSpike.chance = 1;
+            if(NormalMode) {
+                /* Select random number */
+                if(Dispenser.timer == 250) {
+                    CurrentDispenserSpike.chance = Math.floor(Math.random() * 16);
+                    if(!NormalMode) {
+                        CurrentDispenserSpike.chance = 1;
+                    }
+                }
+
+                /* Spawn dispenserspikes */
+                if(Dispenser.timer >= 270 && CurrentDispenserSpike.chance != 0) {
+                    CurrentDispenserSpike.used = false;
+                }
+
+                /* Spawn dispensercoins */
+                else if(Dispenser.timer >= 270 && CurrentDispenserSpike.chance == 0) {
+                    CurrentDispenserCoin = DispenserCoin.array[DispenserSpike.currentlenght];
+                    CurrentDispenserCoin.used = false;
                 }
             }
+            else if(!NormalMode) {
+                /* Select random number */
+                if(Dispenser.timer == 150) {
+                    CurrentDispenserSpike.chance = Math.floor(Math.random() * 16);
+                    if(!NormalMode) {
+                        CurrentDispenserSpike.chance = 1;
+                    }
+                }
 
-            /* Spawn dispenserspikes */
-            if(Dispenser.timer >= 270 && CurrentDispenserSpike.chance != 0) {
-                CurrentDispenserSpike.used = false;
-            }
+                /* Spawn dispenserspikes */
+                if(Dispenser.timer >= 170 && CurrentDispenserSpike.chance != 0) {
+                    CurrentDispenserSpike.used = false;
+                }
 
-            /* Spawn dispensercoins */
-            else if(Dispenser.timer >= 270 && CurrentDispenserSpike.chance == 0) {
-                CurrentDispenserCoin = DispenserCoin.array[DispenserSpike.currentlenght];
-                CurrentDispenserCoin.used = false;
+                /* Spawn dispensercoins */
+                else if(Dispenser.timer >= 170 && CurrentDispenserSpike.chance == 0) {
+                    CurrentDispenserCoin = DispenserCoin.array[DispenserSpike.currentlenght];
+                    CurrentDispenserCoin.used = false;
+                }
             }
 
             /* Update dispenserspikes */
@@ -532,11 +564,21 @@ window.onupdate = function() {
 
                 /* Move object */
                 if(PauseTransition == 0 && !Player.dead && SceneStart) {
-                    if(CurrentDispenserCoin.left) {
-                        CurrentDispenserCoin.x += 12;
+                    if(NormalMode) {
+                        if(CurrentDispenserCoin.left) {
+                            CurrentDispenserCoin.x += 12;
+                        }
+                        else if(!CurrentDispenserCoin.left) {
+                            CurrentDispenserCoin.x -= 12;
+                        }
                     }
-                    else if(!CurrentDispenserCoin.left) {
-                        CurrentDispenserCoin.x -= 12;
+                    else if(!NormalMode) {
+                        if(CurrentDispenserCoin.left) {
+                            CurrentDispenserCoin.x += 18;
+                        }
+                        else if(!CurrentDispenserCoin.left) {
+                            CurrentDispenserCoin.x -= 18;
+                        }
                     }
                 }
             }
@@ -699,7 +741,7 @@ window.onupdate = function() {
             window.updateplatforms();
 
             /* Update score and change background color */
-            if(Player.y <= CurrentPlatform.y) {
+            if(Player.y < CurrentPlatform.y) {
                 /* Update player */
                 if(Player.level < CurrentPlatform.level) {
                     Player.slowfalling = true;
@@ -712,24 +754,20 @@ window.onupdate = function() {
                     Score += 1;
                 }
             }
+            else if(Player.y > CurrentPlatform.y) {
+                /* Update player */
+                if(Player.level + 1 > CurrentPlatform.level) {
+                    Player.slowfalling = true;
+                    Player.level -= 1;
+                }
+            }
 
-            // /* Check if player is slowfalling */
-            // if(Player.slowfalling) {
-            //     /* Start timer */
-            //     Player.slowtimer += 1;
-
-            //     if(Player.slowtimer >= 10) {
-            //         /* Change player falling speed */
-            //         Player.rotated = false;
-            //         Player.vy += 5;
-            //         Player.side = Math.floor(Math.random() * 2) + 1;
-            //     }
-            //     if(Player.slowtimer > 60) {
-            //         /* Change loop value */
-            //         Player.slowfalling = false;
-            //         Player.slowtimer = 0;
-            //     }
-            // }
+            /* Check if player is slowfalling */
+            if(Player.slowfalling) {
+                /* Change player side */
+                Player.side = 0;
+                Player.vx = 0;
+            }
 
             /* Update best score */
             if(Score > BestScore) {
@@ -760,7 +798,7 @@ window.onupdate = function() {
                     }
 
                     /* Fix some update problems */
-                    Player.level = CurrentPlatform.level;
+                    Player.slowfalling = false;
                     Player.touched = true;
                 }
             }
@@ -772,10 +810,6 @@ window.onupdate = function() {
                     /* Change y velocity of Player object */
                     Player.vy = GlobalMovement;
 
-                    /* Fix some update problems */
-                    Player.touched = true;
-                }
-                else if(Player.rotated) {
                     /* Fix player from bugging */
                     if(Player.y > CurrentPlatform.y + GlobalMovement) {
                         console.log(Player.y, CurrentPlatform.y + GlobalMovement);
@@ -784,11 +818,15 @@ window.onupdate = function() {
                         Player.warning = true;
                     }
 
+                    /* Fix some update problems */
+                    Player.slowfalling = false;
+                    Player.touched = true;
+                }
+                else if(Player.rotated) {
                     /* Change y velocity of player object */
                     Player.vy = GlobalMovement - 8;
 
                     /* Fix some update problems */
-                    Player.level = CurrentPlatform.level;
                     Player.touched = true;
                 }
             }
@@ -925,7 +963,7 @@ window.onupdate = function() {
         while(Spike.lenght >= Spike.currentlenght) {
             /* Draw current array spike object */
             CurrentSpike = Spike.array[Spike.currentlenght];
-            if(!CurrentSpike.disabled) {
+            if(!CurrentSpike.disabled && !CurrentSpike.used) {
                 window.animatespike();
             }
 
@@ -934,18 +972,20 @@ window.onupdate = function() {
 
             /* Detect collisions between player and currentspike object */
             if(window.detectcollision(Player, CurrentSpike)) {
-                /* Play dead sound */
-                if(!Player.dead && Sfx) {
-                    TimeSfx.hit.load();
-                    TimeSfx.hit.play();
-                }
+                if(!CurrentSpike.used) {
+                    /* Play dead sound */
+                    if(!Player.dead && Sfx) {
+                        TimeSfx.hit.load();
+                        TimeSfx.hit.play();
+                    }
 
-                /* Make player dead */
-                if(!Player.dead) {
-                    Deaths += 1;
+                    /* Make player dead */
+                    if(!Player.dead) {
+                        Deaths += 1;
+                    }
+                    Player.dead = true;
+                    SceneRestart = true;
                 }
-                Player.dead = true;
-                SceneRestart = true;
             }
 
             /* Move currentspike object */
@@ -968,7 +1008,7 @@ window.onupdate = function() {
         while(Coin.lenght >= Coin.currentlenght) {
             /* Draw current array coin object */
             CurrentCoin = Coin.array[Coin.currentlenght];
-            if(!CurrentCoin.disabled) {
+            if(!CurrentCoin.disabled && !CurrentCoin.used) {
                 window.animatecoin();
             }
 
@@ -977,7 +1017,7 @@ window.onupdate = function() {
 
             /* Detect collisions between player and currentcoin object */
             if(window.detectcollision(Player, CurrentCoin)) {
-                if(!CurrentCoin.disabled) {
+                if(!CurrentCoin.used) {
                     /* Add one to coins variable */
                     Coins += 1;
                     TerCoins += 1;
@@ -995,7 +1035,7 @@ window.onupdate = function() {
                 }
 
                 /* Disable currentcoin */
-                CurrentCoin.disabled = true;
+                CurrentCoin.used = true;
             }
 
             /* Move currentcoin object */
@@ -1009,14 +1049,27 @@ window.onupdate = function() {
         if(PauseTransition == 0 && !Player.dead && SceneStart) {
             Dispenser.timer += 1;
         }
-        /* Reset timer */
-        if(Dispenser.timer >= 310) {
-            Dispenser.timer = 0;
+        if(NormalMode) {
+            /* Reset timer */
+            if(Dispenser.timer >= 310) {
+                Dispenser.timer = 0;
+            }
+            if(Dispenser.timer == 270 && !Player.dead && PauseTransition == 0 && Sfx) {
+                /* Play dispenser sound */
+                TimeSfx.dispenser.load();
+                TimeSfx.dispenser.play();
+            }
         }
-        if(Dispenser.timer == 270 && !Player.dead && PauseTransition == 0 && Sfx) {
-            /* Play dispenser sound */
-            TimeSfx.dispenser.load();
-            TimeSfx.dispenser.play();
+        else if(!NormalMode) {
+            /* Reset timer */
+            if(Dispenser.timer >= 210) {
+                Dispenser.timer = 0;
+            }
+            if(Dispenser.timer == 170 && !Player.dead && PauseTransition == 0 && Sfx) {
+                /* Play dispenser sound */
+                TimeSfx.dispenser.load();
+                TimeSfx.dispenser.play();
+            }
         }
 
         /* Generate dispensers */
@@ -1134,7 +1187,6 @@ window.onupdate = function() {
         Context.fillRect(MenuTransparent.x, MenuTransparent.y, MenuTransparent.w, MenuTransparent.h);
 
         /* Draw title object */
-        Title.img.src = "Sprites/Title.png";
         Context.drawImage(Title.img, Title.x, Title.y, Title.w, Title.h);
 
         /* Draw resumetext object */
@@ -1216,6 +1268,20 @@ window.onupdate = function() {
         Context.fillStyle = PauseText.color;
         Context.font = PauseText.font;
         Context.fillText(PauseText.value, PauseText.x, PauseText.y);
+
+        if(Instruction) {
+            /* Draw universalhud object */
+            Context.fillStyle = UniversalHud.color;
+            Context.fillRect(UniversalHud.x, UniversalHud.y, UniversalHud.w, UniversalHud.h);
+
+            /* Draw universalimage object */
+            Context.drawImage(UniversalImage.img, UniversalImage.x, UniversalImage.y, UniversalImage.w, UniversalImage.h);
+
+            /* Draw universaltext object */
+            Context.fillStyle = UniversalText.color;
+            Context.font = UniversalText.font;
+            Context.fillText(UniversalText.value, UniversalText.x, UniversalText.y);
+        }
 
         /* Draw transition object */
         Context.fillStyle = Transition.color;

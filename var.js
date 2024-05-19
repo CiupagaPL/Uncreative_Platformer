@@ -3,7 +3,7 @@
 
 /* Create global variables */
 let Scene = 1, SceneStart = false, SceneChange = false, SceneRestart = false;
-let Sfx = true, Music = false, NormalMode = false, Generated = false;
+let Sfx = true, Music = false, NormalMode = false, Instruction = true, Generated = false;
 let AboutTransition = 0, SettingsTransition = 0, KeybindsTransition = 0, StatisticsTransition = 0, PauseTransition = 0;
 let FPS = 120, Score = 0, BestScore = 0, Coins = 0, TerCoins = 0, BestCoins = 0, Deaths = 0, GlobalMovement = 0;
 
@@ -113,6 +113,41 @@ let MenuTransparent = {
     type: 0,
 };
 
+/* Create universalhud object */
+let UniversalHud = {
+    w: Board.w,
+    h: Board.h,
+    x: 0,
+    y: 0,
+    fx: 0,
+    fy: 0,
+    color: "rgba(0, 0, 0, 0.85)",
+};
+
+/* Create universalimage object */
+let UniversalImage = {
+    w: 1280,
+    h: 800,
+    x: 0,
+    y: 0,
+    fx: 0,
+    fy: 0,
+    img: new Image(),
+}
+
+/* Create universaltext object */
+let UniversalText = {
+    color: "white",
+    font: "96px Orange_Kid",
+    value: "Continue",
+    x: 64,
+    y: Board.h - 84,
+    fx: 4,
+    fy: -24,
+    w: 264,
+    h: 24,
+};
+
 /* Create title object */
 let Title = {
     w: 1000,
@@ -150,7 +185,7 @@ let UP = {
 
 /* Create uptext object */
 let UPText = {
-    color: "rgb(255, 255, 255)",
+    color: "white",
     font: "96px Orange_Kid",
     value: "Main Menu",
     x: 42,
@@ -163,14 +198,14 @@ let UPText = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Public FixBuild 7",
+    value: "Version 1.0",
     x: -272,
     y: Board.h - 12,
     fx: 4,
     fy: -24,
-    w: 152,
+    w: 102,
     h: 24,
-    vx: 13.8,
+    vx: 13.9,
     used: true,
 };
 
@@ -717,7 +752,6 @@ let Player = {
     warning: true,
     level: 0,
     slowfalling: false,
-    slowtimer: 0,
 };
 
 /* Create groundchecktop object */
@@ -858,7 +892,6 @@ let Corner = {
 /* Create spike object */
 let Spike = {
     array: [],
-    positionarray: [],
     w: 64,
     h: 72,
     x: 0,
@@ -876,6 +909,7 @@ let Spike = {
     timer: 0,
     rotated: false,
     disabled: false,
+    used: false,
 };
 
 /* Create coin object */
@@ -897,12 +931,17 @@ let Coin = {
     timer: 0,
     lenght: -1,
     currentlenght: 0,
-    calc: 0,
     count1: 0,
     count2: 0,
-    countgeneral: 0,
-    chance: 0,
     rotated: false,
+    firstcalc: 0,
+    secondcalc: 0,
+    thirdcalc: 0,
+    fourthcalc: 0,
+    used: false,
+    random: 0,
+    break: 0,
+    loop: false,
 };
 
 /* Create dispenser object */
@@ -1041,6 +1080,9 @@ Mouse.img.src = "Sprites/Mouse.png";
 
 /* Set source of title image */
 Title.img.src = "Sprites/Title.png";
+
+/* Set source of universalimage image */
+UniversalImage.img.src = "Sprites/Instruction.png";
 
 /* Set source of up image */
 UP.img0.src = "Sprites/UP/0.png";

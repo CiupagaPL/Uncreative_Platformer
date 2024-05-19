@@ -80,9 +80,12 @@ window.animatetransition = function() {
             Player.dead = false;
             Player.rotated = false;
             Player.vy = 0;
+            Player.slowfalling = false;
+            Player.score = 0;
             Score = 0;
             TerCoins = 0;
             Dispenser.timer = 100;
+            Coin.loop = false;
             DispenserSpike.timer = 0;
             DispenserCoin.timer = 0;
             Laser.timer = 0;
@@ -122,7 +125,7 @@ window.animatetransition = function() {
                 window.animateingamehud();
 
                 /* End ingame hud animation */
-                if(StatusTransparent.type == 0) {
+                if(StatusTransparent.type == 0 && !Instruction) {
                     /* End scene start */
                     Transition.started = false;
                     Transition.type = 0;
@@ -2148,23 +2151,46 @@ window.animatecoin = function() {
 
 /* Window dispenser animating function */
 window.animatedispenser = function() {
-    /* Check if object is left */
-    if(CurrentDispenser.left) {
-        /* Check object timer */
-        if(Dispenser.timer < 240) {
-            Context.drawImage(Dispenser.imgleft1, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+    if(NormalMode) {
+        /* Check if object is left */
+        if(CurrentDispenser.left) {
+            /* Check object timer */
+            if(Dispenser.timer < 240) {
+                Context.drawImage(Dispenser.imgleft1, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+            }
+            else if(Dispenser.timer >= 240) {
+                Context.drawImage(Dispenser.imgleft2, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+            }
         }
-        else if(Dispenser.timer >= 240) {
-            Context.drawImage(Dispenser.imgleft2, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+        else if(!CurrentDispenser.left) {
+            /* Check object timer */
+            if(Dispenser.timer < 240) {
+                Context.drawImage(Dispenser.imgright1, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+            }
+            else if(Dispenser.timer >= 240) {
+                Context.drawImage(Dispenser.imgright2, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+            }
         }
     }
-    else if(!CurrentDispenser.left) {
-        /* Check object timer */
-        if(Dispenser.timer < 240) {
-            Context.drawImage(Dispenser.imgright1, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+    else if(!NormalMode) {
+        /* Check if object is left */
+        if(CurrentDispenser.left) {
+            /* Check object timer */
+            if(Dispenser.timer < 140) {
+                Context.drawImage(Dispenser.imgleft1, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+            }
+            else if(Dispenser.timer >= 140) {
+                Context.drawImage(Dispenser.imgleft2, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+            }
         }
-        else if(Dispenser.timer >= 240) {
-            Context.drawImage(Dispenser.imgright2, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+        else if(!CurrentDispenser.left) {
+            /* Check object timer */
+            if(Dispenser.timer < 140) {
+                Context.drawImage(Dispenser.imgright1, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+            }
+            else if(Dispenser.timer >= 140) {
+                Context.drawImage(Dispenser.imgright2, CurrentDispenser.x, CurrentDispenser.y, CurrentDispenser.w, CurrentDispenser.h);
+            }
         }
     }
 }
