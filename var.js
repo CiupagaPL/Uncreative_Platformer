@@ -1,5 +1,4 @@
-/* Uncreative Platformer made by CiupagaPL
- * GPL 3.0 (C) 2024 CiupagaPL */
+/* Copyright 2024 CiupagaPL */
 
 /* Create global variables */
 let Scene = 1, SceneStart = false, SceneChange = false, SceneRestart = false;
@@ -198,12 +197,12 @@ let UPText = {
 let VersionText = {
     color: "white",
     font: "32px Orange_Kid",
-    value: "Version 1.0",
+    value: "Version 1.0.1",
     x: -272,
     y: Board.h - 12,
     fx: 4,
     fy: -24,
-    w: 102,
+    w: 118,
     h: 24,
     vx: 13.9,
     used: true,
@@ -393,7 +392,7 @@ let DescriptionText5 = {
 let InstructionText1 = {
     color: "white",
     font: "48px Orange_Kid",
-    value: "A, ←, D, → - Move Player",
+    value: "A, Left, D, Right - Move Player",
     x: -750,
     y: DescriptionText1.y,
     vx: DescriptionText1.vx,
@@ -417,7 +416,7 @@ let InstructionText2 = {
 let InstructionText3 = {
     color: "white",
     font: "48px Orange_Kid",
-    value: "W, ↑ - Change Gravity Up",
+    value: "W, Up - Change Gravity Up",
     fx: 0,
     fy: 0,
     x: -750,
@@ -431,7 +430,7 @@ let InstructionText3 = {
 let InstructionText4 = {
     color: "white",
     font: "48px Orange_Kid",
-    value: "S, ↓ - Change Gravity Down",
+    value: "S, Down - Change Gravity Down",
     x: -750,
     y: DescriptionText4.y,
     vx: DescriptionText1.vx,
@@ -443,7 +442,7 @@ let InstructionText4 = {
 let InstructionText5 = {
     color: "white",
     font: "48px Orange_Kid",
-    value: "W, ↑, S, ↓ - Stop Player",
+    value: "W, Up, S, Down - Stop Player",
     x: -750,
     y: DescriptionText5.y,
     vx: DescriptionText1.vx,

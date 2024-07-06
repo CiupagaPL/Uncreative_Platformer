@@ -1,5 +1,4 @@
-/* Uncreative Platformer made by CiupagaPL
- * GPL 3.0 (C) 2024 CiupagaPL */
+/* Copyright 2024 CiupagaPL */
 
 /* Window corners generator update function */
 window.updatecorners = function() {

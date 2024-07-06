@@ -1,5 +1,4 @@
-/* Uncreative Platformer made by CiupagaPL
- * GPL 3.0 (C) 2024 CiupagaPL */
+/* Copyright 2024 CiupagaPL */
 
 /* Window create function */
 window.onload = function() {
@@ -452,18 +451,18 @@ window.onupdate = function() {
                 if(PauseTransition == 0 && !Player.dead && SceneStart) {
                     if(NormalMode) {
                         if(CurrentDispenserSpike.left) {
-                            CurrentDispenserSpike.x += 12;
+                            CurrentDispenserSpike.x += 20;
                         }
                         else if(!CurrentDispenserSpike.left) {
-                            CurrentDispenserSpike.x -= 12;
+                            CurrentDispenserSpike.x -= 20;
                         }
                     }
                     else if(!NormalMode) {
                         if(CurrentDispenserSpike.left) {
-                            CurrentDispenserSpike.x += 18;
+                            CurrentDispenserSpike.x += 30;
                         }
                         else if(!CurrentDispenserSpike.left) {
-                            CurrentDispenserSpike.x -= 18;
+                            CurrentDispenserSpike.x -= 30;
                         }
                     }
                 }
@@ -479,45 +478,23 @@ window.onupdate = function() {
                 }
             }
 
-            if(NormalMode) {
-                /* Select random number */
-                if(Dispenser.timer == 250) {
-                    CurrentDispenserSpike.chance = Math.floor(Math.random() * 16);
-                    if(!NormalMode) {
-                        CurrentDispenserSpike.chance = 1;
-                    }
-                }
-
-                /* Spawn dispenserspikes */
-                if(Dispenser.timer >= 270 && CurrentDispenserSpike.chance != 0) {
-                    CurrentDispenserSpike.used = false;
-                }
-
-                /* Spawn dispensercoins */
-                else if(Dispenser.timer >= 270 && CurrentDispenserSpike.chance == 0) {
-                    CurrentDispenserCoin = DispenserCoin.array[DispenserSpike.currentlenght];
-                    CurrentDispenserCoin.used = false;
+            /* Select random number */
+            if(Dispenser.timer == 150) {
+                CurrentDispenserSpike.chance = Math.floor(Math.random() * 16);
+                if(!NormalMode) {
+                    CurrentDispenserSpike.chance = 1;
                 }
             }
-            else if(!NormalMode) {
-                /* Select random number */
-                if(Dispenser.timer == 150) {
-                    CurrentDispenserSpike.chance = Math.floor(Math.random() * 16);
-                    if(!NormalMode) {
-                        CurrentDispenserSpike.chance = 1;
-                    }
-                }
 
-                /* Spawn dispenserspikes */
-                if(Dispenser.timer >= 170 && CurrentDispenserSpike.chance != 0) {
-                    CurrentDispenserSpike.used = false;
-                }
+            /* Spawn dispenserspikes */
+            if(Dispenser.timer >= 170 && CurrentDispenserSpike.chance != 0) {
+                CurrentDispenserSpike.used = false;
+            }
 
-                /* Spawn dispensercoins */
-                else if(Dispenser.timer >= 170 && CurrentDispenserSpike.chance == 0) {
-                    CurrentDispenserCoin = DispenserCoin.array[DispenserSpike.currentlenght];
-                    CurrentDispenserCoin.used = false;
-                }
+            /* Spawn dispensercoins */
+            else if(Dispenser.timer >= 170 && CurrentDispenserSpike.chance == 0) {
+                CurrentDispenserCoin = DispenserCoin.array[DispenserSpike.currentlenght];
+                CurrentDispenserCoin.used = false;
             }
 
             /* Update dispenserspikes */
@@ -566,18 +543,18 @@ window.onupdate = function() {
                 if(PauseTransition == 0 && !Player.dead && SceneStart) {
                     if(NormalMode) {
                         if(CurrentDispenserCoin.left) {
-                            CurrentDispenserCoin.x += 12;
+                            CurrentDispenserCoin.x += 20;
                         }
                         else if(!CurrentDispenserCoin.left) {
-                            CurrentDispenserCoin.x -= 12;
+                            CurrentDispenserCoin.x -= 20;
                         }
                     }
                     else if(!NormalMode) {
                         if(CurrentDispenserCoin.left) {
-                            CurrentDispenserCoin.x += 18;
+                            CurrentDispenserCoin.x += 30;
                         }
                         else if(!CurrentDispenserCoin.left) {
-                            CurrentDispenserCoin.x -= 18;
+                            CurrentDispenserCoin.x -= 30;
                         }
                     }
                 }
@@ -628,7 +605,7 @@ window.onupdate = function() {
 
         /* Generate laserspikes */
         while(LaserSpike.lenght >= LaserSpike.currentlenght) {
-            /* Draw current array dispenser object */
+            /* Draw current array laserspike object */
             CurrentLaserSpike = LaserSpike.array[LaserSpike.currentlenght];
             if(!CurrentLaserSpike.disabled && !CurrentLaserSpike.used) {
                 window.animatelaserspike();
@@ -690,7 +667,7 @@ window.onupdate = function() {
 
         /* Generate lasercoins */
         while(LaserCoin.lenght >= LaserCoin.currentlenght) {
-            /* Draw current array dispenser object */
+            /* Draw current array lasercoin object */
             CurrentLaserCoin = LaserCoin.array[LaserCoin.currentlenght];
             if(!CurrentLaserCoin.disabled && !CurrentLaserCoin.used) {
                 window.animatelasercoin();
@@ -1049,27 +1026,14 @@ window.onupdate = function() {
         if(PauseTransition == 0 && !Player.dead && SceneStart) {
             Dispenser.timer += 1;
         }
-        if(NormalMode) {
-            /* Reset timer */
-            if(Dispenser.timer >= 310) {
-                Dispenser.timer = 0;
-            }
-            if(Dispenser.timer == 270 && !Player.dead && PauseTransition == 0 && Sfx) {
-                /* Play dispenser sound */
-                TimeSfx.dispenser.load();
-                TimeSfx.dispenser.play();
-            }
+        /* Reset timer */
+        if(Dispenser.timer >= 210) {
+            Dispenser.timer = 0;
         }
-        else if(!NormalMode) {
-            /* Reset timer */
-            if(Dispenser.timer >= 210) {
-                Dispenser.timer = 0;
-            }
-            if(Dispenser.timer == 170 && !Player.dead && PauseTransition == 0 && Sfx) {
-                /* Play dispenser sound */
-                TimeSfx.dispenser.load();
-                TimeSfx.dispenser.play();
-            }
+        if(Dispenser.timer == 170 && !Player.dead && PauseTransition == 0 && Sfx) {
+            /* Play dispenser sound */
+            TimeSfx.dispenser.load();
+            TimeSfx.dispenser.play();
         }
 
         /* Generate dispensers */

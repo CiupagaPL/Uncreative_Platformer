@@ -14,7 +14,7 @@ For now, I need to take a break from programming; after some time, I will come b
 > Last Updated: **19-05-2024**;
 
 ## License
-**Project licence is based on GPL 3.0**. It uses some 3rd part assets that I'll list bellow.
+Starting from July 6, this project will change its license type from *GNU GPL 3.0* to **ISC**. If you have any questions, please contact me. It also uses some 3rd part assets that I'll list bellow.
 - **Orange Kid** - It's used as main font in this project. You can find it [here](https://www.1001fonts.com/orange-kid-font.html).
 
 ## Have a Good One!
