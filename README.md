@@ -10,8 +10,8 @@ For now, I need to take a break from programming; after some time, I will come b
 > P.S. I know the music is terrible <3
 
 ## Project Status
-> Newest Version: **Version 1.0**;
-> Last Updated: **19-05-2024**;
+> Newest Version: **Version 1.0.1**;
+> Last Updated: **06-07-2024**;
 
 ## License
 Starting from July 6, this project will change its license type from *GNU GPL 3.0* to **ISC**. If you have any questions, please contact me. It also uses some 3rd part assets that I'll list bellow.
